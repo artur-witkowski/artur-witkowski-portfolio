@@ -462,62 +462,89 @@ const contactLinks = [
   var toggleDot = document.getElementById('toggle-dot');
   var toggleLabel = document.getElementById('toggle-label');
   var toggleTrack = document.getElementById('toggle-track');
-  var tickerViews = document.querySelectorAll('.ticker-view');
-  var staticViews = document.querySelectorAll('.static-view');
+  var categories = document.querySelectorAll('.tech-category');
   var isAnimated = true;
+  var isTransitioning = false;
 
-  function showStatic() {
-    tickerViews.forEach(function (el) {
-      el.style.opacity = '0';
-      el.style.transform = 'scaleY(0.8)';
-      setTimeout(function () { el.style.display = 'none'; }, 300);
-    });
-    staticViews.forEach(function (el) {
-      el.style.display = '';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(-4px)';
-      requestAnimationFrame(function () {
-        el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
-      // Stagger tag pop-in
-      el.querySelectorAll('.tech-tag-pop').forEach(function (tag) {
-        tag.style.animation = 'none';
-        tag.offsetHeight; // reflow
-        tag.style.animation = '';
-        tag.classList.add('pop-active');
-      });
-    });
-  }
+  function swap(toStatic) {
+    if (isTransitioning) return;
+    isTransitioning = true;
 
-  function showTickers() {
-    staticViews.forEach(function (el) {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(4px)';
+    var FADE = 180;
+
+    categories.forEach(function (cat) {
+      var ticker = cat.querySelector('.ticker-view');
+      var statics = cat.querySelector('.static-view');
+      var outgoing = toStatic ? ticker : statics;
+      var incoming = toStatic ? statics : ticker;
+
+      // 1. Snapshot start height
+      var startH = cat.offsetHeight;
+      cat.style.height = startH + 'px';
+
+      // 2. Fade out outgoing
+      outgoing.style.transition = 'opacity ' + FADE + 'ms ease';
+      outgoing.style.opacity = '0';
+
       setTimeout(function () {
-        el.style.display = 'none';
-        el.querySelectorAll('.tech-tag-pop').forEach(function (tag) {
-          tag.classList.remove('pop-active');
+        // 3. Hide outgoing
+        outgoing.style.display = 'none';
+        outgoing.style.transition = '';
+        outgoing.style.opacity = '';
+
+        // Reset pop-active when hiding static
+        if (!toStatic) {
+          statics.querySelectorAll('.tech-tag-pop').forEach(function (t) {
+            t.classList.remove('pop-active');
+          });
+        }
+
+        // 4. Show incoming (transparent, for measurement)
+        incoming.style.display = '';
+        incoming.style.opacity = '0';
+
+        // 5. Measure target: set height auto without transition, read, snap back
+        cat.style.transition = 'none';
+        cat.style.height = 'auto';
+        var targetH = cat.offsetHeight;
+        cat.style.height = startH + 'px';
+        void cat.offsetHeight; // force reflow
+
+        // 6. Animate height
+        cat.style.transition = '';
+        cat.style.height = targetH + 'px';
+
+        // 7. Fade in incoming content
+        requestAnimationFrame(function () {
+          if (toStatic) {
+            statics.querySelectorAll('.tech-tag-pop').forEach(function (tag) {
+              tag.style.animation = 'none';
+              void tag.offsetHeight;
+              tag.style.animation = '';
+              tag.classList.add('pop-active');
+            });
+          } else {
+            incoming.style.transition = 'opacity 0.25s ease';
+            incoming.style.opacity = '1';
+          }
         });
-      }, 300);
-    });
-    tickerViews.forEach(function (el) {
-      el.style.display = '';
-      el.style.opacity = '0';
-      el.style.transform = 'scaleY(0.8)';
-      requestAnimationFrame(function () {
-        el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        el.style.opacity = '1';
-        el.style.transform = 'scaleY(1)';
-      });
+
+        // 8. Clean up after height transition completes
+        setTimeout(function () {
+          cat.style.height = '';
+          cat.style.transition = '';
+          incoming.style.transition = '';
+          incoming.style.opacity = '';
+          isTransitioning = false;
+        }, 550);
+      }, FADE);
     });
   }
 
   if (tickerToggle) {
     tickerToggle.addEventListener('click', function () {
       isAnimated = !isAnimated;
-      if (isAnimated) { showTickers(); } else { showStatic(); }
+      swap(!isAnimated);
       toggleDot.style.transform = isAnimated ? '' : 'translateX(12px)';
       toggleTrack.style.background = isAnimated ? '' : 'rgba(6, 182, 212, 0.3)';
       toggleLabel.textContent = isAnimated ? 'animation off' : 'animation on';

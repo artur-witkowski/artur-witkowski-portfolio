@@ -362,30 +362,24 @@ body {
 }
 
 /* ===== TICKER/STATIC TRANSITIONS ===== */
-.ticker-view, .static-view {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform-origin: center top;
+.tech-category {
+  position: relative;
+  overflow: hidden;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: height;
 }
 
-/* Tag pop-in animation for toggle */
+/* Subtle pop for each tag on toggle */
 @keyframes techTagPop {
-  from {
-    opacity: 0;
-    transform: translateY(6px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: scale(0.93); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.tech-tag-pop {
-  opacity: 0;
-}
+.tech-tag-pop { opacity: 0; }
 
 .tech-tag-pop.pop-active {
-  animation: techTagPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--pop-i, 0) * 25ms);
+  animation: techTagPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--pop-i, 0) * 20ms);
 }
 
 /* ===== CHROMA TAGS ===== */
