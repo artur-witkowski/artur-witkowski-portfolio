@@ -1,19 +1,15 @@
 ---
-// Root page — client-side redirect to /pl/ or /en/ based on browser language
+// Root page — instant client-side redirect to /pl/ or /en/ based on browser language
 ---
 
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Redirecting...</title>
-  </head>
-  <body>
     <script is:inline>
-      (function () {
-        var saved = localStorage.getItem('lang');
-        var lang = saved || (navigator.language.startsWith('pl') ? 'pl' : 'en');
-        window.location.replace('/' + lang + '/');
-      })();
+      var s = localStorage.getItem('lang');
+      var l = s || (navigator.language.startsWith('pl') ? 'pl' : 'en');
+      window.location.replace('/' + l + '/');
     </script>
-  </body>
+  </head>
+  <body style="display:none"></body>
 </html>
