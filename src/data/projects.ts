@@ -43,7 +43,7 @@ export const projects: Project[] = [
       pl: 'SaaS do personalizowanych planów dietetycznych. Algorytm generowania diet, eksport PDF, panel admin, integracja Stripe.',
       en: 'SaaS for personalized diet plans. Diet generation algorithm, PDF export, admin panel, Stripe integration.',
     },
-    stack: ['React 18', 'TypeScript', 'Material UI', 'Express.js', 'Drizzle ORM', 'PostgreSQL', 'Stripe'],
+    stack: ['React 18', 'TypeScript', 'Vite', 'Material UI', 'TanStack Query', 'React Hook Form', 'Zustand', 'Framer Motion', 'Stripe'],
     url: 'https://get-diet.com',
     type: 'team',
     highlights: ['Stripe subscriptions', 'PDF generation', 'Health survey system'],

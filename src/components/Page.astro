@@ -31,6 +31,8 @@ const frontendTechs: TechItem[] = [
   { name: 'Redux', icon: 'redux', color: '#764ABC' },
   { name: 'Zustand', color: '#F56565' },
   { name: 'React Query', icon: 'reactquery', color: '#FF4154' },
+  { name: 'React Hook Form', icon: 'reacthookform', color: '#EC5990' },
+  { name: 'Framer Motion', icon: 'framer', color: '#0055FF' },
   { name: 'React Router', icon: 'reactrouter', color: '#CA4245' },
   { name: 'Axios', icon: 'axios', color: '#5A29E4' },
   { name: 'jQuery', icon: 'jquery', color: '#0769AD' },
@@ -94,6 +96,10 @@ Object.assign(techLookup, {
   'Capacitor': { name: 'Capacitor', icon: 'capacitor', color: '#119EFF' },
   'Hono': { name: 'Hono', icon: 'hono', color: '#E36002' },
   'TanStack Router': { name: 'TanStack Router', color: '#FF4154' },
+  'TanStack Query': { name: 'TanStack Query', icon: 'reactquery', color: '#FF4154' },
+  'React Hook Form': { name: 'React Hook Form', icon: 'reacthookform', color: '#EC5990' },
+  'Framer Motion': { name: 'Framer Motion', icon: 'framer', color: '#0055FF' },
+  'Zustand': { name: 'Zustand', color: '#F56565' },
   'Stripe': { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
 } satisfies Record<string, TechItem>);
 
@@ -205,7 +211,7 @@ const contactLinks = [
         ))}
       </h2>
 
-      <p class="font-body text-text text-sm lg:text-[0.9rem] max-w-2xl leading-relaxed mb-5 hero-animate" style="animation-delay: 800ms">
+      <p class="font-body text-text text-sm lg:text-[0.9rem] max-w-2xl leading-relaxed mb-5">
         {t('about.description', lang)}
       </p>
 
@@ -592,7 +598,8 @@ const contactLinks = [
     animateTicker('ticker-3', 22);
   }, 200);
 
-  // ===== GRAINIENT WEBGL 2 =====
+  // ===== GRAINIENT WEBGL 2 (deferred to not block LCP) =====
+  (typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout)(function initGrainient() {
   var canvas = document.getElementById('grainient-bg');
   if (!canvas) return;
 
@@ -775,5 +782,6 @@ const contactLinks = [
   }
 
   requestAnimationFrame(render);
+  }); // end initGrainient
 })();
 </script>
