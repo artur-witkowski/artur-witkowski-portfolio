@@ -8,6 +8,8 @@ export default defineConfig({
     locales: ['pl', 'en'],
     routing: {
       prefixDefaultLocale: true,
+      fallbackType: 'rewrite',
+      redirectToDefaultLocale: false,
     },
   },
   vite: {
