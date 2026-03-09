@@ -10,18 +10,18 @@ const { lang } = Astro.props;
 const altLang = getAlternateLang(lang);
 ---
 
-<div class="fixed top-3 right-3 lg:top-4 lg:right-5 z-50 flex items-center gap-1.5">
+<div class="fixed top-3 right-3 lg:top-5 lg:right-6 z-50 flex items-center gap-1.5 lg:gap-2">
   <a href={`/${altLang}/`}
-    class="text-[11px] font-mono font-medium text-text-muted/60 hover:text-accent transition-colors duration-200 cursor-pointer px-3 py-2.5 rounded-lg border border-border/50 hover:border-accent/30 backdrop-blur-md bg-surface/30">
+    class="text-[11px] lg:text-sm font-mono font-medium text-text-muted/60 lg:text-text-muted/80 hover:text-accent transition-colors duration-200 cursor-pointer px-3 py-2.5 lg:px-4 lg:py-2.5 rounded-lg lg:rounded-xl border border-border/50 lg:border-border/70 hover:border-accent/30 backdrop-blur-md bg-surface/30 lg:bg-surface/50">
     {t('lang.switch', lang)}
   </a>
   <button id="theme-toggle"
-    class="p-2.5 rounded-lg text-text-muted/60 hover:text-accent transition-all duration-200 cursor-pointer border border-border/50 hover:border-accent/30 backdrop-blur-md bg-surface/30"
+    class="p-2.5 lg:p-3 rounded-lg lg:rounded-xl text-text-muted/60 lg:text-text-muted/80 hover:text-accent transition-all duration-200 cursor-pointer border border-border/50 lg:border-border/70 hover:border-accent/30 backdrop-blur-md bg-surface/30 lg:bg-surface/50"
     aria-label={t('theme.toggle', lang)}>
-    <svg class="w-3.5 h-3.5 block dark-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <svg class="w-3.5 h-3.5 lg:w-5 lg:h-5 block dark-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
     </svg>
-    <svg class="w-3.5 h-3.5 hidden light-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <svg class="w-3.5 h-3.5 lg:w-5 lg:h-5 hidden light-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
     </svg>
   </button>
