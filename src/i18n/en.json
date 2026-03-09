@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Artur Witkowski.",
+    "tagline": "Turning ideas into products with TypeScript & AI."
+  },
+  "about": {
+    "label": "ABOUT",
+    "description": "Fullstack developer with over 5 years of experience. By day, I work as a Frontend Developer at Profil Software (Gdynia, Poland). After hours, I design and build my own products, from multiplayer games, through mobile apps, to SaaS platforms.",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "tools": "Tools"
+  },
+  "projects": {
+    "label": "PROJECTS",
+    "visit": "Visit",
+    "solo": "Founder",
+    "team": "Co-Founder"
+  },
+  "contact": {
+    "label": "CONTACT",
+    "cta": "Want to chat? Drop me a line.",
+    "email": "Email",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "footer": {
+    "built": "Built with Astro"
+  },
+  "meta": {
+    "title": "Artur Witkowski \u2014 Fullstack TypeScript Developer",
+    "description": "Turning ideas into products with TypeScript & AI. Fullstack developer portfolio."
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  },
+  "lang": {
+    "switch": "PL"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "about": "O mnie",
+    "projects": "Projekty",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "greeting": "Cze\u015b\u0107, jestem",
+    "name": "Artur Witkowski.",
+    "tagline": "Zamieniam pomys\u0142y w produkty z TypeScript & AI."
+  },
+  "about": {
+    "label": "O MNIE",
+    "description": "Fullstack developer z ponad 5-letnim do\u015bwiadczeniem. Na co dzie\u0144 pracuj\u0119 jako Frontend Developer w Profil Software (Gdynia). Po godzinach projektuj\u0119 i buduj\u0119 w\u0142asne produkty, od gier multiplayer, przez aplikacje mobilne, po platformy SaaS.",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "tools": "Tools"
+  },
+  "projects": {
+    "label": "PROJEKTY",
+    "visit": "Odwied\u017a",
+    "solo": "Founder",
+    "team": "Co-Founder"
+  },
+  "contact": {
+    "label": "KONTAKT",
+    "cta": "Chcesz pogada\u0107? Napisz do mnie.",
+    "email": "Email",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "footer": {
+    "built": "Zbudowane z Astro"
+  },
+  "meta": {
+    "title": "Artur Witkowski \u2014 Fullstack TypeScript Developer",
+    "description": "Turning ideas into products with TypeScript & AI. Portfolio fullstack developera."
+  },
+  "theme": {
+    "toggle": "Prze\u0142\u0105cz motyw"
+  },
+  "lang": {
+    "switch": "EN"
+  }
+}
