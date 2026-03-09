@@ -30,19 +30,28 @@ const altLang = getAlternateLang(lang);
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Alternate language -->
-    <link rel="alternate" hreflang={altLang} href={`/${altLang}/`} />
-    <link rel="alternate" hreflang={lang} href={`/${lang}/`} />
+    <link rel="alternate" hreflang={altLang} href={`https://arturwitkowski.com/${altLang}/`} />
+    <link rel="alternate" hreflang={lang} href={`https://arturwitkowski.com/${lang}/`} />
+    <link rel="alternate" hreflang="x-default" href="https://arturwitkowski.com/" />
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts (non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- Dark mode init (prevents flash) -->
     <script is:inline>
