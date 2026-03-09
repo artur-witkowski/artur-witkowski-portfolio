@@ -577,6 +577,14 @@ const contactLinks = [
     tickerAnimIds[trackId] = requestAnimationFrame(tick);
   }
 
+  // After entrance animations finish, strip hero-animate so toggle doesn't replay them
+  setTimeout(function () {
+    document.querySelectorAll('#tech-container .hero-animate').forEach(function (el) {
+      el.classList.remove('hero-animate');
+      el.style.opacity = '';
+    });
+  }, 2000);
+
   // Start tickers — 3 rows, alternating directions
   setTimeout(function () {
     animateTicker('ticker-1', 30);
