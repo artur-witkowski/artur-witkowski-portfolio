@@ -1,5 +1,50 @@
 @import "tailwindcss";
 
+/* ===== SELF-HOSTED FONTS ===== */
+/* Sora - Heading font */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url('/fonts/sora-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url('/fonts/sora-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* DM Sans - Body font */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: optional;
+  src: url('/fonts/dm-sans-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* JetBrains Mono - Code font (latin only — tech names are ASCII) */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: optional;
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme {
   --font-heading: 'Sora', sans-serif;
   --font-body: 'DM Sans', sans-serif;
@@ -67,13 +112,69 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ===== GRAINIENT BG ===== */
-#grainient-bg {
+/* ===== AURORA BG ===== */
+#aurora-bg {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
   z-index: 0;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora-blob-1 {
+  width: 80vmax;
+  height: 80vmax;
+  background: radial-gradient(circle, rgba(12, 110, 122, 0.45) 0%, transparent 70%);
+  top: -30%;
+  left: -25%;
+  animation: aurora-1 25s ease-in-out infinite;
+}
+
+.aurora-blob-2 {
+  width: 70vmax;
+  height: 70vmax;
+  background: radial-gradient(circle, rgba(22, 78, 138, 0.45) 0%, transparent 70%);
+  bottom: -35%;
+  right: -20%;
+  animation: aurora-2 30s ease-in-out infinite;
+}
+
+.aurora-blob-3 {
+  width: 60vmax;
+  height: 60vmax;
+  background: radial-gradient(circle, rgba(26, 64, 96, 0.45) 0%, transparent 70%);
+  top: 25%;
+  left: 20%;
+  animation: aurora-3 22s ease-in-out infinite;
+}
+
+/* Light mode — softer blobs */
+.light .aurora-blob-1 { background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%); }
+.light .aurora-blob-2 { background: radial-gradient(circle, rgba(103, 232, 249, 0.3) 0%, transparent 70%); }
+.light .aurora-blob-3 { background: radial-gradient(circle, rgba(147, 197, 253, 0.3) 0%, transparent 70%); }
+
+
+@keyframes aurora-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(8vw, 6vh) scale(1.08); }
+  66% { transform: translate(-4vw, 10vh) scale(0.95); }
+}
+
+@keyframes aurora-2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(-10vw, -7vh) rotate(40deg) scale(1.05); }
+}
+
+@keyframes aurora-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(7vw, -5vh) scale(1.12); }
+  75% { transform: translate(-5vw, 4vh) scale(0.92); }
 }
 
 /* ===== GLASS — frosted, classy ===== */
@@ -112,62 +213,44 @@ body {
 
 /* ===== SPLIT-CHAR ANIMATION ===== */
 @keyframes splitCharIn {
-  0% {
-    opacity: 0;
-    transform: translateY(24px) scale(0.96);
-    filter: blur(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .split-char {
   display: inline-block;
-  opacity: 0;
-  animation: splitCharIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--i, 0) * 40ms + var(--base-delay, 400ms));
+  animation: splitCharIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 35ms + var(--base-delay, 200ms));
 }
 
 /* ===== TAG POP-IN ===== */
 @keyframes tagIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(8px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .tag-animate {
-  opacity: 0;
-  animation: tagIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: tagIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--delay, 0ms);
 }
 
 /* ===== ENTRANCE ANIMATIONS ===== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-animate {
-  opacity: 0;
-  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  from { opacity: 0; transform: translateY(8px) scale(0.99); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .card-animate {
-  opacity: 0;
-  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* ===== GRADIENT TEXT ===== */
@@ -428,4 +511,31 @@ body {
   }
   .hero-animate, .card-animate, .split-char, .tag-animate { opacity: 1; transform: none; filter: none; }
   .gradient-text { animation: none; }
+  .aurora-blob { animation: none !important; }
+}
+
+/* Hero profile photo ghost bg */
+.hero-photo-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.hero-photo-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  opacity: 0.3;
+  filter: grayscale(1) contrast(1.2);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 5%, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.6) 60%, transparent 95%);
+  mask-image: linear-gradient(to bottom, transparent 5%, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.6) 60%, transparent 95%);
+}
+
+.light .hero-photo-bg img {
+  opacity: 0.24;
+  filter: grayscale(1) contrast(1.3);
 }

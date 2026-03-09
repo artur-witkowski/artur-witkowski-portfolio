@@ -37,21 +37,12 @@ const altLang = getAlternateLang(lang);
     <!-- Favicon -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
-    <!-- Google Fonts (non-render-blocking) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
+    <!-- Preload LCP image -->
+    <link rel="preload" href="/profile.webp" as="image" type="image/webp" />
+
+    <!-- Preconnect to icon CDNs -->
+    <link rel="preconnect" href="https://cdn.simpleicons.org" />
+    <link rel="preconnect" href="https://api.iconify.design" />
 
     <!-- Dark mode init (prevents flash) -->
     <script is:inline>

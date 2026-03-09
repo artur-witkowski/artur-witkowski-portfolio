@@ -21,7 +21,7 @@ export const projects: Project[] = [
     url: 'https://faunarium.net',
     type: 'solo',
     highlights: ['Monorepo (Turborepo)', 'CI/CD (GitHub Actions)', 'PWA + mobile (Capacitor)'],
-    image: '/projects/faunarium.png',
+    image: '/projects/faunarium.webp',
   },
   {
     slug: 'kociolek',
@@ -34,7 +34,7 @@ export const projects: Project[] = [
     url: 'https://kociolek.arturwitkowski.com',
     type: 'solo',
     highlights: ['Monorepo (Turborepo)', 'E2E type safety (Hono RPC)', 'PWA + mobile'],
-    image: '/projects/kociolek.png',
+    image: '/projects/kociolek.webp',
   },
   {
     slug: 'get-diet',
@@ -47,6 +47,6 @@ export const projects: Project[] = [
     url: 'https://get-diet.com',
     type: 'team',
     highlights: ['Stripe subscriptions', 'PDF generation', 'Health survey system'],
-    image: '/projects/getdiet.png',
+    image: '/projects/getdiet.webp',
   },
 ];
