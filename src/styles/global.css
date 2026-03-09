@@ -12,7 +12,7 @@
   --color-accent: #38bdf8;
   --color-blue: #6366f1;
   --color-text: #e8f0fe;
-  --color-text-muted: #a0c4e8;
+  --color-text-muted: #b0d0f0;
   --color-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -24,11 +24,19 @@
   --color-accent: #0e7490;
   --color-blue: #4f46e5;
   --color-text: #0c1a2e;
-  --color-text-muted: #4b6a8a;
+  --color-text-muted: #3d5a78;
   --color-border: rgba(0, 0, 0, 0.08);
 }
 
 html { scroll-behavior: smooth; }
+
+/* ===== FOCUS VISIBLE ===== */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 body {
   font-family: var(--font-body);
@@ -263,6 +271,14 @@ body {
   opacity: 0.3;
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
+}
+
+/* Enlarge touch target without changing visual size */
+.carousel-dot::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
 }
 
 .carousel-dot.active {
