@@ -368,24 +368,29 @@ body {
 
 /* Carousel dots */
 .carousel-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-dot::after {
+  content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--color-text-muted);
   opacity: 0.3;
   transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
 }
 
-/* Enlarge touch target without changing visual size */
-.carousel-dot::before {
-  content: '';
-  position: absolute;
-  inset: -12px;
-}
-
-.carousel-dot.active {
+.carousel-dot.active::after {
   opacity: 1;
   background: var(--color-accent);
   width: 20px;
