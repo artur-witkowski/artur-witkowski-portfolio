@@ -2,7 +2,9 @@ node_modules/
 dist/
 .astro/
 .wrangler/
+.playwright-mcp/
 .env
 .env.*
 *.log
 .DS_Store
+.mcp.json
