@@ -323,7 +323,7 @@ const contactLinks = [
             <div class="carousel-card glass rounded-2xl p-5 lg:p-5 flex flex-col">
               {/* Browser frame screenshot */}
               {project.image && (
-                <div class={`browser-frame mb-3 rounded-lg overflow-hidden border border-border/50 ${project.phones ? 'bg-[#FFD66E] pt-7' : ''}`}>
+                <div class={`browser-frame mb-3 rounded-lg overflow-hidden ${project.phones ? 'bg-[#FFD66E] pt-[30px]' : 'border border-border/50'}`}>
                   {!project.phones && <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
