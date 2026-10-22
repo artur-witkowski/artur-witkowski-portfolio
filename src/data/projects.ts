@@ -7,9 +7,25 @@ export interface Project {
   type: 'solo' | 'team';
   highlights: string[];
   image?: string;
+  // a phone app: the picture is screens, so it gets no browser bar
+  phones?: boolean;
 }
 
 export const projects: Project[] = [
+  {
+    slug: 'krokiet',
+    name: 'Krokiet',
+    description: {
+      pl: 'Aplikacja na iOS i Androida do oceniania dań ze znajomymi. Jeden telefon zapisuje oceny całego stołu, a z nich powstają listy najlepszych dań, mapa miejsc i rachunek z każdego wyjścia. Działa bez zasięgu, miejsca pochodzą z Overture Maps.',
+      en: 'iOS and Android app for rating dishes with friends. One phone keeps score for the whole table, and the scores become lists of your best dishes, a map of where you ate and a bill for every meal. Works with no signal, places come from Overture Maps.',
+    },
+    stack: ['React Native', 'Expo', 'TypeScript', 'TanStack Query', 'MapLibre', 'Hono', 'Drizzle ORM', 'PostgreSQL', 'PostGIS', 'Bun', 'Claude Code'],
+    url: 'https://krokiet.app',
+    type: 'solo',
+    highlights: ['Offline outbox with ids from the phone', 'Overture Maps import', 'Subscriptions through RevenueCat'],
+    image: '/projects/krokiet.webp',
+    phones: true,
+  },
   {
     slug: 'faunarium',
     name: 'Faunarium',
@@ -22,19 +38,6 @@ export const projects: Project[] = [
     type: 'solo',
     highlights: ['Monorepo (Turborepo)', 'CI/CD (GitHub Actions)', 'PWA + mobile (Capacitor)'],
     image: '/projects/faunarium.webp',
-  },
-  {
-    slug: 'kociolek',
-    name: 'Kociołek',
-    description: {
-      pl: 'Aplikacja do planowania posiłków i list zakupów dla par i domowników. Skanowanie kodów kreskowych, integracja AI, powiadomienia push.',
-      en: 'Meal planning and shopping list app for couples and households. Barcode scanning, AI integration, push notifications.',
-    },
-    stack: ['React 19', 'TypeScript', 'Hono', 'TanStack Router', 'Drizzle ORM', 'PostgreSQL', 'Capacitor', 'Bun', 'Turborepo'],
-    url: 'https://kociolek.arturwitkowski.com',
-    type: 'solo',
-    highlights: ['Monorepo (Turborepo)', 'E2E type safety (Hono RPC)', 'PWA + mobile'],
-    image: '/projects/kociolek.webp',
   },
   {
     slug: 'get-diet',

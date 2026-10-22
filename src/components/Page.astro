@@ -107,6 +107,8 @@ Object.assign(techLookup, {
   'Framer Motion': { name: 'Framer Motion', icon: 'framer', color: '#0055FF' },
   'Zustand': { name: 'Zustand', iconUrl: 'https://api.iconify.design/devicon-plain/zustand.svg?color=%23F56565', color: '#F56565' },
   'Stripe': { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
+  'MapLibre': { name: 'MapLibre', icon: 'maplibre', color: '#396CB2' },
+  'PostGIS': { name: 'PostGIS', color: '#5C8DB8' },
 } satisfies Record<string, TechItem>);
 
 const contactLinks = [
@@ -321,15 +323,15 @@ const contactLinks = [
             <div class="carousel-card glass rounded-2xl p-5 lg:p-5 flex flex-col">
               {/* Browser frame screenshot */}
               {project.image && (
-                <div class="browser-frame mb-3 rounded-lg overflow-hidden border border-border/50">
-                  <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
+                <div class={`browser-frame mb-3 rounded-lg overflow-hidden border border-border/50 ${project.phones ? 'bg-[#FFD66E] pt-7' : ''}`}>
+                  {!project.phones && <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="flex-1 mx-2 h-4 rounded bg-surface-hover flex items-center px-2">
                       <span class="text-[8px] font-mono text-text-muted truncate" aria-hidden="true">{project.url}</span>
                     </span>
-                  </div>
+                  </div>}
                   <img
                     src={project.image}
                     alt={project.name}
