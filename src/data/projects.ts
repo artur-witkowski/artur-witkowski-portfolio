@@ -16,8 +16,8 @@ export const projects: Project[] = [
     slug: 'krokiet',
     name: 'Krokiet',
     description: {
-      pl: 'Aplikacja na iOS i Androida do oceniania dań ze znajomymi. Jeden telefon zapisuje oceny całego stołu, a z nich powstają listy najlepszych dań, mapa miejsc i rachunek z każdego wyjścia. Działa bez zasięgu, miejsca pochodzą z Overture Maps.',
-      en: 'iOS and Android app for rating dishes with friends. One phone keeps score for the whole table, and the scores become lists of your best dishes, a map of where you ate and a bill for every meal. Works with no signal, places come from Overture Maps.',
+      pl: 'Aplikacja na iOS i Androida do oceniania dań ze znajomymi. Jeden telefon zapisuje oceny całego stołu, a z nich powstają listy najlepszych dań, mapa miejsc i rachunek z każdego wyjścia.',
+      en: 'iOS and Android app for rating dishes with friends. One phone keeps score for the whole table, and the scores become lists of your best dishes, a map of where you ate and a bill for every meal.',
     },
     stack: ['React Native', 'Expo', 'TypeScript', 'TanStack Query', 'MapLibre', 'Hono', 'Drizzle ORM', 'PostgreSQL', 'PostGIS', 'Bun', 'Claude Code'],
     url: 'https://krokiet.app',
