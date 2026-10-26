@@ -1,0 +1,52 @@
+---
+// Plain English pages for the Lockabulary app: support and privacy. App Store Connect links here.
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+}
+const { title, description, path } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`https://arturwitkowski.com/${path}`} />
+    <link rel="icon" href="/lockabulary/icon.png" type="image/png" />
+    <style is:global>
+      :root { --bg: #f6e3d6; --card: #fdf6ee; --ink: #352a26; --soft: #7a6259; --accent: #c9513d; }
+      @media (prefers-color-scheme: dark) {
+        :root { --bg: #241c19; --card: #2f2521; --ink: #f4e9e1; --soft: #b9a59b; --accent: #ef7e68; }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+      main { max-width: 680px; margin: 0 auto; padding: 40px 16px 64px; }
+      header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+      header img { width: 56px; height: 56px; border-radius: 13px; }
+      header a { color: var(--ink); text-decoration: none; font-weight: 700; font-size: 20px; }
+      h1 { font-size: 34px; line-height: 1.15; margin: 0 0 8px; }
+      h2 { font-size: 20px; margin: 34px 0 6px; }
+      p { margin: 0 0 14px; }
+      .soft { color: var(--soft); }
+      .card { background: var(--card); border-radius: 18px; padding: 18px 20px; margin: 22px 0; }
+      a { color: var(--accent); }
+      footer { margin-top: 48px; color: var(--soft); font-size: 15px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="/lockabulary/icon.png" alt="" width="56" height="56" />
+        <a href="/lockabulary">Lockabulary</a>
+      </header>
+      <slot />
+      <footer>
+        <a href="/lockabulary">Support</a> · <a href="/lockabulary/privacy">Privacy</a> · Made by <a href="/en/">Artur Witkowski</a>
+      </footer>
+    </main>
+  </body>
+</html>
