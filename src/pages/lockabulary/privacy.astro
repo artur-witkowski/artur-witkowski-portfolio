@@ -2,27 +2,182 @@
 import LockabularyPage from '@/components/lockabulary/LockabularyPage.astro';
 ---
 
-<LockabularyPage title="Lockabulary privacy policy" description="Lockabulary collects no data. Progress stays on your devices and in your private iCloud." path="lockabulary/privacy">
+<LockabularyPage title="Lockabulary privacy policy" description="How Lockabulary for iPhone and Mac handles personal data: no account, no analytics, progress in your private iCloud." path="lockabulary/privacy">
   <h1>Lockabulary privacy policy</h1>
-  <p class="soft">Last updated 26 October 2026</p>
+  <p class="soft">Last updated 27 October 2026</p>
 
-  <p>Lockabulary is a vocabulary trainer for iPhone and Mac made by Artur Witkowski. It has no account, no ads, no analytics and no server. I don't collect any data about you.</p>
+  <ol class="toc">
+    <li><a href="#scope">Introduction and scope</a></li>
+    <li><a href="#controller">Who is responsible for your data</a></li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#device">Data processed only on your device</a></li>
+    <li><a href="#icloud">Synchronisation through iCloud</a></li>
+    <li><a href="#purchases">Purchases and the App Store</a></li>
+    <li><a href="#messages">Messages you send</a></li>
+    <li><a href="#apple">Information Apple makes available</a></li>
+    <li><a href="#website">The Website</a></li>
+    <li><a href="#recipients">Recipients and service providers</a></li>
+    <li><a href="#transfers">International transfers</a></li>
+    <li><a href="#retention">Retention</a></li>
+    <li><a href="#deletion">Deleting your data</a></li>
+    <li><a href="#rights">Your rights</a></li>
+    <li><a href="#object">Right to object</a></li>
+    <li><a href="#complaints">Complaints</a></li>
+    <li><a href="#automated">No automated decision-making</a></li>
+    <li><a href="#children">Children</a></li>
+    <li><a href="#us">Residents of the United States</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#changes">Changes to this policy</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
 
-  <h2>What stays on your devices</h2>
-  <p>Your words, answers, progress and settings are saved on your iPhone and Mac. If you're signed in to iCloud, Lockabulary syncs them between your devices through your private iCloud database. Apple stores that database under your Apple Account, and I can't read it.</p>
+  <h2 id="scope">1. Introduction and scope</h2>
+  <p class="c">1.1 This privacy policy explains how personal data is processed in connection with Lockabulary for iPhone and Lockabulary for Mac, as distributed through the Apple App Store (together, the "Apps"), and the web page at arturwitkowski.com/lockabulary (the "Website").</p>
+  <p class="c">1.2 "Personal data" has the meaning given in Article 4(1) of Regulation (EU) 2016/679 (the "GDPR"). "You" means the person using the Apps or the Website.</p>
+  <p class="c">1.3 This policy is provided in accordance with Articles 13 and 14 of the GDPR, the GDPR as retained in the law of the United Kingdom (the "UK GDPR"), and the Apple App Store Review Guidelines.</p>
 
-  <h2>Screen Time</h2>
-  <p>On iPhone, Lockabulary uses Apple's Screen Time framework to lock the apps you choose. iOS hands the app only opaque tokens for those apps, so Lockabulary never learns which apps or websites they are. It counts minutes of use on the device to know when to lock, and that count never leaves the device.</p>
+  <h2 id="controller">2. Who is responsible for your data</h2>
+  <p class="c">2.1 The Apps and the Website are provided by:</p>
+  <p class="addr">Artur Witkowski<br>ul. Stefana Batorego 23/7<br>81-365 Gdynia, Poland<br>Email: <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a></p>
+  <p class="c">(the "Developer").</p>
+  <p class="c">2.2 The Developer is the controller, within the meaning of Article 4(7) of the GDPR, of the personal data described in sections 7 to 9. The Developer has not appointed a data protection officer and is not required to do so.</p>
 
-  <h2>Bug reports and ideas</h2>
-  <p>"Report a bug" and "Suggest an idea" open an email in your own mail app, addressed to contact@arturwitkowski.com. A bug report includes the app's log of what it did and when, plus your app version, system version, device model and the language you're learning. You see all of it before you send, and nothing goes anywhere unless you press send. I use these emails only to answer you and fix the app.</p>
+  <h2 id="summary">3. Summary</h2>
+  <p class="c">3.1 The Apps have no user accounts, display no advertising, contain no analytics, tracking or other third-party software, and do not communicate with any server operated by the Developer.</p>
+  <p class="c">3.2 The Apps do not collect personal data automatically. Your learning data and settings are stored on your devices and, if you use iCloud, in your private iCloud database, which the Developer cannot access.</p>
+  <p class="c">3.3 The Developer receives personal data only when you choose to send an email, including a bug report or a suggestion (section 7), and when Apple makes certain information available to the Developer under Apple's own terms (section 8).</p>
 
-  <h2>Children</h2>
-  <p>Lockabulary collects no data from anyone, children included. On a child's account in Family Sharing, a parent approves Screen Time access.</p>
+  <h2 id="device">4. Data processed only on your device</h2>
+  <p class="c">4.1 <b>Learning data and settings.</b> The Apps store on your device the words you study, a record of each answer you give with its time and result, your progress and statistics, your schedule and your settings. This data is used solely to provide the Apps' functionality and is not transmitted to the Developer.</p>
+  <p class="c">4.2 <b>iPhone: Screen Time.</b> Lockabulary for iPhone uses Apple's Screen Time frameworks (Family Controls, Device Activity and Managed Settings) to restrict access to the apps, categories and websites you select. iOS provides the App only with opaque tokens representing your selection, and the App cannot determine which apps or websites those tokens represent. The App does not record which apps you open or which websites you visit. It counts minutes of use of the selected items in order to decide when to restrict access. Your selection is stored only on your iPhone and is not transmitted to the Developer or to iCloud. The minute count is likewise kept on your iPhone, except that the diagnostic log described in section 4.6 records it as a number. Screen Time access requires your authorisation in iOS, which you may revoke at any time in the iOS Settings app.</p>
+  <p class="c">4.3 <b>Mac: activity checks.</b> To avoid interrupting you at an inappropriate moment, Lockabulary for Mac:</p>
+  <ol class="sub">
+    <li>checks, through the macOS audio system, whether another application is currently using a microphone and, if so, which one. The App does not access, record, transmit or analyse any audio, and does not request microphone permission;</li>
+    <li>reads the identifier of the application in the foreground, solely to compare it with the exception list you have configured. This identifier is not stored or logged; and</li>
+    <li>reads how long the computer has been idle and whether the screen is locked or asleep.</li>
+  </ol>
+  <p class="c">4.4 <b>Mac: system features.</b> If you enable the corresponding setting, Lockabulary for Mac sends a pause command to the Music and Spotify applications through Apple Events when a quiz begins. macOS asks for your permission before the App can control each application, and you may withdraw it in System Settings, Privacy &amp; Security, Automation. The App opens at login unless you turn this off in its settings. Its keyboard shortcut is a single key combination registered with macOS; the App does not monitor any other keys you press. When you quit the App, relax certain settings or leave a quiz early, macOS may ask for Touch ID or your password, and the App learns only whether the check succeeded.</p>
+  <p class="c">4.5 <b>Other on-device features.</b> Words are pronounced by voices installed on your device. Reminders and lock warnings are scheduled locally on your device; the only remote notifications the Apps receive are silent notifications from iCloud indicating that new progress is available. The iPhone widgets keep a short list of upcoming words and your statistics in storage shared only with the App. The Lock Screen widget displays your streak and daily count to anyone who can see your Lock Screen. On Mac, the export function saves your settings and progress to a file at a location you choose.</p>
+  <p class="c">4.6 <b>Diagnostic log.</b> Each App keeps a text log on your device recording, with timestamps, the actions the App has taken and the reasons for them. The log may include the words presented to you, whether your answers were correct, the text you typed and the options you chose, your schedule and settings, pause and resume events, minutes of use counted for Screen Time and the number (but not the identity) of items you selected, purchase and trial status, and synchronisation errors. On Mac, the log also records when the screen was locked or asleep and the name and identifier of any application that used a microphone, as described in section 4.3(a). The log is limited to approximately 4 MB, and older entries are overwritten automatically. It remains on your device unless you choose to send it in a bug report (section 7).</p>
+  <p class="c">4.7 <b>Device storage.</b> The storage of information on your device described in this section is strictly necessary to provide the service you have requested and therefore does not require consent under Article 5(3) of Directive 2002/58/EC or the national laws implementing it.</p>
 
-  <h2>Deleting your data</h2>
-  <p>Delete the app to remove its data from a device. To remove the iCloud copy, open Settings, tap your name, then iCloud, and manage storage for Lockabulary.</p>
+  <h2 id="icloud">5. Synchronisation through iCloud</h2>
+  <p class="c">5.1 If you are signed in to iCloud and iCloud is enabled for the Apps, the Apps synchronise your answer history, progress and settings between your devices using Apple's CloudKit service. The synchronised settings include the lists of Mac applications you have marked as exceptions or as microphone users to ignore, and a randomly generated label used to tell your devices apart.</p>
+  <p class="c">5.2 This data is stored in the private database associated with your Apple Account. The Developer has no technical means of accessing it. iCloud is provided to you by Apple under Apple's terms and privacy policy (<a href="https://www.apple.com/legal/privacy/">apple.com/legal/privacy</a>), and Apple determines how iCloud data is stored and secured.</p>
+  <p class="c">5.3 You may stop synchronisation at any time by disabling iCloud for the Apps in your device settings.</p>
 
-  <h2>Changes and contact</h2>
-  <p>If this policy changes, the new version will be on this page with a new date. Questions go to <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>.</p>
+  <h2 id="purchases">6. Purchases and the App Store</h2>
+  <p class="c">6.1 Downloads, subscriptions, free trials and in-app purchases are processed by Apple as the seller. The Developer does not receive your name, email address, payment details or billing address.</p>
+  <p class="c">6.2 The Apps verify your purchases on your device using Apple's StoreKit framework, to determine which features you are entitled to use. The Apps transmit no purchase information to the Developer.</p>
+  <p class="c">6.3 Apple provides the Developer with sales and subscription reports in App Store Connect. These reports do not identify individual customers to the Developer.</p>
+  <p class="c">6.4 Subscriptions, refunds and purchase history are managed through your Apple Account, and requests about them should be addressed to Apple.</p>
+
+  <h2 id="messages">7. Messages you send</h2>
+  <p class="c">7.1 <b>How messages are sent.</b> The "Report a bug" and "Suggest an idea" functions open a new email, addressed to contact@arturwitkowski.com, in the email application on your device. Nothing is sent unless you send the email yourself. Before sending, you can edit the message and remove the diagnostic information, whether it appears in the body or as an attachment.</p>
+  <p class="c">7.2 <b>Data concerned.</b> When you send an email, the Developer receives your email address, the name associated with it, the content of your message and any attachments. Unless you remove them, a bug report also contains the App version, the operating system version, the device model, the language you are learning and the diagnostic log described in section 4.6. Depending on your email application, the log is either attached in full as a file or its most recent entries are included in the body of the email. The same applies to any other email you send to the Developer.</p>
+  <p class="c">7.3 <b>Purposes and legal bases.</b> The Developer processes this data:</p>
+  <ol class="sub">
+    <li>to reply to you and deal with your request, on the basis of Article 6(1)(b) of the GDPR where the request relates to your use of the Apps under the terms on which you obtained them, and otherwise on the basis of Article 6(1)(f) of the GDPR, the Developer's legitimate interest being to respond to enquiries addressed to him;</li>
+    <li>to investigate, reproduce and correct faults and to improve the Apps, on the basis of Article 6(1)(f) of the GDPR, the legitimate interest being to keep the Apps working correctly for all users; and</li>
+    <li>where necessary, to establish, exercise or defend legal claims, on the basis of Article 6(1)(f) of the GDPR.</li>
+  </ol>
+  <p class="c">7.4 <b>Voluntary provision.</b> Sending a message is voluntary and is neither a statutory nor a contractual requirement. The Apps work fully without it. If you do not send a message, the Developer cannot respond to it. Removing the diagnostic information may make a fault harder to diagnose.</p>
+  <p class="c">7.5 <b>No other use.</b> The Developer does not use messages for marketing, does not add your address to any mailing list and does not disclose messages to third parties other than the email service provider named in section 10.</p>
+
+  <h2 id="apple">8. Information Apple makes available to the Developer</h2>
+  <p class="c">8.1 Apple collects certain information about the use of apps under its own privacy policy and makes some of it available to the Developer through App Store Connect and Xcode, namely:</p>
+  <ol class="sub">
+    <li>crash reports and diagnostic data, if you have chosen in your device settings to share analytics with app developers;</li>
+    <li>aggregated usage and sales statistics, which do not identify you to the Developer; and</li>
+    <li>ratings and reviews you publish on the App Store, together with the public name you choose to display.</li>
+  </ol>
+  <p class="c">8.2 The Developer uses this information only to identify and correct faults, to understand how the Apps are used in aggregate and to respond to reviews, on the basis of Article 6(1)(f) of the GDPR, the legitimate interest being the maintenance and improvement of the Apps. You can stop sharing crash and analytics data with developers in Settings (iPhone) or System Settings (Mac), under Privacy &amp; Security, Analytics &amp; Improvements.</p>
+  <p class="c">8.3 The Apps may display Apple's standard rating prompt. Apple controls when the prompt appears and processes any rating you give.</p>
+
+  <h2 id="website">9. The Website</h2>
+  <p class="c">9.1 The Website does not use cookies, analytics or advertising technologies.</p>
+  <p class="c">9.2 The Website is hosted by Cloudflare, Inc. When you visit it, Cloudflare necessarily processes your IP address and technical information about your request in order to deliver the page and protect it against abuse. This processing is carried out on the Developer's behalf on the basis of Article 6(1)(f) of the GDPR, the legitimate interest being the secure operation of the Website. The Developer does not use this information to identify visitors.</p>
+
+  <h2 id="recipients">10. Recipients and service providers</h2>
+  <p class="c">10.1 The Developer does not sell, rent or trade personal data and does not disclose it to third parties for their own purposes.</p>
+  <p class="c">10.2 The Developer uses the following service providers, which process personal data on his behalf as processors under Article 28 of the GDPR:</p>
+  <ol class="sub">
+    <li>Namecheap, Inc., which hosts the mailbox contact@arturwitkowski.com; and</li>
+    <li>Cloudflare, Inc., which hosts the Website.</li>
+  </ol>
+  <p class="c">10.3 Apple acts independently, under its own terms and privacy policy, in providing the App Store, purchases, iCloud, notifications and the other Apple services referred to in this policy. For users in the European Economic Area, the United Kingdom and Switzerland, these services are provided by Apple Distribution International Limited, Ireland.</p>
+  <p class="c">10.4 The Developer may disclose personal data where required to do so by law or by a binding order of a public authority.</p>
+
+  <h2 id="transfers">11. International transfers</h2>
+  <p class="c">11.1 The service providers named in section 10.2 are established in the United States, and personal data they process, including emails you send to the Developer, may be stored there. They process it under their own data protection terms.</p>
+
+  <h2 id="retention">12. Retention</h2>
+  <p class="c">12.1 The Apps do not delete your answer history on their own, because it is used to restore your progress on a new device. The "Reset progress" function starts your learning afresh but keeps the history. Data stored on your devices or in iCloud is retained until you delete it as described in section 13.</p>
+  <p class="c">12.2 The diagnostic log overwrites older entries automatically once it reaches approximately 4 MB (section 4.6).</p>
+  <p class="c">12.3 Emails and their attachments are retained for as long as necessary to deal with your request or the reported fault, and are deleted no later than 24 months after the last message in the correspondence, unless a longer period is necessary to establish, exercise or defend legal claims, in which case they are retained until the relevant limitation period expires.</p>
+  <p class="c">12.4 Information provided by Apple under section 8 is retained in accordance with Apple's retention periods for App Store Connect and Xcode. Website request data is retained by Cloudflare for the periods necessary for delivery and security of the Website.</p>
+
+  <h2 id="deletion">13. Deleting your data</h2>
+  <p class="c">13.1 <b>iPhone.</b> Deleting the App removes all data it stored on the iPhone and lifts any restrictions it applied.</p>
+  <p class="c">13.2 <b>Mac.</b> Quit the App, move it to the Trash and delete the folder ~/Library/Containers/com.arturwitkowski.Lockabulary. Files you exported remain where you saved them.</p>
+  <p class="c">13.3 <b>iCloud.</b> First delete the App from all of your devices; otherwise an installed copy will upload your data again. Then, on iPhone, open Settings, tap your name, then iCloud, Manage Storage, Lockabulary, and choose to delete the data. On Mac, open System Settings, click your name, then iCloud, Manage, Lockabulary, and choose Delete.</p>
+  <p class="c">13.4 <b>Emails.</b> To have emails you sent deleted before the end of the period in section 12.3, write to the Developer.</p>
+
+  <h2 id="rights">14. Your rights</h2>
+  <p class="c">14.1 Subject to the conditions and exceptions set out in the GDPR, you have the right to:</p>
+  <ol class="sub">
+    <li>obtain confirmation of whether the Developer processes personal data about you, and access to that data (Article 15);</li>
+    <li>have inaccurate data rectified (Article 16);</li>
+    <li>have your data erased (Article 17);</li>
+    <li>restrict the processing of your data (Article 18);</li>
+    <li>receive data you have provided in a structured, commonly used and machine-readable format and have it transmitted to another controller, where processing is based on Article 6(1)(b) and carried out by automated means (Article 20); and</li>
+    <li>object to processing, as described in section 15 (Article 21).</li>
+  </ol>
+  <p class="c">14.2 To exercise any of these rights, write to contact@arturwitkowski.com. The Developer will respond within one month of receipt. That period may be extended by two further months where necessary in view of the complexity or number of requests, in which case you will be informed. The Developer may ask for information needed to confirm that the request comes from the person to whom the data relates, for example a reply from the same email address.</p>
+  <p class="c">14.3 Because the Developer has no access to data stored on your devices or in your iCloud account, requests concerning that data can be fulfilled only by you, using the controls described in section 13, or by Apple in respect of data held by Apple.</p>
+  <p class="c">14.4 Residents of the United Kingdom have equivalent rights under the UK GDPR.</p>
+
+  <h2 id="object">15. Right to object</h2>
+  <p class="c notice">You have the right to object at any time, on grounds relating to your particular situation, to the processing of your personal data based on Article 6(1)(f) of the GDPR (legitimate interests), as described in sections 7.3, 8.2 and 9.2. The Developer will then stop processing the data unless he demonstrates compelling legitimate grounds for the processing which override your interests, rights and freedoms, or the processing is necessary for the establishment, exercise or defence of legal claims. To object, write to contact@arturwitkowski.com.</p>
+
+  <h2 id="complaints">16. Complaints to a supervisory authority</h2>
+  <p class="c">16.1 If you consider that the processing of your personal data infringes the GDPR, you have the right to lodge a complaint with a supervisory authority, in particular in the EU Member State of your habitual residence, place of work or place of the alleged infringement.</p>
+  <p class="c">16.2 The supervisory authority competent for the Developer is:</p>
+  <p class="addr">President of the Personal Data Protection Office (Prezes Urzędu Ochrony Danych Osobowych)<br>ul. Stanisława Moniuszki 1A, 00-014 Warszawa, Poland<br><a href="https://uodo.gov.pl">uodo.gov.pl</a></p>
+  <p class="c">16.3 Residents of the United Kingdom may lodge a complaint with the Information Commissioner's Office (<a href="https://ico.org.uk">ico.org.uk</a>).</p>
+  <p class="c">16.4 You are welcome to contact the Developer first, so that your concern can be addressed directly.</p>
+
+  <h2 id="automated">17. No automated decision-making</h2>
+  <p class="c">The Developer does not make decisions about you based solely on automated processing, including profiling, which produce legal effects concerning you or similarly significantly affect you within the meaning of Article 22 of the GDPR. The scheduling of quizzes and the choice of words to review are calculated on your device to provide the learning function you have requested and have no such effects.</p>
+
+  <h2 id="children">18. Children</h2>
+  <p class="c">18.1 The Apps are suitable for all ages and do not collect personal data automatically from any user, including children.</p>
+  <p class="c">18.2 When the iPhone App is used on a child's device within an Apple Family Sharing group, a parent or guardian may need to approve Screen Time access through Family Sharing.</p>
+  <p class="c">18.3 The Developer does not knowingly collect personal data from children under the age of 13, or under the age of 16 in the European Economic Area, without the consent of a parent or guardian. If the Developer learns that he has received an email from such a child without that consent, he will delete it, except to the extent that a short reply is needed to explain why the request cannot be handled. A parent or guardian who believes that a child has sent personal data to the Developer may request its deletion at contact@arturwitkowski.com.</p>
+
+  <h2 id="us">19. Information for residents of the United States</h2>
+  <p class="c">19.1 The Developer receives personal information only in the form of emails sent by users, as described in section 7. In the categories used by the California Consumer Privacy Act, this consists of identifiers (email address and name), the content of communications, and device and app information included in bug reports. This information is obtained directly from users and used only for the purposes stated in section 7.3.</p>
+  <p class="c">19.2 The Developer does not sell personal information, does not share it for cross-context behavioural advertising and does not use or disclose sensitive personal information.</p>
+  <p class="c">19.3 You may request access to or deletion of personal information the Developer holds about you by writing to contact@arturwitkowski.com. The Developer will not discriminate against you for making such a request.</p>
+
+  <h2 id="security">20. Security</h2>
+  <p class="c">20.1 The Developer takes appropriate technical and organisational measures to protect the personal data he receives, including restricting access to the mailbox to the Developer, protecting it with strong authentication and using encrypted connections.</p>
+  <p class="c">20.2 Data synchronised through iCloud is transmitted over encrypted connections and stored by Apple in accordance with Apple's security practices. No method of transmission or storage is completely secure, and the Developer cannot guarantee the security of data outside his control.</p>
+
+  <h2 id="changes">21. Changes to this policy</h2>
+  <p class="c">21.1 The Developer may amend this policy to reflect changes in the Apps, the Website or the law. The current version is always published on this page with its effective date.</p>
+  <p class="c">21.2 Where a change materially affects how your personal data is processed, the Developer will give notice on this page before the change takes effect. Earlier versions are available on request.</p>
+
+  <h2 id="contact">22. Contact</h2>
+  <p class="c">Questions, requests and complaints concerning this policy or your personal data may be sent to <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a> or by post to the address in section 2.</p>
 </LockabularyPage>
+
+<style>
+  h2 { margin-top: 40px; }
+  p.c { margin: 10px 0; }
+  ol.sub { list-style: lower-alpha; margin: 6px 0 12px; padding-left: 28px; }
+  .addr { margin: 10px 0 10px 24px; }
+  .toc { columns: 2; column-gap: 32px; padding-left: 20px; margin: 0 0 8px; font-size: 15px; }
+  .notice { font-weight: 600; }
+  @media (max-width: 560px) { .toc { columns: 1; } }
+</style>
