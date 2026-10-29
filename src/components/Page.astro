@@ -109,6 +109,14 @@ Object.assign(techLookup, {
   'Stripe': { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
   'MapLibre': { name: 'MapLibre', icon: 'maplibre', color: '#396CB2' },
   'PostGIS': { name: 'PostGIS', color: '#5C8DB8' },
+  'Swift': { name: 'Swift', icon: 'swift', color: '#F05138' },
+  'SwiftUI': { name: 'SwiftUI', icon: 'swift', color: '#0D96F6' },
+  'AppKit': { name: 'AppKit', icon: 'apple', color: '#c0c0c0' },
+  'Screen Time API': { name: 'Screen Time API', icon: 'apple', color: '#c0c0c0' },
+  'CloudKit': { name: 'CloudKit', icon: 'icloud', color: '#3693F3' },
+  'StoreKit': { name: 'StoreKit', icon: 'appstore', color: '#0D96F6' },
+  'WidgetKit': { name: 'WidgetKit', icon: 'apple', color: '#c0c0c0' },
+  'Python': { name: 'Python', icon: 'python', color: '#3776AB' },
 } satisfies Record<string, TechItem>);
 
 const contactLinks = [
@@ -296,7 +304,7 @@ const contactLinks = [
             </span>
           ))}
         </h2>
-        <div class="flex items-center gap-2 lg:hidden">
+        <div class="flex items-center gap-2 md:hidden">
           <div class="flex items-center gap-0" id="carousel-dots">
             {projects.map((_, i) => (
               <button
@@ -315,7 +323,8 @@ const contactLinks = [
         </div>
       </div>
 
-      <div class="carousel-track flex-1" id="carousel-track">
+      {/* One row on wide screens, up to four across; more wrap into the next row */}
+      <div class="carousel-track flex-1" id="carousel-track" style={`--cols: ${Math.min(projects.length, 4)}`}>
         {projects.map((project) => {
           const desc = project.description[lang];
           const typeLabel = project.type === 'solo' ? t('projects.solo', lang) : t('projects.team', lang);
@@ -323,8 +332,11 @@ const contactLinks = [
             <div class="carousel-card glass rounded-2xl p-5 lg:p-5 flex flex-col">
               {/* Browser frame screenshot */}
               {project.image && (
-                <div class={`browser-frame mb-3 rounded-lg overflow-hidden ${project.phones ? 'bg-[#FFD66E] pt-[30px]' : 'border border-border/50'}`}>
-                  {!project.phones && <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
+                <div
+                  class={`browser-frame mb-3 rounded-lg overflow-hidden ${project.backdrop ? 'pt-[30px]' : 'border border-border/50'}`}
+                  style={project.backdrop ? `background-color: ${project.backdrop}` : undefined}
+                >
+                  {!project.backdrop && <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
                     <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
@@ -371,17 +383,39 @@ const contactLinks = [
                 })}
               </div>
 
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="glow-link inline-flex items-center gap-1 text-xs text-primary hover:text-accent font-body font-medium cursor-pointer group w-fit mt-auto"
-              >
-                {t('projects.visit', lang)}
-                <svg class="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-                </svg>
-              </a>
+              <div class="flex items-center gap-1.5 flex-wrap mt-auto">
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="cta cta-primary flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg border border-transparent whitespace-nowrap text-xs font-body font-semibold cursor-pointer group"
+                >
+                  {t('projects.visit', lang)}
+                  <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+                {project.stores?.map((store) => (
+                  <a
+                    href={store.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cta cta-secondary flex-1 inline-flex items-center justify-center gap-1 px-2 py-2 rounded-lg whitespace-nowrap border border-border bg-surface/40 text-text text-xs font-body font-medium cursor-pointer"
+                    aria-label={`${project.name}: ${store.icon === 'apple' ? 'App Store' : 'Google Play'}, ${store.label}`}
+                  >
+                    {store.icon === 'apple' ? (
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.38-.92-2.4-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z" />
+                      </svg>
+                    ) : (
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M4.6 2.3c-.3.3-.5.8-.5 1.4v16.6c0 .6.2 1.1.5 1.4l.1.1 9.3-9.3v-.2L4.7 2.2l-.1.1zm12.5 12.5-3.1-3.1v-.2l3.1-3.1.1.1 3.7 2.1c1 .6 1 1.6 0 2.2l-3.7 2.1-.1-.1zm-.1.1L13.8 12l-9.2 9.7c.3.4.9.4 1.6 0l10.8-6.8m0-5.8L6.2 2.3c-.7-.4-1.3-.4-1.6 0l9.2 9.7 3.2-3.2z" />
+                      </svg>
+                    )}
+                    {store.label}
+                  </a>
+                ))}
+              </div>
             </div>
           );
         })}

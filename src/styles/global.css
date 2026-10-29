@@ -301,6 +301,36 @@ body {
   width: 100%;
 }
 
+/* ===== PROJECT BUTTONS ===== */
+/* Main one is filled; dark text on bright cyan, white on the deeper teal in light mode, both above 4.5:1 */
+.cta {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+}
+
+.cta-primary {
+  background: linear-gradient(135deg, #06b6d4, #38bdf8);
+  color: #0b1a2e;
+}
+
+.light .cta-primary {
+  background: linear-gradient(135deg, #0e7490, #155e75);
+  color: #ffffff;
+}
+
+.cta-primary:hover {
+  box-shadow: 0 6px 22px rgba(6, 182, 212, 0.35);
+}
+
+.cta-secondary:hover {
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: var(--color-accent);
+}
+
 /* ===== SOCIAL ICON ===== */
 .social-icon {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -349,20 +379,28 @@ body {
   display: none;
 }
 
+/* On phones the next card shows past the edge, so it's clear there are more */
 .carousel-card {
   scroll-snap-align: start;
-  flex: 0 0 calc(100% - 1rem);
+  flex: 0 0 85%;
 }
 
-@media (min-width: 1024px) {
+/* From tablets up every project is on screen: two columns, then --cols across (set from the project count) */
+@media (min-width: 768px) {
   .carousel-track {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     overflow: visible;
     scroll-snap-type: none;
   }
   .carousel-card {
     flex: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .carousel-track {
+    grid-template-columns: repeat(var(--cols, 3), 1fr);
   }
 }
 

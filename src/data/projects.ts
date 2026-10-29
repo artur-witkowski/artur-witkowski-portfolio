@@ -7,11 +7,32 @@ export interface Project {
   type: 'solo' | 'team';
   highlights: string[];
   image?: string;
-  // a phone app: the picture is screens, so it gets no browser bar
-  phones?: boolean;
+  // an app, not a website: the picture is its screens on this colour, so it gets no browser bar
+  backdrop?: string;
+  // store pages, shown as buttons next to "Visit"
+  stores?: { label: string; url: string; icon: 'apple' | 'play' }[];
 }
 
 export const projects: Project[] = [
+  {
+    slug: 'lockabulary',
+    name: 'Lockabulary',
+    description: {
+      pl: 'Aplikacja na iPhone\'a i Maca do nauki słówek. Na telefonie blokuje aplikacje, w których tracisz czas, dopóki nie odpowiesz na kilka pytań. Na Macu co 15 do 70 minut pracy rozmywa ekran na krótki quiz.',
+      en: 'iPhone and Mac app for learning vocabulary. On the phone it locks the apps you lose time in until you answer a few words. On the Mac it blurs the screen for a short quiz every 15 to 70 minutes of work.',
+    },
+    stack: ['Swift', 'SwiftUI', 'AppKit', 'Screen Time API', 'CloudKit', 'StoreKit', 'WidgetKit', 'Python', 'Claude Code'],
+    url: '/lockabulary',
+    type: 'solo',
+    highlights: ['Screen Time shield on iPhone', 'CloudKit sync with no server', 'FSRS spaced repetition'],
+    image: '/projects/lockabulary.webp',
+    backdrop: '#F6CDB8',
+    // one app record for both, so one Apple ID
+    stores: [
+      { label: 'iPhone', url: 'https://apps.apple.com/app/id6827322789?platform=iphone', icon: 'apple' },
+      { label: 'Mac', url: 'https://apps.apple.com/app/id6827322789?platform=mac', icon: 'apple' },
+    ],
+  },
   {
     slug: 'krokiet',
     name: 'Krokiet',
@@ -24,7 +45,11 @@ export const projects: Project[] = [
     type: 'solo',
     highlights: ['Offline outbox with ids from the phone', 'Overture Maps import', 'Subscriptions through RevenueCat'],
     image: '/projects/krokiet.webp',
-    phones: true,
+    backdrop: '#FFD66E',
+    stores: [
+      { label: 'iPhone', url: 'https://apps.apple.com/app/id6813079137', icon: 'apple' },
+      { label: 'Android', url: 'https://play.google.com/store/apps/details?id=com.arturwitkowski.krokiet', icon: 'play' },
+    ],
   },
   {
     slug: 'faunarium',
