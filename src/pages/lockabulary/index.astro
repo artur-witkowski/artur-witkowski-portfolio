@@ -1,25 +1,367 @@
 ---
 import LockabularyPage from '@/components/lockabulary/LockabularyPage.astro';
+
+// One app record covers iPhone and Mac, so one link
+const appStoreUrl = 'https://apps.apple.com/app/id6827322789';
+
+const paces = [
+  { name: 'Relaxed', minutes: 5, every: '50–70', fresh: 5 },
+  { name: 'Regular', minutes: 10, every: '35–50', fresh: 10 },
+  { name: 'Serious', minutes: 15, every: '30–40', fresh: 12 },
+  { name: 'Intense', minutes: 25, every: '25–30', fresh: 16 },
+  { name: 'Hardcore', minutes: 40, every: '15–20', fresh: 22 },
+];
+
+const languages = [
+  { flag: '🇵🇹', name: 'Portuguese (European)' },
+  { flag: '🇪🇸', name: 'Spanish (Spain)' },
+  { flag: '🇫🇷', name: 'French (France)' },
+];
 ---
 
-<LockabularyPage title="Lockabulary support" description="Help and contact for Lockabulary, the vocabulary trainer for iPhone and Mac." path="lockabulary">
-  <h1>Learn a language, scroll less</h1>
-  <p class="soft">Lockabulary is a vocabulary trainer for European Portuguese, Spanish and French. On iPhone it locks the apps you lose time in until you answer a few words. On Mac it lives in the menu bar and asks a few words every so often.</p>
+<LockabularyPage
+  title="Lockabulary: learn vocabulary, scroll less"
+  description="Lockabulary locks the apps you lose time in until you answer a few words. A vocabulary trainer for iPhone and Mac: European Portuguese, Spanish and French."
+  path="lockabulary"
+  wide
+>
+  <main>
+    {/* ===== HERO ===== */}
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <span class="pill">For iPhone and Mac</span>
+        <h1>Learn a language, <em>scroll less.</em></h1>
+        <p class="lead">
+          Lockabulary locks the apps you lose time in until you answer a few words. On the Mac, a short
+          quiz comes up between your work. European Portuguese, Spanish and French.
+        </p>
+        <div class="cta-row">
+          <a class="store-btn" href={appStoreUrl}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.38-.92-2.4-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z" /></svg>
+              <span><small>Download on the</small>App Store</span>
+            </a>
+          <a class="ghost-btn" href="#how">See how it works</a>
+        </div>
+        <p class="fine">14 days free. One purchase covers your iPhone and your Mac.</p>
+      </div>
 
-  <div class="card">
-    <p><strong>Something broke, or you have an idea?</strong></p>
-    <p>Write to <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>. The quickest way is Settings › Feedback in the app: a bug report brings the app's log along, which helps a lot.</p>
-  </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="mac">
+          <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+          <div class="menubar"><img src="/lockabulary/icon.png" alt="" width="12" height="12" />Tue 9:41</div>
+          <img class="mac-win" src="/lockabulary/mac-quiz.webp" alt="" width="1100" height="1002" />
+        </div>
+        <div class="phone hero-phone"><img src="/lockabulary/locked.webp" alt="" width="660" height="1434" /></div>
+      </div>
+    </section>
 
-  <h2>The lock on my iPhone doesn't start</h2>
-  <p>Open Settings in Lockabulary and check three things: Screen Time access is allowed, at least one app is chosen under "Apps to lock", and the current time is inside your hours. "Test the lock" locks the chosen apps after 2 minutes of use, at any hour.</p>
+    {/* ===== HOW IT WORKS ===== */}
+    <section id="how" class="wrap section">
+      <span class="pill">How it works</span>
+      <h2>It stops you <em>at the right moment.</em></h2>
 
-  <h2>My progress isn't on my other device</h2>
-  <p>Both devices need to be signed in to the same Apple Account with iCloud turned on. Progress syncs through your private iCloud database. "Sync now" in Settings asks for the latest right away.</p>
+      <div class="two">
+        <article class="panel">
+          <div class="panel-art art-phone">
+            <div class="phone cut"><img src="/lockabulary/locked.webp" alt="Lockabulary on iPhone: your apps are locked, start the quiz" width="660" height="1434" loading="lazy" /></div>
+          </div>
+          <div class="panel-copy">
+            <h3>On iPhone, your apps wait for a few words</h3>
+            <ol class="steps">
+              <li>Pick the apps that eat your time.</li>
+              <li>After the minutes you choose in them, Screen Time locks them.</li>
+              <li>Answer a few questions and you're back in.</li>
+            </ol>
+            <p class="soft">Screen Time keeps the list of apps to itself, so Lockabulary never learns which ones they are.</p>
+          </div>
+        </article>
 
-  <h2>One purchase, both devices</h2>
-  <p>Lockabulary is a single purchase for iPhone and Mac. On the second device, download it from the App Store with the same Apple Account.</p>
+        <article class="panel">
+          <div class="panel-art art-mac">
+            <img class="mac-menu" src="/lockabulary/mac-menu.webp" alt="The Lockabulary menu: 1:41 to solve, Solve now, +10 min" width="400" height="940" loading="lazy" />
+          </div>
+          <div class="panel-copy">
+            <h3>On Mac, a quiz from the menu bar</h3>
+            <ol class="steps">
+              <li>A countdown in the menu bar gives you two minutes to wrap up.</li>
+              <li>Then the screen blurs and a short quiz opens, usually under a minute.</li>
+              <li>Answer, and the screen is yours again.</li>
+            </ol>
+            <p class="soft">It waits during calls and in apps you mark, like Keynote. "+10 min" buys time once a day, and <kbd>⌃⌥P</kbd> starts one early.</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <h2>Privacy</h2>
-  <p>No account, no ads, no analytics. Read the <a href="/lockabulary/privacy">privacy policy</a>.</p>
+    {/* ===== WHAT YOU LEARN ===== */}
+    <section id="learn" class="wrap section learn">
+      <div class="learn-art">
+        <div class="phone tilt-left"><img src="/lockabulary/intro.webp" alt="A new word: a saudade, longing, with an example sentence" width="660" height="1434" loading="lazy" /></div>
+        <div class="phone tilt-right"><img src="/lockabulary/choice.webp" alt="A quiz question: what does o comboio mean? Train." width="660" height="1434" loading="lazy" /></div>
+      </div>
+      <div>
+        <span class="pill">What you learn</span>
+        <h2>The words you'll <em>actually meet.</em></h2>
+        <ul class="langs">
+          {languages.map((l) => <li><span aria-hidden="true">{l.flag}</span> {l.name}</li>)}
+        </ul>
+        <ul class="facts">
+          <li><strong>2,500 to 3,300 words</strong> per language, in order of how often you'll run into them.</li>
+          <li><strong>Every word in a real sentence</strong>, with phonetic spelling and a voice.</li>
+          <li><strong>Reviews spaced with FSRS</strong>, so a word comes back right before you'd forget it.</li>
+          <li><strong>Questions grow with you.</strong> New words are multiple choice, later you fill gaps, listen and type them.</li>
+          <li><strong>A placement check</strong> skips the words you already know.</li>
+        </ul>
+      </div>
+    </section>
+
+    {/* ===== PACE ===== */}
+    <section id="pace" class="wrap section">
+      <span class="pill">Your pace</span>
+      <h2>Five minutes a day, <em>or forty.</em></h2>
+      <p class="lead narrowish">Setup asks how much time you have, not for intervals. You also pick the days and hours it runs, so evenings can stay yours.</p>
+      <ul class="paces">
+        {paces.map((p) => (
+          <li class={p.name === 'Regular' ? 'picked' : ''}>
+            <span class="pace-name">{p.name}</span>
+            <span class="pace-min"><b>{p.minutes}</b> min a day</span>
+            <span class="pace-meta">{p.fresh} new words a day</span>
+            <span class="pace-meta">Mac quiz every {p.every} min</span>
+          </li>
+        ))}
+      </ul>
+      <p class="soft note">Used every day, Regular gets you to 750 words (A1) in about 100 days. Hardcore reaches 2,500 (B1) in about 115.</p>
+    </section>
+
+    {/* ===== PRICING ===== */}
+    <section id="pricing" class="wrap section">
+      <span class="pill">Pricing</span>
+      <h2>Two weeks free, <em>then your call.</em></h2>
+      <div class="plans">
+        <div class="plan">
+          <h3>Yearly</h3>
+          <p class="price"><b>$12.99</b> a year</p>
+          <p class="soft">Starts with 14 days free. Cancel any time in your Apple Account settings.</p>
+        </div>
+        <div class="plan featured">
+          <span class="badge">Pay once</span>
+          <h3>Lifetime</h3>
+          <p class="price"><b>$19.99</b> once</p>
+          <p class="soft">Keep it for good. Launch price.</p>
+        </div>
+      </div>
+      <p class="soft note">Both cover iPhone and Mac. Prices are in US dollars; the App Store shows yours.</p>
+    </section>
+
+    {/* ===== PRIVACY ===== */}
+    <section class="wrap section">
+      <div class="privacy">
+        <h2>Private by design</h2>
+        <ul>
+          <li>No account</li>
+          <li>No ads</li>
+          <li>No analytics</li>
+          <li>No server</li>
+        </ul>
+        <p>Your progress stays on your devices and in your own iCloud. <a href="/lockabulary/privacy">Read the privacy policy</a>.</p>
+      </div>
+    </section>
+
+    {/* ===== HELP ===== */}
+    <section id="help" class="wrap section help">
+      <span class="pill">Help</span>
+      <h2>Something not working?</h2>
+      <div class="contact">
+        <p><strong>Found a bug, or have an idea?</strong></p>
+        <p>Write to <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>. The quickest way is Settings › Feedback in the app: a bug report brings the app's log along, which helps a lot.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>The lock on my iPhone doesn't start</summary>
+          <p>Open Settings in Lockabulary and check three things: Screen Time access is allowed, at least one app is chosen under "Apps to lock", and the current time is inside your hours. "Test the lock" locks the chosen apps after 2 minutes of use, at any hour.</p>
+        </details>
+        <details>
+          <summary>My progress isn't on my other device</summary>
+          <p>Both devices need to be signed in to the same Apple Account with iCloud turned on. Progress syncs through your private iCloud database. "Sync now" in Settings asks for the latest right away.</p>
+        </details>
+        <details>
+          <summary>I bought it on one device. What about the other?</summary>
+          <p>Lockabulary is a single purchase for iPhone and Mac. On the second device, download it from the App Store with the same Apple Account, and "Restore purchase" in Settings picks it up.</p>
+        </details>
+        <details>
+          <summary>How do I get out of a quiz on the Mac?</summary>
+          <p>Answer the questions, or use "Emergency exit…" under the quiz. It asks for Touch ID or your Mac password and closes the quiz at once.</p>
+        </details>
+      </div>
+    </section>
+  </main>
 </LockabularyPage>
+
+<style>
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .section { padding-top: 88px; scroll-margin-top: 16px; }
+
+  .pill {
+    display: inline-block; padding: 6px 16px 7px; border-radius: 999px;
+    background: #3A2A2A; color: #FFE2A0;
+    font-weight: 800; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  h1, h2 { font-weight: 800; line-height: 1.02; margin: 16px 0 18px; text-wrap: balance; }
+  h1 { font-size: clamp(44px, 7vw, 82px); }
+  h2 { font-size: clamp(34px, 4.6vw, 54px); }
+  h1 em, h2 em {
+    font-style: normal; padding: 0 6px; margin: 0 -6px;
+    background: linear-gradient(transparent 58%, var(--sun) 58%, var(--sun) 92%, transparent 92%);
+    -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  }
+  h3 { font-size: 24px; line-height: 1.15; margin: 0 0 12px; }
+  .lead { font-size: 20px; line-height: 1.5; margin: 0 0 26px; max-width: 34em; }
+  .narrowish { max-width: 36em; }
+  .note { margin-top: 18px; }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1fr; gap: 40px; padding-top: 28px; align-items: center; }
+  @media (min-width: 960px) { .hero { grid-template-columns: 1fr 1.05fr; gap: 24px; padding-top: 48px; } }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .store-btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 11px 20px 11px 16px;
+    background: #3A2A2A; color: #FFF8EC; border-radius: 16px; text-decoration: none;
+    box-shadow: 0 6px 0 #1d1413; font-weight: 700; font-size: 18px; line-height: 1.1;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .store-btn svg { width: 28px; height: 28px; fill: currentColor; }
+  .store-btn small { display: block; font-size: 12px; font-weight: 600; opacity: .8; letter-spacing: .02em; }
+  a.store-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #1d1413; }
+  .ghost-btn {
+    display: inline-flex; align-items: center; padding: 14px 20px; border-radius: 16px;
+    border: 3px solid var(--line); background: var(--card); color: var(--ink);
+    font-weight: 700; text-decoration: none; box-shadow: 0 5px 0 var(--line);
+    transition: transform .2s ease;
+  }
+  .ghost-btn:hover { transform: translateY(-2px); }
+  .fine { margin: 18px 0 0; font-size: 15px; color: var(--soft); }
+
+  .hero-art { position: relative; aspect-ratio: 1.25; max-width: 620px; width: 100%; justify-self: center; }
+  .mac {
+    position: absolute; left: 0; top: 6%; width: 86%; aspect-ratio: 16 / 10;
+    border: 10px solid #3A2A2A; border-radius: 26px; overflow: hidden; background: #F6CDB8;
+    box-shadow: 0 14px 0 #3A2A2A; transform: rotate(-3deg);
+  }
+  .blob { position: absolute; border-radius: 12px; filter: blur(14px); opacity: .8; }
+  .b1 { background: #FFF8EC; left: 4%; top: 12%; width: 44%; height: 52%; }
+  .b2 { background: #8FCDB9; right: 2%; bottom: 4%; width: 32%; height: 38%; }
+  .b3 { background: #F2B33D; left: 10%; bottom: 0; width: 32%; height: 26%; }
+  .b4 { background: #E5533D; right: 8%; top: 14%; width: 14%; height: 22%; }
+  .menubar {
+    position: absolute; left: 0; right: 0; top: 0; height: 18px; background: rgba(255, 248, 236, .75);
+    display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding: 0 12px;
+    font: 600 9px -apple-system, sans-serif; color: #2b2320;
+  }
+  .menubar img { width: 11px; height: 11px; border-radius: 3px; }
+  .mac-win { position: absolute; width: 70%; left: 15%; top: 4%; }
+
+  .phone {
+    border: 8px solid #3A2A2A; border-radius: 40px; overflow: hidden; background: #3A2A2A;
+    box-shadow: 0 10px 0 #3A2A2A;
+  }
+  .phone img { display: block; width: 100%; height: auto; }
+  .hero-phone { position: absolute; right: 0; top: 24%; width: 36%; transform: rotate(5deg); }
+  .hero-phone { aspect-ratio: 660 / 1180; }
+  @media (max-width: 520px) { .phone { border-width: 5px; border-radius: 26px; box-shadow: 0 6px 0 #3A2A2A; } .mac { border-width: 6px; border-radius: 16px; box-shadow: 0 8px 0 #3A2A2A; } }
+
+  /* How it works */
+  .two { display: grid; gap: 24px; margin-top: 12px; }
+  @media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; } }
+  .panel {
+    background: var(--card); border: 3px solid var(--line); border-radius: 28px; box-shadow: 0 8px 0 var(--line);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .panel-art { height: 300px; position: relative; overflow: hidden; }
+  .art-phone { background: #FFE2A0; }
+  .art-phone .phone { position: absolute; left: 50%; top: 34px; width: 210px; margin-left: -105px; transform: rotate(-3deg); }
+  .art-mac { background: #8FCDB9; display: flex; justify-content: center; }
+  .mac-menu { width: 200px; margin-top: 34px; border-radius: 16px; border: 3px solid #3A2A2A; box-shadow: 0 8px 0 #3A2A2A; transform: rotate(2deg); align-self: flex-start; }
+  .panel-copy { padding: 26px 28px 28px; border-top: 3px solid var(--line); }
+  .panel-copy p { margin: 14px 0 0; }
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: step; display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+  .steps li::before {
+    content: counter(step); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    background: #1F8A8A; color: #FFF8EC; font-weight: 800; font-size: 14px; margin-top: 1px;
+  }
+  kbd { font: inherit; font-weight: 700; padding: 1px 6px; border-radius: 6px; border: 2px solid var(--line); background: var(--bg); }
+
+  /* What you learn */
+  .learn { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 900px) { .learn { grid-template-columns: 0.9fr 1.1fr; } }
+  /* Tall enough for both phones at any width: each is 58% wide, so about 1.26x the box width tall */
+  .learn-art { position: relative; aspect-ratio: 1 / 1.45; max-width: 440px; width: 100%; justify-self: center; }
+  .learn-art .phone { position: absolute; width: 58%; }
+  .tilt-left { left: 0; top: 0; transform: rotate(-5deg); z-index: 1; }
+  .tilt-right { right: 0; top: 10%; transform: rotate(5deg); }
+  .langs { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .langs li {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 14px; background: var(--card); border: 3px solid var(--line);
+    box-shadow: 0 4px 0 var(--line); font-weight: 700;
+  }
+  .facts { padding: 0; margin: 0; list-style: none; display: grid; gap: 12px; }
+  .facts li { padding-left: 28px; position: relative; }
+  .facts li::before { content: ''; position: absolute; left: 4px; top: 10px; width: 12px; height: 12px; border-radius: 4px; background: #E5533D; transform: rotate(45deg); }
+
+  /* Pace */
+  .paces { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .paces li {
+    background: var(--card); border: 3px solid var(--line); border-radius: 22px; box-shadow: 0 6px 0 var(--line);
+    padding: 18px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .paces li.picked { background: #E5533D; color: #FFF8EC; }
+  .paces li.picked .pace-meta { color: #ffe9df; }
+  .pace-name { font-weight: 800; font-size: 20px; }
+  .pace-min b { font-size: 34px; font-weight: 800; font-variation-settings: 'opsz' 96; }
+  .pace-meta { font-size: 14px; color: var(--soft); }
+
+  /* Pricing */
+  .plans { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); max-width: 760px; }
+  .plan {
+    position: relative; background: var(--card); border: 3px solid var(--line); border-radius: 26px;
+    box-shadow: 0 8px 0 var(--line); padding: 26px 26px 22px;
+  }
+  .plan.featured { background: #1F8A8A; color: #FFF8EC; }
+  .plan.featured .soft { color: #d9f0ea; }
+  .plan p { margin: 8px 0 0; }
+  .price b { font-size: 46px; font-weight: 800; font-variation-settings: 'opsz' 96; letter-spacing: -0.02em; }
+  .badge {
+    position: absolute; top: -16px; right: 20px; padding: 5px 12px; border-radius: 999px; transform: rotate(4deg);
+    background: #FFE2A0; color: #3A2A2A; border: 3px solid #3A2A2A; font-weight: 800; font-size: 13px;
+  }
+
+  /* Privacy */
+  .privacy { background: #3A2A2A; color: #FFF8EC; border-radius: 30px; padding: 40px 32px; }
+  .privacy h2 { margin-top: 0; }
+  .privacy ul { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .privacy li { padding: 10px 18px; border-radius: 999px; background: #FFE2A0; color: #3A2A2A; font-weight: 800; }
+  .privacy p { margin: 0; font-size: 18px; }
+  .privacy a { color: #FFE2A0; }
+
+  /* Help */
+  .contact { background: var(--card); border-radius: 22px; padding: 20px 24px; max-width: 760px; }
+  .contact p { margin: 0 0 8px; }
+  .contact p:last-child { margin: 0; }
+  .faq { max-width: 760px; margin-top: 20px; display: grid; gap: 12px; }
+  .faq details { background: var(--card); border: 3px solid var(--line); border-radius: 18px; padding: 0 22px; }
+  .faq summary { cursor: pointer; padding: 16px 0; font-weight: 700; font-size: 18px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-weight: 800; font-size: 22px; line-height: 1; color: var(--accent); }
+  .faq details[open] summary::after { content: '–'; }
+  .faq details p { margin: 0 0 18px; }
+
+  /* The ink pieces vanish on the dark background, so they turn light there */
+  @media (prefers-color-scheme: dark) {
+    .pill { background: #FFE2A0; color: #3A2A2A; }
+    .store-btn { background: #FFF8EC; color: #3A2A2A; box-shadow: 0 6px 0 #0f0a09; }
+    a.store-btn:hover { box-shadow: 0 8px 0 #0f0a09; }
+    .privacy { background: #1F8A8A; }
+    .privacy li { background: #FFF8EC; }
+  }
+</style>
