@@ -64,3 +64,14 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Otwieranie i zamykanie to po jednej ciągłej choreografii: kamera, drzwi, światło i przyciemnienie mają wspólny zegar,
   animowane są tylko `transform` i `opacity`, dźwięki są zsynchronizowane z tym zegarem. Zamknięcie ma odbicie przy uszczelce.
 - Aplikacja na iOS i Androida (Capacitor 8): folder `app/`, instrukcja w `app/README.md`. Gra dalej rozwija się w `index.html`.
+
+## Meta-rozwój (v7)
+
+- Lodówki startowe (wybór strzałkami na drzwiach, każda zmienia jedną zasadę i kolor drzwi):
+  Biegun (standard), Mińsk (6 półek, 8 monet), Turystyczna (4 półki, 12 monet),
+  Skrzynia (pierwsza dostawa co rano gratis, potwory +1 życia), Smart (szanse jak noc później, 4 serca).
+- Odblokowania (tablica `UNLOCKS`): Masło (3 noce w jednej grze), Chili (danie ★★★), Kurczak (pokonaj Króla Pleśni),
+  Dynia (wygraj grę), Mińsk (12 nocy łącznie), Turystyczna (40 zakupów), Skrzynia (3 dania ★★★), Smart (2 wygrane).
+  Zablokowane składniki nie pojawiają się w dostawach. Nowości ogłasza karteczka od Babci.
+- Danie dnia zawsze gra na Biegunie z pełną pulą składników, żeby wynik był porównywalny dla wszystkich.
+- Ekran ODBLOKOWANIA (przycisk KSIĄŻKA) pokazuje, co jest odblokowane i jak zdobyć resztę.
