@@ -1,4 +1,4 @@
-# Midnight Pantry (prototyp v6)
+# Midnight Pantry (prototyp v10)
 
 Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią kuchni przed Pleśnią przez 10 nocy.
 
@@ -98,3 +98,18 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
   + przyprawy. Niewydane przepadają (chyba że Słoik na drobne).
 - Sprzedaż tylko przeciągnięciem składnika z półki na blat; stuknięcie pokazuje opis i cenę sprzedaży.
 - `#dev` w adresie włącza hak testowy `window.__mp` (używany przez automatyczne testy późnych nocy).
+
+## Grupy i nowe składniki (v10)
+
+- Każdy składnik należy do 0–2 grup (`GROUP_OF`), liczą się RÓŻNE składniki na półce (jak cechy w TFT). Żetony się nie liczą.
+  Chipy grup są nad półką (szare = nieaktywne, niebieskie = poziom 1, złote = poziom 2); stuknięcie pokazuje progi i członków.
+  Ikony grup są też na kartach w sklepie i w opisie składnika.
+- Grupy (`GROUPS`):
+  - Warzywa 3/6: +2 życia / +2/+4 i leczenie o 1 po każdym starciu,
+  - Nabiał i chleb 2/4: blokada pierwszego ciosu / cała półka +1/+2,
+  - Mięsa 2/4: +2 ataku / +4 ataku i trafiają też drugiego potwora,
+  - Słodkie 2/4: rano +2 monety / +5 monet i walczący leczy się o 1 po starciu,
+  - Ostre 2/3: na start nocy 2 / 5 obrażeń każdemu potworowi.
+- Nowe składniki: Pomidor (I, po zepsuciu sos w pierwszego potwora), Truskawka (I, moneta rano, jeśli przeżyje),
+  Grzyb (II, start: potwory −atak), Ryba (II, ości: oddaje obrażenia), Wołowina (III, rośnie po zabiciu potwora), Miód (III, leczy półkę po starciu).
+- Grafiki nowych składników z tej samej paczki „16x16 Food” (CC0).

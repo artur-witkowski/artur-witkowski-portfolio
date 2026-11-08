@@ -51,13 +51,13 @@ export function validate(date, b, now) {
   if (!PLAYER_RE.test(String(b.player || ''))) return 'player';
   const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
   if (!int(b.night, 0, MAX_NIGHTS)) return 'night';
-  if (!int(b.score, 0, MAX_NIGHTS * 100 + 5 * 25 + 300 + 14 * 50)) return 'score';
+  if (!int(b.score, 0, MAX_NIGHTS * 100 + 5 * 25 + 300 + 20 * 50)) return 'score';
   if (!int(b.hp, 0, 5)) return 'hp';
   if (b.seed !== hashStr(SEED_PREFIX + date)) return 'seed';
   if (typeof b.log !== 'string' || b.log.length > 60000) return 'log';
   // a score can't be higher than what the nights and hearts allow
-  // nights × 100 + hearts × 25 + 300 once night 10 is beaten + 50 per new ★★★ dish (14 dishes)
-  if (b.score > b.night * 100 + b.hp * 25 + (b.night >= 10 ? 300 : 0) + 14 * 50) return 'score';
+  // nights × 100 + hearts × 25 + 300 once night 10 is beaten + 50 per new ★★★ dish (20 dishes)
+  if (b.score > b.night * 100 + b.hp * 25 + (b.night >= 10 ? 300 : 0) + 20 * 50) return 'score';
   return null;
 }
 
