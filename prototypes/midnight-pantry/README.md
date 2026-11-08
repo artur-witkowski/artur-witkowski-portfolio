@@ -10,11 +10,13 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 ## Kierunek v3 (po drugim teście)
 
 - Wygląd: pixel-art z efektem CRT i mocnymi reakcjami (inspiracja Balatro) + rysunkowe postacie z grubym konturem (inspiracja Isaac / Wildfrost).
-  Sprite'y są rysowane kodem w 32×32, dostają kontur i cieniowanie, potem są skalowane bez wygładzania.
+- Grafiki składników: paczka „16x16 Food” autorstwa ARoachIFoundOnMyPillow z OpenGameArt.org, licencja CC0
+  (https://opengameart.org/content/16x16-food). Są osadzone w pliku jako data URI i skalowane ×3/×4 bez wygładzania.
+  Potwory, serca i moneta są nadal rysowane kodem.
 - Bohaterami są same składniki z buźkami.
 - Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy.
 - Łączenie jak w TFT: 3 kupione kopie automatycznie łączą się w formę ★★, kolejne 3 w danie ★★★
-  (np. Ziemniak → Pieczony ziemniak → Placki).
+  (np. Ziemniak → Frytki → Placki, Burak → Ćwikła → Barszcz).
 - Rzadkość składników to kolor ramki karty: szary od nocy 1, niebieski od 3, fioletowy od 5.
 - Dźwięki generowane w przeglądarce (Web Audio), wyciszanie przyciskiem ♪.
 

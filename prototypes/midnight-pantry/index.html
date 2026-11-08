@@ -60,9 +60,9 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 /* panels */
 .panel{background:var(--panel);border:3px solid var(--panel-edge);border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.5);padding:6px 8px 8px;position:relative}
 .plabel{font-size:15px;letter-spacing:.08em;color:var(--muted);display:flex;justify-content:space-between;padding:0 2px 2px}
-.row{display:flex;gap:6px;justify-content:center;align-items:flex-end;min-height:96px}
-.unit{position:relative;width:62px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .12s}
-.unit .sp{width:62px;height:62px;transition:filter .1s}
+.row{display:flex;gap:4px;justify-content:center;align-items:flex-end;min-height:96px}
+.unit{position:relative;flex:0 1 64px;min-width:40px;width:64px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .12s}
+.unit .sp{width:64px;max-width:100%;height:auto;aspect-ratio:1;transition:filter .1s}
 .unit.empty{height:84px;border:3px dashed #3D3456;border-radius:12px;box-sizing:border-box}
 .unit.empty.valid{border-color:var(--green);background:rgba(39,196,107,.1)}
 .unit.sel{transform:translateY(-8px)}
@@ -72,16 +72,16 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .unit.dead{opacity:.55}
 .unit.front::before{content:"▶";position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:15px;color:var(--gold)}
 .stars{height:14px;font-size:17px;line-height:14px;color:var(--gold);letter-spacing:-1px;text-shadow:1px 1px 0 #000}
-.badges{display:flex;justify-content:space-between;width:62px;margin-top:-10px;position:relative;z-index:2}
+.badges{display:flex;justify-content:space-between;width:64px;max-width:100%;margin-top:-10px;position:relative;z-index:2}
 .bdg{min-width:22px;height:22px;padding:0 3px;box-sizing:border-box;border-radius:6px;display:grid;place-items:center;font-weight:400;font-size:19px;color:#fff;border:2px solid var(--ink);text-shadow:1px 1px 0 rgba(0,0,0,.4)}
 .bdg.a{background:var(--atk)}.bdg.h{background:var(--hp)}
 .pips{display:flex;gap:3px;height:8px;margin-top:3px}
 .pips i{width:8px;height:6px;border-radius:2px;background:#3D3456}
 .pips i.on{background:var(--gold)}
-.enemy .sp{width:56px;height:56px}
-.enemy.boss .sp{width:84px;height:84px}
-.enemy.small .sp{width:44px;height:44px}
-.enemy .badges{width:56px}
+.enemy .sp{width:64px}
+.enemy.boss{flex-basis:96px;width:96px}.enemy.boss .sp{width:96px}
+.enemy.small{flex-basis:48px;width:48px}.enemy.small .sp{width:48px}
+.enemy .badges{width:100%}
 #center{flex:1;min-height:84px;max-height:170px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:4px;overflow:hidden}
 #center .ct{font-weight:400;font-size:28px;color:var(--gold)}
 #center .cd{font-size:19px;line-height:1.3;color:var(--text);max-width:340px}
@@ -95,7 +95,7 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 /* shop */
 .shop{display:flex;gap:8px;justify-content:center;align-items:flex-end;min-height:132px;padding-top:12px}
 .card{position:relative;width:88px;height:120px;background:var(--card);color:var(--ink);border:3px solid var(--rc,var(--r1));border-radius:12px;box-shadow:0 5px 0 rgba(0,0,0,.5),inset 0 0 0 2px var(--ink);display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;transition:transform .15s}
-.card .sp{width:56px;height:56px}
+.card .sp{width:48px;height:48px;margin:4px 0}
 .card .cn{font-weight:400;font-size:17px;line-height:1.05;text-align:center;padding:0 4px;min-height:28px;display:flex;align-items:center}
 .card .cs{display:flex;gap:4px}
 .card .cs .bdg{min-width:20px;height:20px;font-size:17px}
@@ -134,9 +134,9 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .howto{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:20px;line-height:1.3}
 .coll{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .coll div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:14px;text-align:center;line-height:1.05}
-.coll img{width:56px;height:56px}
+.coll img{width:48px;height:48px}
 .coll .lock img{filter:brightness(0) opacity(.45)}
-@media (max-height:700px){.row{min-height:84px}.unit .sp{width:52px;height:52px}.unit{width:54px}.badges{width:54px}.card{height:108px;width:82px}.card .sp{width:48px;height:48px}.shop{min-height:118px}#center{min-height:64px}#center .cd{font-size:17px}}
+@media (max-height:700px){.row{min-height:84px}.unit{flex-basis:56px}.card{height:108px;width:82px}.card .sp{width:48px;height:48px}.shop{min-height:118px}#center{min-height:64px}#center .cd{font-size:17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -203,7 +203,9 @@ const SFX={
 };
 
 /* ================= PIXEL SPRITES (drawn at 32x32, outlined, scaled up) ================= */
-const S=32,SPR={};
+const S=32;
+/* Ingredient art: "16x16 Food" by ARoachIFoundOnMyPillow, OpenGameArt.org, CC0 */
+const ART={"potato":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA4UlEQVR42mNgoBAw4pOM8lT/jy62bPtNFD0s+DT3TmzEIlP/H9kQJlI0f/5wkyEvVJ/By0jhP04vYNP8+cNNFP67K1cZmqacYth27gEjC74wQNeIDbBgsx2fxndXrqLwmbBp5hVQx6qYgYGBQUhHmwFvLPAKqMNdgK743ZWrDMduPmbYs/s5w7ZzDxjhLkC2HZfzYa6xUpfF7gV8ANkrsNBHMeDDy58oNiNrwKcZxQUwhcg0Ic1wA7ade8DYNOUUXMOxm49RFOHSjJESvYwU/tflmKFohFlAdG5ETuf4NMIAAJyTjCu/BktbAAAAAElFTkSuQmCC","french_fries":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgoCXwMlL472Wk8B+fGhZ8mifMSIRwMubDDdl27gEjXgOQbfz7/hQDs6AZAwMDAwOyYciGMGGzFa4YCnrbtRn+vj+F1aVM6ALvrlxl+Pv+FMOEGYkMH59yM/x9f4rh41NuBmZBM4aCjPkYXkAxYNu5B4xNU07BNRIDGNG9EMHNxcDAwMAgz8eNopBXXZnh8827DJ3PXzPgDAN84PPNu8SFAS7Aq65MmQG4AE4DHn76SroXtp17wLji6zectqEHIEEvoLuCYDRiS87oLqR6jgUAlbdbVJukL68AAAAASUVORK5CYII=","pancakes":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5ElEQVR42mNgGGjAiC7gZaTwH5+GbeceoOhhQdecZaxGyNL/yIYw4tMsYimAwn9z/AMDAwMDw7Szt+AuYcHmbHSN6OJZDGpwlzDBJCfMSMSwCRcwLk2Cs+EG3Jp9lEEt1ZpgqMvbBDE8PLIOeyBiM4RXQJ3h84ebDLwC6gwMDAwMD4+sY5C3CWJgmHIK1QC1VGuGW7OPMtyafRTFz+8YrjIwMDDAaZwuIMYLvALqKJqxugAXQHYNshdQ0gEsJtANQo5WeZsghuSICng6YMSWjJGjFD0wCzLmM2BNicTmB/S8QDEAAHizYOT+fTvFAAAAAElFTkSuQmCC","apple_red":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAtklEQVR42rWSMQ7CMBAEx4gqltLFEg2mpEQ8g4aChlfkMf4HBX+hoCSUTodEbRosRbbjGCls5zvvam/v4J847Ddu6s8iR96tmkmRpMBJNy58hzWPZYp8XDcA3IGzrEBWvu0uXS9GBYZkgO3rDYCuJapVaCMjETFG1rWM7KpWYY3F3B54kWQGKfLPW0jBGlsm0H1nn92BalVUE7ktpLIYBjjpoGQUkTukENdnT3hIouSUPULyLPgA/UM+nVk5oJwAAAAASUVORK5CYII=","pie_cherry_slice":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxklEQVR42mNgGGjAiE/Sy0jhP4y97dwDrGpZ8GnOMlZDFvqPzSAWXJrrcswY3hz/wCBiKcDAwMDAkMWghtUgFlyaGRgY4JpxGbTt3ANGFlyakQE2gxjOonkBl2YGBgaGW/OvYBiGEgbYNCNrQgdvjn/AHog/195nYGBgYHj46StezdPO3sIMRHTN8nzccLaQhgxOAzFiAabxs5Qgg5CUIAMDAwPDtLO3UNQgpwW4AezBinC/CUkJomjClQpRkjJysiWkaXABANJtW8w6RBayAAAAAElFTkSuQmCC","pie_cherry_whole":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+UlEQVR42mNgGPKAEZugl5HCf2zi2849wFDPgk1jlrEag4ilAMOb4x/gNBT8RzeIEVlzXY4ZXufCDGyacgpuCBO6AmRwa/4VFL6IpQCGoUww25GdDQNqiToohrw5/oHhzfEPDFnGanDvMuFzLgMDA4OQhgyK87G64Ae7LMO0s7fgmtC9gm7otLO3GH6wyzKguCCtdiLDtLO3GKadvYWhAVnjtLO3GOqnr8NMB06Wtv/zykoYGBgYGGY152N1AUxjZUE+w77jhxkxEhKyIZJSsgzPnz1mkJSSRTEEWTNGIO47fphxUlcPznSArhlnUnaytMWalNE1UwUAABYfdL8KNKW0AAAAAElFTkSuQmCC","egg_whole_white":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoUlEQVR42mNgGNQgylP9f5Sn+n+yNT+/uPH/84sbSTckylP9/6MdHf+fX9z4//2r2//fv7qN0xAmbJo78hMZWCU1UcR7O7oYsBnCRMg1P55fY2BgYGDgkNRiIOgCmO24ADZXsBATJjBXEBUG+MDv59eJNwBdMTbNDAwMDIy4YgEbqJg4n2HZ9puMeF2wbPtNxoqJ84nSjNUFyC5BN3hwZjgAOMpNfwXSJbgAAAAASUVORK5CYII=","egg_fried":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5ElEQVR42mNgGAWMuCRUpfj/C0twoIidOPeSkaABqlL8/xkYGBhOXTiDYainhw2GQYzomg8dmMnAIWDMwMDAwPDifAFcTsJwAopBMEOYkDWfunCGgUPAmOHHh7MMd3sy4BoEFGNRDNu+4wiDhZH4f7gBMM0/Ppxl+PHhLFzh170/GBgYGBg+3F8MZ+N0AQMDA9zpDAwMDNIpqXBDvu79Aeeju4AR3f8wg5Bdgi7GIWAMdwVWFyBrRhdD1ow17p/fWvH/+a0V/1Wl+P/D+O9f3f7//tVtuBhR6eD2s4+MyHxkscEFADb+efuO/0SbAAAAAElFTkSuQmCC","quiche":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABI0lEQVR42q2TMUjDUBCGv5dkKVIaHDq0hbZTB7eSsasIHTu5OIhuhc7OLk6iSBU3B3fHLq5OEesmVCmtgiiFmBTnEKekea8+I+g/Hcd9/73j7sEfJbIK2s1aFMeD4XSp3sqCj3Y3eLqfxKlINRJZcKyUCWd3j4mJ0MHH59sAhL4LgDGuSEaxifgJVhX6Lsa4IpmYOvhkdI1jevRfHnBMDyNXxsiVEaU8q5HFx3vA7ZuHoYO7xQKnszndYkEaBUA4JXkL38EAvca6NELebgDwGYwWBu1mLTo8WEs66CCA55srMu8g9F3s+paUi8Fqq5N03+9fMBhOhQUsAcHkMonnrytUWx0Adjb3UK/SUgHV0K4vQO0pqy9Id9KByUbSn+U3wL/rCy5jhRNRtRtuAAAAAElFTkSuQmCC","onion_brown":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR42mNgGNTAy0jhv5eRwn98aljwac4yVmMQsRRgYJjC8H/buQeM2NQxUepKJny2w0BdjhkDLq8wEdJMyBAmXJpFLAVQFArpaGM1hImQzTDw7spVrIZgeAHdZgYGBoY3xz+QFoj4XEHQAGTbiHENIzExgGxg05RTDMiJihFbNDIwMDCgGzTt7C0GBgYGBvQUyYgvKSPzcSVligEAyC0/ZQj747QAAAAASUVORK5CYII=","onion_purple":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlUlEQVR42mNgGNRAU0zuv6aY3H98apjwaTYSUGJIU7JmwGcIE6WuZMJnOwzgcwUTIc2EDGHCpdlESBJFoRoHM1ZDmAjZDAO3fvzFagiGF9BtZmBgYDjz7jkDVWLh1o+/hA1Ato0Y1zASEwPIBs66d5Th+qtHjFgNgBnCwMDAgG7QuQ/3GBgYGFA0YzUA3SAYQNdINQAAn943KSdwukcAAAAASUVORK5CYII=","onionrings":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABB0lEQVR42oVTyw2DMAx9qRiAAwP0xABFQmIFRok6Qw+ZwWIUVkCKBANwYgAObJAeqFMnpI1P+fn5+T1HQUT/uDu5H5dNIROFTH49W3+xTwcAuBxI8Su56kpo1FmQW3xgyGKYV7/XTX1pLWAgqxuy374J7vVsuRUPErMpUqgMasgCAGR7IARAAYBuzp51U8OQ9YmsyT4d0E2NqisBOrVRXJEv9unAMK9BVcmEW6q6EobsyeBDx31UD9wY5jXQJQYqoqEJ1K66EpjDweofd8fJFxvHZVNcbZ8OyIcX4F9zED9KzYEETto4LpsCnW5Id8Tax985Z3dSweJmfxvTl0DSmSxA6qvLcX4DmP+cx6KEmaUAAAAASUVORK5CYII=","breadroll":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgGPKAEZ+kl5HCf2T+tnMPMNSz4NPY4mDBwMDAwPDs8zuY1H90QxixaYZpRNPMwMDAwDDt7C0UlzCRohnmKmSvMSFr7k9xh2vEplmKVwh7ICJrhoHb5+/D2aqGigwMDAwMX+98hIvVHDjBsO3cA0Z4IHIqKTJ8v4epCQZgmrlV+CECB7CEAaeSIgOnkiLOaIVrxhYLXkYK/2e0ZcAlkF0DMxQmVjhnJzwmGNFjAdkQZPD93n2Gwjk7MRIUI65EhGxQRtUMnCmRkZhkjE0j1QAAjGBedjZHoE0AAAAASUVORK5CYII=","bread_loaf_brown":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42s3SMQ6CMBQG4L+mu5jgIJuDzDLiBdxcDBcyHsEbOPYemLjAXPYyQAKcAAfzsIU2uOlLSNPXfq9QHvDrYK6FXbDsbflCdYbhLpBEIQ7BysCpaiAge70QI5xEIQBMkC1S1UBkEoXqGCd8Om+tm+tHO8m9DwkhIHsOwIkBwI891I8WqWqs64tvbtqG87IyC4xfleZ6Pi+r4dlv1jAu8X49GtiPPQDA5fY0ChMEAJHJz2/UIWH9dB1a+4CwPrqwyOTQVHzuuwkTGncjm2tdVwv/T7wAw3lp4+L7SZsAAAAASUVORK5CYII=","sandwich":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABR0lEQVR42qWTMUgCURjHfw9dBReHgxtEidvSToic25xaotZycbDhcDBoanQQgxqioVrlHMXNWRcv1xsMB6EhCEEc5Rr0XT29M8I3HXfv93vfvf/3wY5LhH0omElPPneccei+aBh493jx87L04oWJRBAYixvMpi6xuKFsLp5fs16VkLA8cR0KEklZxxmLaMFMelkt4cOzqauIgmCArJYAE0/I0qXkqlHZejLAvVUHYPjxiSiYSS9l6bw3Jqp9JZMiCcm1d7OPXe4uUzh8+gJLByCXNrDLXf8/l7K2Am6NMVLtcfpwDMBg5DJcVZaydHJpg0xrzvPBhMs3HRsQv+PrV5q+aFHLMxi55NLLe8i05gBopRP1Dta7TsbZrzRZ1PJEqj2O6md+Qq+3bR/uOGMhglp3oxNBATcaKWwGZBpB4L+G6a+B2ml9A733jRQxXNgkAAAAAElFTkSuQmCC","cheese":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA1ElEQVR42mNgoAdorIr731gV959sze9f3f7//tVtrIawENKcV1DL8OPDWQYGBgaGvIJaBgYGhv8MDAwM9W2LGIm2+fmtFf+f31oB5yO7hhGfzYTApAnNDEykaIZ5BRkw4fIzsmIYm0PAGEXsxcuPiEDEZzNMIzYXsGDTjGzT6wfLGHgF1DE0fv5wE2IAsrOx2QTTDNMA40PocxAXwDT8+HAWQyEhwPLi5UeGzx9uEtQAk2/qXA4Xmz53IyMLLoXIAF0TRiCSqgkZMGYm+2PNZfg0IQMA5dOSShJREh4AAAAASUVORK5CYII=","cake_slice_plain":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA00lEQVR42r2SMQqDMBSG/4CDi5ClezZ3PYMgHqFeoGNv1KkeQQo9Q93FJbMOBlzc0in2JRpLS+mDEJKX7/9fHg/4RxSJ0EUi9Nfw2Hd67Dv9sRCF6aIibA++3u4AgFk9rFzIU5R5hrqRjL2D96LMMwQ+eMt1KwKfsw8AgEFWawHX2RWgEABEPH4J+JwHWSHiMSbVWjsATKq1KzDOJuE+NHfmfD5dUDeSWT2gTpNqcRDHRZyCAFA3klkVhDxdyjc7/YILrppIv+BCW6A1ib759kE/jScwoJX2XHgz5AAAAABJRU5ErkJggg==","dumpling":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7ElEQVR42mNgGGjAiEvCy0jhv4A4O5y/bPtNrGpZcGmuyzFjYGBgYJC3CYKK1v/HZggTLs1COtpwsc8fbjL0TmxkiPJU/4/XAGSbkTXzCqgzfP5wk2Hqwi0YhjBh04xsOwMDAwOHgDEDAwMDw48PZzEMYcIViO+uXIWzf3w4izMWmPDZDmPDXPD5w02GHx/OooQHE6nxDjOMoBeQAbIX0L3DxMDAwLDt3APGpimnMPyOzGZgYGDgFVBnYGBgYCjOr4cnLEZC0QgLC2yasSZlLyOF/wwMDAzoBk1afRFrksabF2BsAXF2nHmBYgAAj4ZhgPqWGNEAAAAASUVORK5CYII=","cucumber":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAy0lEQVR42pWTPQ6CMBzFfxAcNEbDwuRIXLgAgwfgLtzME3gEnY2bg1EHN8XwEUIITiVF/ny9pWma33vtawsT5fp25fp2pebWVDgIPQAOXKrr8W1YY0GAIPR43T4A5EkJgDEGdrwVAPEzY7tzOO3vPM5fY9DgHwZIo4I8KWsDcwosyZwCp1ExbCDBy828Xte33zLoguNnJqY3DHRYSU+W0jsfkkrXm+8tUUpXkBqldLFEdd7FejYItwykK+uDxQ50EOiFG09ZfZixoNIPUzWQF6S1OeYAAAAASUVORK5CYII=","canned_food_2":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAvElEQVR42mNgoBAwYhN0srT9j0183/HDjAQNcLK0/e8TFAjnK6koM0hKyTIwMDAwVBbkYxjCiEuzkooyhgskpWQxDGGiNAwwDNiybj0DAwMDw707dxnu3bkLtxlmOzpgQRf4ofUIbgg60Mr6z3BtGiN+A2CGMDAwMBg5yJLuBXSQLcbPkC3GT54B+DQSNGCSsAqcPfXVR/K9gE8zVgNCNCBRlff2DoZmF55SBpKSMnpqnNTVgz8pk5OZKAYALOw9qwLxvLYAAAAASUVORK5CYII=","soup_pea":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR42mNgGGjAiE3QydL2PzbxfccPM+I1AKZx6cJsBgYGBgYOAWMUxcH+SRgGMSJrhmn8/OEmXBOvgDqcDTMw2D8JbggjsmaYxqN/HqHYfPYuRLzaPAduEMwQJmSFR/88wtDMwMDAYKwMcUXrySkMrSenoMixwBifP9xk8BBxZWBgYGDY8WY3hu0MDAwMze7zGRgYGBh+fDiLaQDMEF4BdYYAlQq4WIAKqmuQNaMYwCugzvD5w004Rg48dIAcO0ywaImOn4pXE7JmjFjAFpXoaQA5LWBNB9gMQTcIXTNVkvLAAwDjjGSMgsuZJAAAAABJRU5ErkJggg==","garlic":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAuElEQVR42mNgGPTAydL2P0Wa37+6/R+fIUz4NC9dmE3QEiZKvciIy8/ItnMIGDME+ycxMDAwMOw7fpgRpwFOlrb/Z0x0YWBgYGDgFVBn+PzhJgOvgDoDh4AxAwMDA8OPD2cZouOnohjCgu4CmEZk8OPDWQYGBgYMcZQwQLYdHSBrXLtxHkrUMuFTjA3AXEN2LKBbADdg3/HDjBn5e3AqhPEz8vegBCLOaEQPD5jheKMRXx5A10g1AAAGvFK2WMg/1AAAAABJRU5ErkJggg==","baguette":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0ElEQVR42mNgoBAwEqPIy0jhPzJ/27kHcH0sxGjMMlaDix179p6BwYjhP8wQFnya+1PcGRgYGBhun78PF7eSEoQwoIYw4dKcZazGcPv8fQZOJUUGvWAnnK5kwmUzTNOltfsYGBgYGFQNFQkHIsxmBgYGDAOQw+DC89fwgGTCZ/P3e/dx2ozVC7DAghly+/x9lABEtx3uBWSnI/uXkGac0YisEZ9mFC8ce/Yew6Bjz97j1YzhAmyG4NOMEo1eRgr/DSRFUTSip3ui0gG2DENTAABzfX7vmTDc3QAAAABJRU5ErkJggg==","pizza_cheese_whole":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR42qWTv0vDQBTHP2kDZhFuiOBkO7V0EwOFQv4CcepmR8fS1TWIa9fiInT0T/A/KAEh7ulUEHQwwmERShHiYO96d8Yi+OAg95L3/ZH3nkdFnJ40y6r8/ePCc3N+VWEy6gJQpJKwJ7YfTChdIN8sTkZdilTSiPsAtM8iAFYyAyAxgBSIr4qHUYtG3KcRw1LmAATiG0DdFXBigGgFltRNvC7u2BdtdkVdsXfOB5q1zpr16g2AvSDUJxARn6sXxFGH48N3np8+rvzfWF1mZcN9rrkAVZIDEXHQHFRaqJmo6ri5XST+XxSoNi5lrt8XqbQVmL6XMteyzZzZWtU1z5yD6PLC8m2ymyDz2xk32RxrDqq64dra2pvZ/2AzluVwPAWwlJiRjaeEPaHZtQV3mYZRyypUfq8nDz+20vvvOn8Bk/+QbyRyYtgAAAAASUVORK5CYII=","butter":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR42mNgGPKAkRhFJ+aF/UcXs0haxcjAwMDAQoxGeZsgBg4BY7j4jw9nGU7MY/hvkbSKkYUUjTDNnz/chPNZSNXIK6COIs6CrBmbRnRbYfSxm48ZsIbBjw9nUfgcAsYoTkYHTIRi4OaWagyxLWt3MBR1HkeNhWM3HzPI2+A3bMvaHQwMDAxwzQSjEZ9GrAmpr9zyPzYDsGkcRgAAwQlJVgZlXEYAAAAASUVORK5CYII=","croissant":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABDUlEQVR42sWTMWoCQRiFvyGLRIIExCqVI1lLySQ3sFBImytY2eUO9ttZeQVLBS08QCAxWEbZtZIUYYlI2HJTmB3W3dmNYOFU8zPz3rx/3vvh3EvkHT7eV8N4PX5bp+5beUCn02Y59wCwlYTBJEySCBO4+1DHVpJiTRK4Hj+rLZudj60kz4PJgRJhAgPclMoAXN1es5x79F8/jG2kWrCV1LIBDTb1D3CRfN3//Kbx1ESIgEL5kt7oJROc+Ylf03cANjv/XxutpHyAYk1qkr8/CbNU5CqISLv7rTETRhciByqtuwPCqA5cT9tpGVh1DgAWw5kmDNy9O/EspFqISBwlNSAeomQWxLFzkDULJ69ftnd+8zVTt5MAAAAASUVORK5CYII=","cake_whole_plain":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA1UlEQVR42qWTPQ6CQBBGvzUWNCTb0NPRyxlMjCcgUBkuwTEs7azkCMbEM2BPtz3NJjR0Wg2Z/UMjX0VmeW+YzQCsjPAVj7v07avfX0osCgi8PZ7ebtVh74gEhwmcdAcAiGQeFJFEcJjAJdiWbH69LC7nMQS8awiws6WHQbVI0nKWTLoLjjSo1hXwAy76NsYsiGWGUfdOB6rHMgMAjLpHkpYArqbAfslXj2SOSObhEQjkwKQ74174ubNI58vJmM/+fEpdNOYi2atsi0hWF014lf/9mVbnA2ErbOxDWzfiAAAAAElFTkSuQmCC","beet":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/ElEQVR42pWSMW7CQBBFnxGFU9jCFERYWQo6ItEhN0jcINfIaXKOXCDXsNykiJSCAixQUiArIOEGLUW8lr1evOZ3M7v//5mvAQPE3Jdi7ktbD6BvJEeBKuX2888x9W4KKGTpGS90EVAlY52gUJde6DYEj7vcLqBERCEioqAke6HL4OkBQKp/jk6ejSa1oIIXhyw9AyhybaK+Tn57XpX1+y4l+VhzesztGSjyd34pHxfDMQDJz5qv340jitGrqxoziA/7kmwIuIZetVDui+GY+LCnC3q6s14n2f/4rQKz0US+Tpd3OTdCrO6tnIFW98Yh3UM0Ctj2bYV+gV1xBZoOgqveznLHAAAAAElFTkSuQmCC","canned_food_1":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAuUlEQVR42mNgoBAwYhN0srT9j0183/HDjAQNcLK0/e8TFAjnK6koM0hKyTIwMDAwVBbkYxjCiEuzkooyhgskpWQxDGGiNAwwDNiybj0DAwMDw707dxnu3bkLtxlmOzpgQRdIYHnLsABqCDqoF/rB0PiOA78BMEMYGBgY5Pm4SfcCxWHgOrcOp2K9+csIhwGyIRwCxgPgheUbn+FUfPDoNfxegKaw/wwMsNTIiaJ4UlcP/qRMTmaiGAAAvqw4IJkTIH8AAAAASUVORK5CYII=","soup_beet":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR42mNgGGjAiE3QydL2PzbxfccPM+I1AKZx6cJsBgYGBgYOAWMUxcH+SRgGMSJrhmn8/OEmXBOvgDqcDTMw2D8JbggjsmaYxttlt1FsvvXjLwMDAwNDxCJ/uEEwQ1iQFaJrhAE1DmaGWz/+MqyI28jAwMDAkLAJ4TW4AZ8/3GQwmuXDwMDAwHAubQuG7RCNTQwMDAwMPz6cxTQAZgivgDqD1ap6uJgVmmuQNaMYwCugzvD5w004Rg48dIAcO0ywaImOn4pXE7JmjFjAFpXoaQA5LWBNB9gMQTcIXTNVkvLAAwDMdWPjPwu+LAAAAABJRU5ErkJggg==","chili_pepper_red":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0UlEQVR42mNgoBeQ1eX7L6vL9x9dnIlYzf5legz+ZXoM2Awh2gVWyfL/cxbboLiEaBfImgkyGDnIYsgxEtIcJi/6/zjfTwZZM0EGBgYGhsen3jM8vvyJkSgXhMmL/s/WUWA4HpkG0XjqPYPlJ3bSAlHZ2p7h7tGDDEvk1BlaBWQYiI4FmO0w8PDTV6zqCLrg7tGDcM1bHr1mWPXwNSNBA9BtxwcY0TUyMDAwYHM6NttRDMBmKyHNWF3gIycK52959JqBgYEBp2asCQnmDUIaqQYA7jJYiJuyppIAAAAASUVORK5CYII=","taco":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA6UlEQVR42mNgGGjAiE/Sy0jhP7rYtnMPUPSwENIwYUYiqkDG/P/IBjEia3ZxlYSr27P7OaZmKCjImA93DRM2zZ5OQiga3l25CsformJB1uwT7MHAwMDA8Pf9KRTNMCCko43CZ2BgYGCCMXyCPeAaT/BKoGjCZlhdjhmDl5HCf7gBk27uRqGRnY4NHLv5GNUFMJuNldUZzt69iTNqYRoxvHCv/wlcI9+Kn3gTz7Gbjxn27H6OiAUY4Fvxk2F1zl4M29BpmGZ4OoDFxJ7dz1ECCd3JMHnk1Ig1IVmpy6I4FVcyxsgLxKR9qgMAiaKChs00cOkAAAAASUVORK5CYII=","burrito":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABGElEQVR42sWTMUvDQBTHfymFTi1FcHe7Qb9HyAcQym39ANIhs8QgTiLForO6hEDAqRC6uzg4FNoho1+gBLuYKS59R5KeNIPgW+4e737/9477H/x3OG0Pak+V1TxKMweg2xa8uw8blaCM0sxx2oLbPKM/VGzzDID+UOFPgv0JbB0FkhXg8+2VvStoT5XNUauQxGa1NvtuFX58mZvCd/5xEDYC0vl2rAH4GvW4dp9qApvVmqOzU5PPkiVRmjkdgW/eH3B38CAuuFyMOT7Rta6yCgzQEcVBXJCMegC4u9w2chU2AjLqeVwYIdfytE3YOFF7qrwKNc/hHBdYABdT3zzXLFnW3Ge1soiISQD8SfAraP0LTb8fgv8kfgCpWIvEHpq6qAAAAABJRU5ErkJggg==","sausage":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArUlEQVR42mNgoCewkxL5bycl8h9ZjIUUzWXeRhDO1nP/Dz17w8jAwMDARIpmVUNFBgYGBoYUZTEGmEuYKPUWEym23z5/n3QD0MG7G08Y5tx9xUBUGBCynYGBgYERl0YGBgYGeKjjsB0jGnFpxAdYkDWnKIvBJZCd/e7GEwYGBgYM2+FeQNYspCGD4mQYwKYZa0pE1gTTyMDAgFUzSiCie4GQRqyxgJxRCGmkGgAAyXFXT+31NIMAAAAASUVORK5CYII=","hotdog":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+ElEQVR42r3TvUrDUBTA8X+CY8ZQSqZA3iAPkNEhjkKfoGIfoGTK5FCKs4igZPIRtHTqHBxu15QihlKCdOiU/TilGJJ6UwXPdrn3x/m4HPiPCH1XQt+VtruzLvhhMqIoFGVcCoDVtwCYqdzQ4s18KmkykMCxZXV/LS9X5xI4tmzm06NVdcJpMpDQd8XUlR3FCx7jS9bLj9ZEpg5HF/4B374qnpNx7b2hwwD7bMvT++6Ai0Jxc/fGTOWG+RvcqKAN77MtQCuusgOYf8G1IUbxgqHXOwnXWig/S4Ze7yTc+IXAsQXojBu7YPUtqnlU8RNuVFC18/2sW5gv58jee0Ln2AgAAAAASUVORK5CYII=","ham":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgGGjAiEvCy0jhPzbxbeceoOhhwaWxxcECl9n/kQ1iQtfc4mAB1/zs8zsMGt1gJmTNWcZqKBpgbCleIRQ6y1gN7lIWZJtF3AwYGBgYGEQYGBi+37vPoMrAz/D1zkcMl7y78QTTBTDN3+/dZ/h+7z5cAbcKP4omZM0YYYALqBoqMghpyDC8u/GEQUhDBrcByDZzKimiKIRpfnfjCcOKr9+wxwKyZmyGoTsfxQBkDchsdIBsO0pK9DJS+N+f4o7VCwdaF2HVjJGUcSVfXMl4cAAA0+lzo1I/RT4AAAAASUVORK5CYII=","scallions":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApUlEQVR42mNgIBLI6vL9xybORIwGWV2+/7JmglgNYcGlWdZMkIGBgeE/NrnHlz8x4nQBui3+ZXoM6HxkNUzomtE1wMDjU+8Z/Mv0GDZ2XWLA6wJSAYoBjy9/YtzYdYnBv0yP4fGp96QbgA9gcz5WA5BdQZELjJXV8fKJ9gIujbSJBWSgyaePl0+0C3BpJCr3yery/T9xZdJ/GBubOkZiszB6/MMAAG3FPoRitK0zAAAAAElFTkSuQmCC","flatbread":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2klEQVR42u2SrQ7CMBSFvxKmCQ6mMJDMgkPMj4dYQnBAwqMQEpCEJ8DyCDgIbqIG1S1BLNMTQ0CX/TQYBIajmt7znTb3Xvjra4nqxWTYy/RZRjH9ThsZxXldqkQYAzS4P2xIwwCr6xhfdD2/FCQ0vD9sjEAaBgC1QNfzkSoRoghrswkwBbqeT8Nk0rA2p2FQAovhDYDLdmcsWl2n9KuiZtMVpR7MRwMARsvFxyZqUEYxUiWiCXC63gWQyShm/Tae1ZGx3easXiO8hY8crE2hqL7dyj4tTnUPfq8nLxhdGODmjA0AAAAASUVORK5CYII="};
 function cv(){const c=document.createElement('canvas');c.width=S;c.height=S;return c;}
 function shapes(ctx){return{
   E:(x,y,rx,ry,c,r)=>{ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(x,y,rx,ry,r||0,0,Math.PI*2);ctx.fill();},
@@ -233,64 +235,6 @@ function face(ctx,x,y,mood){
   px(ctx,x-2,y+4,'#140E1C');px(ctx,x+2,y+4,'#140E1C');px(ctx,x-1,y+5,'#140E1C',3,1);
   px(ctx,x-6,y+3,'rgba(255,110,140,.85)',2,1);px(ctx,x+5,y+3,'rgba(255,110,140,.85)',2,1);
   if(mood==='tear'){px(ctx,x-4,y+3,'#6EC3FF',1,2);px(ctx,x+3,y+3,'#6EC3FF',1,3);}}
-function bowl(content,garn){return s=>{s.E(16,22,13,8,'#F4F1EA');s.E(16,17,12,4,content);if(garn)garn(s);};}
-const DRAW={
-  ziemniak:[s=>s.E(16,19,11,8,'#C8955A',-.2),s=>s.E(16,19,11,8,'#C8955A',-.2),
-    s=>{s.E(16,25,12,4,'#B87A3E');s.E(16,21,12,4,'#E0A85E');s.E(16,17,12,4,'#B87A3E');s.E(16,13,12,4,'#E0A85E');s.E(16,10,4,2,'#FFF8EC');}],
-  marchew:[s=>{s.P([[9,10],[23,10],[16,30]],'#F07A2B');s.E(13,7,2,5,'#3FA34D',-.5);s.E(19,7,2,5,'#3FA34D',.5);s.E(16,6,2,5,'#2F8A3E');},
-    s=>{s.P([[9,10],[23,10],[16,30]],'#F07A2B');s.E(16,7,2,4,'#2F8A3E');},
-    bowl('#F08A3A',s=>{s.E(11,16,2,1,'#FFC07A');s.E(20,17,2,1,'#FFC07A');s.E(16,15,1.5,1,'#3FA34D');})],
-  jajko:[s=>s.E(16,18,9,12,'#F5EFE0'),s=>{s.E(16,19,13,9,'#FBF7EF');s.C(16,18,6,'#F5B31B');},
-    s=>{s.R(9,8,14,22,'#CFE8F0',2);s.R(10,13,12,16,'#F6D860',1);s.E(16,12,6,2,'#FFF6D6');s.R(21,3,2,10,'#B9B9C9');}],
-  cebula:[s=>{s.E(16,20,10,9,'#E0A33C');s.P([[13,13],[19,13],[16,4]],'#E0A33C');s.E(16,4,1,3,'#3FA34D');},
-    s=>{s.E(16,20,11,8,'#E0A33C');},
-    s=>{s.O(11,19,6,'#E0A33C',4);s.O(21,15,6,'#D9932C',4);s.O(18,24,6,'#E8B04A',4);}],
-  chleb:[s=>{s.R(5,14,22,13,'#C98A4B',4);s.E(16,15,11,7,'#D99A55');},s=>{s.R(6,8,20,20,'#D9A060',4);s.R(8,10,16,16,'#F0C98A',2);},
-    s=>{s.R(2,14,28,11,'#D39A55',4);s.R(4,11,24,6,'#F6C94C',2);}],
-  twarog:[s=>{s.R(6,12,20,14,'#F3EAD2',3);s.R(6,12,20,4,'#FFF8E6',3);},s=>{s.E(16,20,12,8,'#F7F2E2');s.E(16,16,9,5,'#FFFBF0');},
-    s=>{s.R(5,12,22,15,'#F6E3A1',2);s.R(5,24,22,4,'#B7773D');s.R(5,12,22,3,'#E9C46A');}],
-  ogorek:[s=>s.E(16,17,6,13,'#4C9A4A',.6),s=>s.E(16,17,6,13,'#4C9A4A',.6),bowl('#E7F3D9',s=>{s.C(11,17,2,'#6FB35A');s.C(17,16,2,'#6FB35A');s.C(22,18,2,'#6FB35A');})],
-  czosnek:[s=>{s.E(16,21,10,8,'#EFE6D8');s.P([[12,15],[20,15],[16,5]],'#EFE6D8');},s=>{s.E(16,21,10,8,'#EFE6D8');s.P([[12,15],[20,15],[16,5]],'#EFE6D8');},
-    bowl('#E8D9A0',s=>{s.R(10,15,3,3,'#A8692E');s.R(19,16,3,3,'#A8692E');s.R(15,14,2,2,'#3FA34D');})],
-  maslo:[s=>{s.R(4,12,24,13,'#F7D35C',2);s.R(4,19,24,6,'#E9E2CF',2);},s=>{s.R(5,11,22,15,'#F2D06A',3);s.E(16,11,10,3,'#FBE7A0');},
-    s=>{s.E(16,18,13,9,'#E3A04A');}],
-  burak:[s=>{s.C(16,20,9,'#8E1F4A');s.E(12,9,3,6,'#3FA34D',-.6);s.E(20,9,3,6,'#3FA34D',.6);s.R(15,28,2,3,'#8E1F4A');},
-    s=>{s.E(16,22,12,7,'#F4F1EA');s.E(16,18,10,5,'#9B1D4F');},bowl('#A3123A',s=>{s.C(12,17,1.6,'#fff');s.C(19,16,1.6,'#fff');s.C(16,18,1,'#fff');})],
-  chili:[s=>{s.E(15,18,5,12,'#E5352B',.5);s.R(19,4,2,6,'#3FA34D');},s=>{s.E(15,18,5,12,'#B4241C',.5);s.R(19,4,2,6,'#6F7A2C');},
-    s=>{s.R(13,3,6,7,'#E9E2CF');s.R(9,9,14,20,'#D42A1F',3);s.R(10,16,12,8,'#FFF6E6');}],
-  kielbasa:[s=>{s.R(3,12,26,10,'#B5533A',5);s.R(2,15,2,4,'#E9E2CF');s.R(28,15,2,4,'#E9E2CF');},s=>{s.R(3,12,26,10,'#9A4026',5);},
-    s=>{s.L(4,30,26,6,'#7A4A26',2);s.E(17,15,5,9,'#B5533A',.8);}],
-  kielek:[s=>{s.E(16,24,6,5,'#C8955A');s.E(13,15,2,5,'#3FA34D',-.6);s.E(19,15,2,5,'#3FA34D',.6);}],
-  suchar:[s=>{s.R(7,12,18,14,'#A86A34',2);s.R(9,14,14,10,'#C98A4B',1);}]
-};
-const POST={ // per kind/tier extra pixels after outline, then face position
-  ziemniak:[(c)=>{px(c,10,17,'#7A5230');px(c,21,14,'#7A5230');px(c,22,22,'#7A5230');return[16,17];},(c)=>{for(let i=0;i<3;i++)px(c,9+i*6,13+i*2,'#5A3418',3,1);return[16,18];},()=>[16,18]],
-  marchew:[(c)=>{px(c,12,16,'#C55A12',3,1);px(c,17,21,'#C55A12',2,1);return[16,13];},(c)=>{px(c,12,15,'#C55A12',3,1);return[16,13];},()=>[16,23]],
-  jajko:[()=>[16,17],()=>[16,16],()=>[16,19]],
-  cebula:[(c)=>{px(c,11,15,'#F6C66A',1,8);px(c,20,15,'#F6C66A',1,8);return[16,19];},(c)=>{for(let i=0;i<4;i++)px(c,8+i*5,17+(i%2),'#8A4B1C',3,1);return[16,19];},()=>null],
-  chleb:[(c)=>{px(c,10,11,'#8A5A26');px(c,11,12,'#8A5A26');px(c,16,10,'#8A5A26');px(c,17,11,'#8A5A26');px(c,22,11,'#8A5A26');px(c,23,12,'#8A5A26');return[16,19];},()=>[16,17],
-    (c)=>{for(let i=0;i<6;i++)px(c,5+i*4,13+(i%2),'#D42A1F',2,1);return[16,19];}],
-  twarog:[()=>[16,19],(c)=>{px(c,10,15,'#3FA34D',2,1);px(c,20,14,'#3FA34D',2,1);px(c,15,13,'#3FA34D',2,1);return[16,20];},()=>[16,18]],
-  ogorek:[(c)=>{px(c,12,10,'#7CC46A');px(c,18,16,'#7CC46A');px(c,14,22,'#7CC46A');return[16,15];},(c)=>{px(c,12,10,'#A8C46A');px(c,18,16,'#A8C46A');px(c,11,20,'#4D6B1E',2,1);return[16,15];},()=>[16,24]],
-  czosnek:[(c)=>{px(c,13,17,'#C9B89A',1,8);px(c,19,17,'#C9B89A',1,8);return[16,20];},(c)=>{px(c,13,17,'#8A5A26',1,8);px(c,19,17,'#8A5A26',1,8);return[16,20];},()=>[16,24]],
-  maslo:[()=>[16,14],(c)=>{px(c,9,13,'#3FA34D');px(c,14,12,'#3FA34D');px(c,21,13,'#3FA34D');return[16,17];},(c)=>{c.globalCompositeOperation='destination-out';c.beginPath();c.ellipse(16,26,9,6,0,0,Math.PI*2);c.fill();c.globalCompositeOperation='source-over';return[16,13];}],
-  burak:[(c)=>{px(c,12,19,'#B33A6A');return[16,19];},(c)=>{for(let i=0;i<5;i++)px(c,8+i*4,17+(i%2),'#C2386A',2,1);return[16,23];},()=>[16,24]],
-  chili:[()=>[15,16],(c)=>{px(c,12,12,'#7A140E',2,1);px(c,16,20,'#7A140E',2,1);return[15,16];},()=>[16,19]],
-  kielbasa:[(c)=>{px(c,8,14,'#D9785A',4,1);return[16,15];},(c)=>{for(let i=0;i<4;i++)px(c,7+i*5,13,'#5A2010',2,8);return[17,15];},(c)=>{px(c,14,10,'#5A2010',4,1);px(c,15,15,'#5A2010',4,1);return[16,14];}],
-  kielek:[()=>[16,23]],
-  suchar:[()=>[16,18]]
-};
-const T2TINT={ziemniak:['#8A4B22',.28],marchew:['#B0501A',.18],cebula:['#8A4B22',.35],ogorek:['#6F7A2C',.35],czosnek:['#9A6A30',.35],burak:null,maslo:null,chleb:null,twarog:null,jajko:null,chili:null,kielbasa:null};
-function steam(c){px(c,7,4,'#E8E8F0');px(c,8,2,'#E8E8F0');px(c,24,5,'#E8E8F0');px(c,25,3,'#E8E8F0');}
-function makeSprite(kind,tier){const c=cv(),ctx=c.getContext('2d'),s=shapes(ctx);
-  DRAW[kind][tier-1](s);
-  if(tier===2&&T2TINT[kind])tint(ctx,T2TINT[kind][0],T2TINT[kind][1]);
-  finalize(ctx);
-  const f=POST[kind][tier-1](ctx);
-  if(f)face(ctx,f[0],f[1],kind==='cebula'&&tier===1?'tear':'cute');
-  if(tier===2)steam(ctx);
-  if(tier===3){px(ctx,3,3,'#FFC93C');px(ctx,2,4,'#FFC93C');px(ctx,4,4,'#FFC93C');px(ctx,3,5,'#FFC93C');px(ctx,3,4,'#FFF3B0');}
-  return c.toDataURL();}
 const EDRAW={
   plesn:[s=>{s.E(16,19,11,10,'#7FB04A');s.R(8,24,3,6,'#7FB04A',1);s.R(15,25,3,6,'#7FB04A',1);s.R(22,24,3,5,'#7FB04A',1);},[16,17]],
   biala:[s=>{s.E(16,19,11,10,'#E9E4D2');s.R(8,24,3,6,'#E9E4D2',1);s.R(15,25,3,6,'#E9E4D2',1);s.R(22,24,3,5,'#E9E4D2',1);},[16,17],c=>{px(c,9,14,'#7FB04A',2,2);px(c,22,20,'#7FB04A',2,2);px(c,19,10,'#7FB04A');}],
@@ -306,18 +250,18 @@ function makeCoin(){const c=cv(),ctx=c.getContext('2d'),s=shapes(ctx);s.C(16,16,
 
 /* ================= DATA ================= */
 const KINDS={
-  ziemniak:{r:1,a:2,h:5,n:['Ziemniak','Pieczony ziemniak','Placki'],tr:'faint',ab:t=>`zostawia Kiełek ${t}/${t}.`},
-  marchew:{r:1,a:3,h:2,n:['Marchewka','Gotowana marchew','Surówka'],ab:()=>'Bez sztuczek. Mocno chrupie.'},
-  jajko:{r:1,a:1,h:3,n:['Jajko','Jajko sadzone','Kogel-mogel'],tr:'fight',ab:t=>`skorupka blokuje ${t===1?'pierwszy cios':'pierwsze '+t+' ciosy'}.`},
-  cebula:{r:1,a:1,h:3,n:['Cebula','Smażona cebula','Krążki cebulowe'],tr:'start',ab:t=>`wyciska łzy: ${t} obrażeń każdemu potworowi.`},
-  chleb:{r:1,a:2,h:4,n:['Chleb','Grzanka','Zapiekanka'],tr:'faint',ab:t=>`zostaje Suchar ${t}/${2*t}.`},
-  twarog:{r:2,a:2,h:6,n:['Twaróg','Twarożek','Sernik'],tr:'fight',ab:t=>`miękki: każdy cios zadaje mu ${t} mniej.`},
-  ogorek:{r:2,a:2,h:3,n:['Ogórek','Kiszony ogórek','Mizeria'],tr:'morning',ab:t=>`kisi się: +${t}/+${t} na stałe.`},
-  czosnek:{r:2,a:2,h:3,n:['Czosnek','Pieczony czosnek','Zupa czosnkowa'],tr:'start',ab:t=>`${3*t} obrażeń pierwszemu potworowi.`},
-  maslo:{r:2,a:1,h:4,n:['Masło','Masło ziołowe','Rogal maślany'],tr:'start',ab:t=>`sąsiedzi na półce +${t}/+${t}.`},
-  burak:{r:3,a:2,h:5,n:['Burak','Ćwikła','Barszcz'],tr:'after',ab:t=>`leczy walczący składnik o ${2*t}.`},
-  chili:{r:3,a:4,h:2,n:['Chili','Suszone chili','Ostry sos'],tr:'fight',ab:()=>'ostre: trafia też drugiego potwora w kolejce.'},
-  kielbasa:{r:3,a:4,h:7,n:['Kiełbasa','Kiełbasa z patelni','Kiełbaska z ogniska'],ab:()=>'Solidna. Bez fanaberii.'}
+  ziemniak:{r:1,a:2,h:5,n:['Ziemniak','Frytki','Placki'],art:['potato','french_fries','pancakes'],tr:'faint',ab:t=>`zostawia Kiełek ${t}/${t}.`},
+  jablko:{r:1,a:3,h:2,n:['Jabłko','Kawałek szarlotki','Szarlotka'],art:['apple_red','pie_cherry_slice','pie_cherry_whole'],ab:()=>'Bez sztuczek. Mocno chrupie.'},
+  jajko:{r:1,a:1,h:3,n:['Jajko','Jajko sadzone','Tarta'],art:['egg_whole_white','egg_fried','quiche'],tr:'fight',ab:t=>`skorupka blokuje ${t===1?'pierwszy cios':'pierwsze '+t+' ciosy'}.`},
+  cebula:{r:1,a:1,h:3,n:['Cebula','Czerwona cebula','Krążki cebulowe'],art:['onion_brown','onion_purple','onionrings'],tr:'start',ab:t=>`wyciska łzy: ${t} obrażeń każdemu potworowi.`},
+  chleb:{r:1,a:2,h:4,n:['Bułka','Chleb','Kanapka'],art:['breadroll','bread_loaf_brown','sandwich'],tr:'faint',ab:t=>`zostaje Suchar ${t}/${2*t}.`},
+  twarog:{r:2,a:2,h:6,n:['Twaróg','Sernik','Pierogi ruskie'],art:['cheese','cake_slice_plain','dumpling'],tr:'fight',ab:t=>`miękki: każdy cios zadaje mu ${t} mniej.`},
+  ogorek:{r:2,a:2,h:3,n:['Ogórek','Słoik kiszonych','Ogórkowa'],art:['cucumber','canned_food_2','soup_pea'],tr:'morning',ab:t=>`kisi się: +${t}/+${t} na stałe.`},
+  czosnek:{r:2,a:2,h:3,n:['Czosnek','Bagietka czosnkowa','Pizza czosnkowa'],art:['garlic','baguette','pizza_cheese_whole'],tr:'start',ab:t=>`${3*t} obrażeń pierwszemu potworowi.`},
+  maslo:{r:2,a:1,h:4,n:['Masło','Rogal','Tort'],art:['butter','croissant','cake_whole_plain'],tr:'start',ab:t=>`sąsiedzi na półce +${t}/+${t}.`},
+  burak:{r:3,a:2,h:5,n:['Burak','Ćwikła','Barszcz'],art:['beet','canned_food_1','soup_beet'],tr:'after',ab:t=>`leczy walczący składnik o ${2*t}.`},
+  chili:{r:3,a:4,h:2,n:['Chili','Taco','Burrito'],art:['chili_pepper_red','taco','burrito'],tr:'fight',ab:()=>'ostre: trafia też drugiego potwora w kolejce.'},
+  kielbasa:{r:3,a:4,h:7,n:['Kiełbasa','Hot-dog','Szynka'],art:['sausage','hotdog','ham'],ab:()=>'Solidna. Bez fanaberii.'}
 };
 const TOKENS={kielek:{n:'Kiełek'},suchar:{n:'Suchar'}};
 const TRIG={start:'START NOCY',fight:'W STARCIU',after:'PO STARCIU',faint:'PO ZEPSUCIU',morning:'RANO'};
@@ -337,8 +281,8 @@ const STARS=['★','★★','★★★'];
 const RCOL={1:'var(--r1)',2:'var(--r2)',3:'var(--r3)'};
 const COST=3,MAXHP=5,SLOTS=5;
 const IMG={};
-Object.keys(KINDS).forEach(k=>{IMG[k]=[1,2,3].map(t=>makeSprite(k,t));});
-IMG.kielek=[makeSprite('kielek',1)];IMG.suchar=[makeSprite('suchar',1)];
+Object.keys(KINDS).forEach(k=>{IMG[k]=KINDS[k].art.map(a=>ART[a]);});
+IMG.kielek=[ART.scallions];IMG.suchar=[ART.flatbread];
 Object.keys(EDRAW).forEach(k=>{IMG['e_'+k]=makeEnemy(k);});
 const HEART=[makeHeart(true),makeHeart(false)],COIN=makeCoin();
 
