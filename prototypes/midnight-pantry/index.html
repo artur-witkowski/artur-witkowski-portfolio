@@ -80,8 +80,17 @@ img.px{display:block}
 .cal span{font-size:28px;line-height:26px}
 .clock{font-size:26px;color:#9FE6FF;background:#0B1424;border:2px solid #22324F;border-radius:8px;padding:2px 8px;text-shadow:0 0 6px rgba(120,220,255,.7);font-variant-numeric:tabular-nums}
 .hud .sp{flex:1}
-.coins{display:flex;align-items:center;gap:6px;font-size:28px;color:var(--gold);text-shadow:2px 2px 0 rgba(0,0,0,.6)}
-.coins img{width:24px;height:24px}
+.coins{position:absolute;right:10px;top:-18px;z-index:4;display:flex;align-items:center;gap:6px;font-size:30px;line-height:1;color:var(--gold);
+  background:#2A1C12;border:3px solid #140E1C;border-radius:12px;padding:3px 12px 3px 7px;box-shadow:0 4px 0 rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.12);text-shadow:2px 2px 0 rgba(0,0,0,.6)}
+.coins img{width:26px;height:26px}
+#game.night .counter .coins{opacity:.5}
+.actions{position:relative}
+.warn{position:absolute;right:0;bottom:calc(100% + 12px);z-index:6;width:min(100%,250px);background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:12px;
+  padding:8px 10px;font-size:19px;line-height:1.05;box-shadow:0 5px 0 rgba(0,0,0,.4);animation:warnIn .25s cubic-bezier(.3,1.5,.5,1)}
+.warn::after{content:"";position:absolute;right:40px;bottom:-11px;width:14px;height:14px;background:var(--paper);border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.warn b{font-weight:400;color:#B3261E}
+@keyframes warnIn{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+.btn.b-orange.armed{background:var(--red);--d:var(--red-d);animation:none}
 .iconbtn{width:36px;height:36px;border-radius:10px;background:rgba(20,16,30,.8);border:2px solid #3D3456;display:grid;place-items:center;font-size:22px}
 
 /* ---------- FRIDGE ---------- */
@@ -312,7 +321,6 @@ img{-webkit-user-drag:none;user-select:none}
       <div class="cal" aria-label="Noc"><b>NOC</b><span id="calN">1</span></div>
       <div class="clock" id="clock">08:00</div>
       <div class="sp"></div>
-      <div class="coins" id="coins"></div>
       <button class="iconbtn" data-act="mute" id="muteBtn" aria-label="Dźwięk">♪</button>
       <button class="iconbtn" data-act="help" aria-label="Jak grać">?</button>
     </div>
@@ -329,6 +337,7 @@ img{-webkit-user-drag:none;user-select:none}
       <span class="clabel" id="clabel">ZAKUPY</span>
       <div class="shop" id="shop"></div>
       <div class="actions" id="actions"></div>
+      <div class="coins" id="coins" aria-label="Monety"></div>
     </div>
     <div id="banner" hidden></div>
   </section>
@@ -654,7 +663,9 @@ function renderActions(){const el=$('#actions');
   if(s&&s.type==='shop'){const c=run.shop[s.i],o=owner(c.k),u=o>=0?run.team[o]:null;const full=!u&&run.team.every(Boolean);const max=u&&u.t===3;const p=cost(c.k);
     el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-blue" data-act="hold">${c.held?'PUŚĆ':'TRZYMAJ'}</button><button class="btn b-green grow" data-act="buy" ${run.coins<p||full||max?'disabled':''}>${max?'MAX':full?'PEŁNO':'KUP · '+p}</button>`;return;}
   if(s&&s.type==='shelf'){const u=run.team[s.i];el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-red grow" data-act="sell">SPRZEDAJ +${u.inv}</button>`;return;}
-  el.innerHTML=`<button class="btn b-blue" data-act="reroll" ${run.coins<(run.freeRoll?0:ROLL)?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> ${run.freeRoll?0:ROLL}</button><button class="btn b-orange grow wiggle" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>ZAMKNIJ LODÓWKĘ</button>`;}
+  const armed=run.warnUntil>Date.now();
+  const warn=armed?`<div class="warn" role="alert">Zostało <b>${run.coins} ${run.coins===1?'moneta':run.coins<5?'monety':'monet'}</b>${run.freeRoll?' i darmowa dostawa':''}. Rano przepadnie! Stuknij jeszcze raz, żeby zamknąć.</div>`:'';
+  el.innerHTML=`${warn}<button class="btn b-blue" data-act="reroll" ${run.coins<(run.freeRoll?0:ROLL)?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> ${run.freeRoll?0:ROLL}</button><button class="btn b-orange grow ${armed?'armed':'wiggle'}" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>${armed?'ZAMKNIJ MIMO TO':'ZAMKNIJ LODÓWKĘ'}</button>`;}
 function center(title,desc){$('#center').innerHTML=`${title?`<div class="ct">${title}</div>`:''}<div class="cd">${desc||''}</div>`;}
 function defaultCenter(){const n=run.night;let d;
   if(n===1)d=(run.daily?'<em>Danie dnia:</em> wszyscy mają dziś te same dostawy. ':'')+'Przeciągnij produkt na półkę. <em>Co rano 10 monet, reszta przepada.</em>';
@@ -669,7 +680,7 @@ function infoUnit(k,t,extra){const K=KINDS[k];return `${K.tr?`<span class="tag">
 function renderAll(){renderHUD();renderEnemies();renderTeam();renderShop();renderActions();}
 
 /* ================= SHOP ACTIONS ================= */
-function select(sel){run.sel=sel;SFX.tap();
+function select(sel){run.sel=sel;run.warnUntil=0;SFX.tap();
   if(!sel){defaultCenter();}
   else if(sel.type==='shop'){const c=run.shop[sel.i],K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null;
     const tail=u&&u.t<3?`<br><em>Na półce ${u.c}/3 → ${K.n[u.t]}</em>`:`<br><em>→ ${K.n[1]} → ${K.n[2]}</em>`;
@@ -990,7 +1001,10 @@ document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;
     case 'hold':{const s=run.sel;if(s&&s.type==='shop'){const c=run.shop[s.i];c.held=!c.held;run.log.push(['h',s.i]);SFX.block();run.sel=null;renderAll();defaultCenter();}break;}
     case 'reroll':if(run&&!busy&&run.coins>=(run.freeRoll?0:ROLL)){const old=run.coins;run.coins-=run.freeRoll?0:ROLL;run.freeRoll=false;run.log.push(['r']);rollShop(true);rollTriggers();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
       document.querySelectorAll('.card').forEach((c,j)=>{if(!RM)c.animate([{transform:'translateX(-120%) rotate(-20deg)',opacity:0},{transform:'none',opacity:1}],{duration:300,delay:j*70,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'});});defaultCenter();}break;
-    case 'night':if(run&&run.team.some(Boolean))startNight();break;
+    case 'night':{if(!run||!run.team.some(Boolean)||busy)break;
+      if((run.coins>0||run.freeRoll)&&!(run.warnUntil>Date.now())){run.warnUntil=Date.now()+4000;SFX.block();renderActions();anim($('#coins'),'pop');
+        setTimeout(()=>{if(run&&run.phase==='shop'&&run.warnUntil&&Date.now()>=run.warnUntil){run.warnUntil=0;renderActions();}},4050);break;}
+      run.warnUntil=0;startNight();break;}
     case 'speed':run.speed=run.speed===1?2:run.speed===2?3:1;renderActions();break;
     case 'next':collect();break;
     case 'home':goHome();break;
