@@ -13,7 +13,7 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Grafiki składników: paczka „16x16 Food” autorstwa ARoachIFoundOnMyPillow z OpenGameArt.org, licencja CC0
   (https://opengameart.org/content/16x16-food). Są osadzone w pliku jako data URI i skalowane ×3/×4 bez wygładzania.
   Potwory, serca i moneta są nadal rysowane kodem.
-- Bohaterami są same składniki z buźkami.
+- Bohaterami są same składniki (bez głównej postaci).
 - Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy.
 - Łączenie jak w TFT: 3 kupione kopie automatycznie łączą się w formę ★★, kolejne 3 w danie ★★★
   (np. Ziemniak → Frytki → Placki, Burak → Ćwikła → Barszcz).
