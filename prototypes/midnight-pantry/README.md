@@ -1,4 +1,4 @@
-# Midnight Pantry (prototyp v4)
+# Midnight Pantry (prototyp v5)
 
 Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią kuchni przed Pleśnią przez 10 nocy.
 
@@ -34,3 +34,13 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy. Zepsuty składnik zielenieje i spada z półki.
 - Rzadkość składników to kolor ramki karty: szary od nocy 1, niebieski od 3, fioletowy od 5.
 - Dźwięki generowane w przeglądarce (Web Audio), wyciszanie przyciskiem ♪.
+
+## Ekonomia i poziomy (v5)
+
+- Składniki mają poziomy I–IV (kolor ramki karty, znaczek z cyfrą rzymską, podstawka na półce).
+  Ceny: I = 3, II = 4, III = 5, IV = 6 monet. Legendarne IV: Dynia i Kurczak.
+- Szanse na poziomy rosną z każdą nocą i są widoczne na blacie (tabela `ODDS` w kodzie).
+- Co rano 10 monet, niewydane przepadają (jak w Super Auto Pets). Dostawa (nowe karty) kosztuje 1.
+- Sprzedaż zwraca 100% wydanej kwoty, także za połączone kopie. Składnik z półki można przeciągnąć na blat, żeby sprzedać.
+- TRZYMAJ zostawia kartę na blacie przy dostawie i do następnego ranka.
+- Zdolności, które nagradzają częste zmiany: Jabłko (przy sprzedaży wzmacnia losowy składnik), Twaróg (rośnie przy każdej dostawie).

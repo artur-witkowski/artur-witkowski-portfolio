@@ -145,6 +145,19 @@ img{-webkit-user-drag:none;user-select:none}
 .arena .cap{font-size:19px;line-height:1.05;text-align:center;min-height:22px;max-width:330px;position:relative;z-index:3}
 .lungeR{animation:lr .3s ease-out}@keyframes lr{45%{transform:translateX(28px) scale(1.15) rotate(6deg)}}
 .lungeL{animation:ll .3s ease-out}@keyframes ll{45%{transform:translateX(-28px) scale(1.15) rotate(-6deg)}}
+/* tiers */
+.card{background:var(--rb,var(--paper))}
+.card.t3,.card.t4{border-width:4px}
+.card .tier{position:absolute;top:-11px;left:-11px;min-width:30px;height:30px;padding:0 3px;box-sizing:border-box;border-radius:50% 50% 50% 8px;background:var(--rc);border:2px solid var(--ink);display:grid;place-items:center;font-size:18px;color:#fff;text-shadow:1px 1px 0 var(--ink);z-index:2}
+.card.t4::before{content:"";position:absolute;inset:0;border-radius:6px;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.75) 45%,transparent 60%);background-size:260% 100%;animation:shine 2.2s linear infinite;pointer-events:none}
+@keyframes shine{from{background-position:130% 0}to{background-position:-130% 0}}
+.card.held{box-shadow:0 0 0 3px #8FD3F0,0 5px 0 rgba(40,20,10,.55);animation:none}
+.card.held::after{content:"TRZYMAM";position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;border:2px solid var(--ink);border-radius:6px;font-size:15px;padding:0 5px}
+.unit .tnum{position:absolute;top:13px;left:-3px;z-index:3;min-width:20px;height:18px;border-radius:5px;background:var(--tc);border:2px solid var(--ink);color:#fff;font-size:14px;line-height:15px;text-align:center;padding:0 2px;box-sizing:border-box;text-shadow:1px 1px 0 var(--ink)}
+.shelfrow .unit .bob{background:radial-gradient(ellipse 44% 12% at 50% 92%,var(--tc,transparent) 0 88%,transparent 100%)}
+.clabel span{font-size:16px}
+.counter.sellzone{box-shadow:inset 0 0 0 4px var(--red),0 5px 0 #4A2E18}
+.counter.sellzone::after{content:"UPUŚĆ, ŻEBY SPRZEDAĆ";position:absolute;inset:0;display:grid;place-items:center;font-size:30px;color:#fff;background:rgba(160,30,30,.6);border-radius:14px;text-shadow:2px 2px 0 var(--ink);z-index:5}
 /* night */
 #game.night .cavity{background:linear-gradient(180deg,rgba(30,40,70,.95),rgba(18,24,44,.97))}
 #game.night .cavity::before{opacity:0}
@@ -170,12 +183,12 @@ img{-webkit-user-drag:none;user-select:none}
 .card .cs{display:flex;gap:4px}
 .card .cs .bdg{min-width:22px;height:22px;font-size:18px}
 .card .price{position:absolute;top:-10px;right:-10px;width:30px;height:30px;border-radius:50%;background:var(--gold);border:2px solid var(--ink);display:grid;place-items:center;font-size:22px;color:var(--ink)}
-.card .own{position:absolute;top:-10px;left:-8px;background:var(--green);color:#fff;border:2px solid var(--ink);border-radius:8px;font-size:16px;padding:0 5px}
+.card .own{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;border:2px solid var(--ink);border-radius:8px;font-size:16px;padding:0 5px}
 .card.sel{transform:translateY(-14px) scale(1.06) rotate(0deg)!important;animation:none;box-shadow:0 0 0 3px var(--gold),0 10px 0 rgba(40,20,10,.55)}
 .card.sold{visibility:hidden}
 .card.poor{filter:brightness(.6)}
 .actions{display:flex;gap:8px;height:54px;margin-top:6px}
-.actions .btn{flex:1}
+.actions .btn{flex:1;padding-inline:6px}
 .actions .btn.grow{flex:1.7}
 
 /* ---------- FX ---------- */
@@ -286,6 +299,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,RM?Math.min(ms,60):ms));
 /* Ingredient art: "16x16 Food" by ARoachIFoundOnMyPillow (OpenGameArt.org, CC0).
    Monster art: "32x32 Colorful Slimes" by AndHeGames (OpenGameArt.org, CC0). */
 const ART={"potato":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA4UlEQVR42mNgoBAw4pOM8lT/jy62bPtNFD0s+DT3TmzEIlP/H9kQJlI0f/5wkyEvVJ/By0jhP04vYNP8+cNNFP67K1cZmqacYth27gEjC74wQNeIDbBgsx2fxndXrqLwmbBp5hVQx6qYgYGBQUhHmwFvLPAKqMNdgK743ZWrDMduPmbYs/s5w7ZzDxjhLkC2HZfzYa6xUpfF7gV8ANkrsNBHMeDDy58oNiNrwKcZxQUwhcg0Ic1wA7ade8DYNOUUXMOxm49RFOHSjJESvYwU/tflmKFohFlAdG5ETuf4NMIAAJyTjCu/BktbAAAAAElFTkSuQmCC","french_fries":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgoCXwMlL472Wk8B+fGhZ8mifMSIRwMubDDdl27gEjXgOQbfz7/hQDs6AZAwMDAwOyYciGMGGzFa4YCnrbtRn+vj+F1aVM6ALvrlxl+Pv+FMOEGYkMH59yM/x9f4rh41NuBmZBM4aCjPkYXkAxYNu5B4xNU07BNRIDGNG9EMHNxcDAwMAgz8eNopBXXZnh8827DJ3PXzPgDAN84PPNu8SFAS7Aq65MmQG4AE4DHn76SroXtp17wLji6zectqEHIEEvoLuCYDRiS87oLqR6jgUAlbdbVJukL68AAAAASUVORK5CYII=","pancakes":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5ElEQVR42mNgGGjAiC7gZaTwH5+GbeceoOhhQdecZaxGyNL/yIYw4tMsYimAwn9z/AMDAwMDw7Szt+AuYcHmbHSN6OJZDGpwlzDBJCfMSMSwCRcwLk2Cs+EG3Jp9lEEt1ZpgqMvbBDE8PLIOeyBiM4RXQJ3h84ebDLwC6gwMDAwMD4+sY5C3CWJgmHIK1QC1VGuGW7OPMtyafRTFz+8YrjIwMDDAaZwuIMYLvALqKJqxugAXQHYNshdQ0gEsJtANQo5WeZsghuSICng6YMSWjJGjFD0wCzLmM2BNicTmB/S8QDEAAHizYOT+fTvFAAAAAElFTkSuQmCC","apple_red":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAtklEQVR42rWSMQ7CMBAEx4gqltLFEg2mpEQ8g4aChlfkMf4HBX+hoCSUTodEbRosRbbjGCls5zvvam/v4J847Ddu6s8iR96tmkmRpMBJNy58hzWPZYp8XDcA3IGzrEBWvu0uXS9GBYZkgO3rDYCuJapVaCMjETFG1rWM7KpWYY3F3B54kWQGKfLPW0jBGlsm0H1nn92BalVUE7ktpLIYBjjpoGQUkTukENdnT3hIouSUPULyLPgA/UM+nVk5oJwAAAAASUVORK5CYII=","pie_cherry_slice":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxklEQVR42mNgGGjAiE/Sy0jhP4y97dwDrGpZ8GnOMlZDFvqPzSAWXJrrcswY3hz/wCBiKcDAwMDAkMWghtUgFlyaGRgY4JpxGbTt3ANGFlyakQE2gxjOonkBl2YGBgaGW/OvYBiGEgbYNCNrQgdvjn/AHog/195nYGBgYHj46StezdPO3sIMRHTN8nzccLaQhgxOAzFiAabxs5Qgg5CUIAMDAwPDtLO3UNQgpwW4AezBinC/CUkJomjClQpRkjJysiWkaXABANJtW8w6RBayAAAAAElFTkSuQmCC","pie_cherry_whole":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+UlEQVR42mNgGPKAEZugl5HCf2zi2849wFDPgk1jlrEag4ilAMOb4x/gNBT8RzeIEVlzXY4ZXufCDGyacgpuCBO6AmRwa/4VFL6IpQCGoUww25GdDQNqiToohrw5/oHhzfEPDFnGanDvMuFzLgMDA4OQhgyK87G64Ae7LMO0s7fgmtC9gm7otLO3GH6wyzKguCCtdiLDtLO3GKadvYWhAVnjtLO3GOqnr8NMB06Wtv/zykoYGBgYGGY152N1AUxjZUE+w77jhxkxEhKyIZJSsgzPnz1mkJSSRTEEWTNGIO47fphxUlcPznSArhlnUnaytMWalNE1UwUAABYfdL8KNKW0AAAAAElFTkSuQmCC","egg_whole_white":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAoUlEQVR42mNgGNQgylP9f5Sn+n+yNT+/uPH/84sbSTckylP9/6MdHf+fX9z4//2r2//fv7qN0xAmbJo78hMZWCU1UcR7O7oYsBnCRMg1P55fY2BgYGDgkNRiIOgCmO24ADZXsBATJjBXEBUG+MDv59eJNwBdMTbNDAwMDIy4YgEbqJg4n2HZ9puMeF2wbPtNxoqJ84nSjNUFyC5BN3hwZjgAOMpNfwXSJbgAAAAASUVORK5CYII=","egg_fried":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5ElEQVR42mNgGAWMuCRUpfj/C0twoIidOPeSkaABqlL8/xkYGBhOXTiDYainhw2GQYzomg8dmMnAIWDMwMDAwPDifAFcTsJwAopBMEOYkDWfunCGgUPAmOHHh7MMd3sy4BoEFGNRDNu+4wiDhZH4f7gBMM0/Ppxl+PHhLFzh170/GBgYGBg+3F8MZ+N0AQMDA9zpDAwMDNIpqXBDvu79Aeeju4AR3f8wg5Bdgi7GIWAMdwVWFyBrRhdD1ow17p/fWvH/+a0V/1Wl+P/D+O9f3f7//tVtuBhR6eD2s4+MyHxkscEFADb+efuO/0SbAAAAAElFTkSuQmCC","quiche":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABI0lEQVR42q2TMUjDUBCGv5dkKVIaHDq0hbZTB7eSsasIHTu5OIhuhc7OLk6iSBU3B3fHLq5OEesmVCmtgiiFmBTnEKekea8+I+g/Hcd9/73j7sEfJbIK2s1aFMeD4XSp3sqCj3Y3eLqfxKlINRJZcKyUCWd3j4mJ0MHH59sAhL4LgDGuSEaxifgJVhX6Lsa4IpmYOvhkdI1jevRfHnBMDyNXxsiVEaU8q5HFx3vA7ZuHoYO7xQKnszndYkEaBUA4JXkL38EAvca6NELebgDwGYwWBu1mLTo8WEs66CCA55srMu8g9F3s+paUi8Fqq5N03+9fMBhOhQUsAcHkMonnrytUWx0Adjb3UK/SUgHV0K4vQO0pqy9Id9KByUbSn+U3wL/rCy5jhRNRtRtuAAAAAElFTkSuQmCC","onion_brown":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR42mNgGNTAy0jhv5eRwn98aljwac4yVmMQsRRgYJjC8H/buQeM2NQxUepKJny2w0BdjhkDLq8wEdJMyBAmXJpFLAVQFArpaGM1hImQzTDw7spVrIZgeAHdZgYGBoY3xz+QFoj4XEHQAGTbiHENIzExgGxg05RTDMiJihFbNDIwMDCgGzTt7C0GBgYGBvQUyYgvKSPzcSVligEAyC0/ZQj747QAAAAASUVORK5CYII=","onion_purple":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlUlEQVR42mNgGNRAU0zuv6aY3H98apjwaTYSUGJIU7JmwGcIE6WuZMJnOwzgcwUTIc2EDGHCpdlESBJFoRoHM1ZDmAjZDAO3fvzFagiGF9BtZmBgYDjz7jkDVWLh1o+/hA1Ato0Y1zASEwPIBs66d5Th+qtHjFgNgBnCwMDAgG7QuQ/3GBgYGFA0YzUA3SAYQNdINQAAn943KSdwukcAAAAASUVORK5CYII=","onionrings":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABB0lEQVR42oVTyw2DMAx9qRiAAwP0xABFQmIFRok6Qw+ZwWIUVkCKBANwYgAObJAeqFMnpI1P+fn5+T1HQUT/uDu5H5dNIROFTH49W3+xTwcAuBxI8Su56kpo1FmQW3xgyGKYV7/XTX1pLWAgqxuy374J7vVsuRUPErMpUqgMasgCAGR7IARAAYBuzp51U8OQ9YmsyT4d0E2NqisBOrVRXJEv9unAMK9BVcmEW6q6EobsyeBDx31UD9wY5jXQJQYqoqEJ1K66EpjDweofd8fJFxvHZVNcbZ8OyIcX4F9zED9KzYEETto4LpsCnW5Id8Tax985Z3dSweJmfxvTl0DSmSxA6qvLcX4DmP+cx6KEmaUAAAAASUVORK5CYII=","breadroll":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgGPKAEZ+kl5HCf2T+tnMPMNSz4NPY4mDBwMDAwPDs8zuY1H90QxixaYZpRNPMwMDAwDDt7C0UlzCRohnmKmSvMSFr7k9xh2vEplmKVwh7ICJrhoHb5+/D2aqGigwMDAwMX+98hIvVHDjBsO3cA0Z4IHIqKTJ8v4epCQZgmrlV+CECB7CEAaeSIgOnkiLOaIVrxhYLXkYK/2e0ZcAlkF0DMxQmVjhnJzwmGNFjAdkQZPD93n2Gwjk7MRIUI65EhGxQRtUMnCmRkZhkjE0j1QAAjGBedjZHoE0AAAAASUVORK5CYII=","bread_loaf_brown":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42s3SMQ6CMBQG4L+mu5jgIJuDzDLiBdxcDBcyHsEbOPYemLjAXPYyQAKcAAfzsIU2uOlLSNPXfq9QHvDrYK6FXbDsbflCdYbhLpBEIQ7BysCpaiAge70QI5xEIQBMkC1S1UBkEoXqGCd8Om+tm+tHO8m9DwkhIHsOwIkBwI891I8WqWqs64tvbtqG87IyC4xfleZ6Pi+r4dlv1jAu8X49GtiPPQDA5fY0ChMEAJHJz2/UIWH9dB1a+4CwPrqwyOTQVHzuuwkTGncjm2tdVwv/T7wAw3lp4+L7SZsAAAAASUVORK5CYII=","sandwich":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABR0lEQVR42qWTMUgCURjHfw9dBReHgxtEidvSToic25xaotZycbDhcDBoanQQgxqioVrlHMXNWRcv1xsMB6EhCEEc5Rr0XT29M8I3HXfv93vfvf/3wY5LhH0omElPPneccei+aBh493jx87L04oWJRBAYixvMpi6xuKFsLp5fs16VkLA8cR0KEklZxxmLaMFMelkt4cOzqauIgmCArJYAE0/I0qXkqlHZejLAvVUHYPjxiSiYSS9l6bw3Jqp9JZMiCcm1d7OPXe4uUzh8+gJLByCXNrDLXf8/l7K2Am6NMVLtcfpwDMBg5DJcVZaydHJpg0xrzvPBhMs3HRsQv+PrV5q+aFHLMxi55NLLe8i05gBopRP1Dta7TsbZrzRZ1PJEqj2O6md+Qq+3bR/uOGMhglp3oxNBATcaKWwGZBpB4L+G6a+B2ml9A733jRQxXNgkAAAAAElFTkSuQmCC","cheese":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA1ElEQVR42mNgoAdorIr731gV959sze9f3f7//tVtrIawENKcV1DL8OPDWQYGBgaGvIJaBgYGhv8MDAwM9W2LGIm2+fmtFf+f31oB5yO7hhGfzYTApAnNDEykaIZ5BRkw4fIzsmIYm0PAGEXsxcuPiEDEZzNMIzYXsGDTjGzT6wfLGHgF1DE0fv5wE2IAsrOx2QTTDNMA40PocxAXwDT8+HAWQyEhwPLi5UeGzx9uEtQAk2/qXA4Xmz53IyMLLoXIAF0TRiCSqgkZMGYm+2PNZfg0IQMA5dOSShJREh4AAAAASUVORK5CYII=","cake_slice_plain":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA00lEQVR42r2SMQqDMBSG/4CDi5ClezZ3PYMgHqFeoGNv1KkeQQo9Q93FJbMOBlzc0in2JRpLS+mDEJKX7/9fHg/4RxSJ0EUi9Nfw2Hd67Dv9sRCF6aIibA++3u4AgFk9rFzIU5R5hrqRjL2D96LMMwQ+eMt1KwKfsw8AgEFWawHX2RWgEABEPH4J+JwHWSHiMSbVWjsATKq1KzDOJuE+NHfmfD5dUDeSWT2gTpNqcRDHRZyCAFA3klkVhDxdyjc7/YILrppIv+BCW6A1ib759kE/jScwoJX2XHgz5AAAAABJRU5ErkJggg==","dumpling":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7ElEQVR42mNgGGjAiEvCy0jhv4A4O5y/bPtNrGpZcGmuyzFjYGBgYJC3CYKK1v/HZggTLs1COtpwsc8fbjL0TmxkiPJU/4/XAGSbkTXzCqgzfP5wk2Hqwi0YhjBh04xsOwMDAwOHgDEDAwMDw48PZzEMYcIViO+uXIWzf3w4izMWmPDZDmPDXPD5w02GHx/OooQHE6nxDjOMoBeQAbIX0L3DxMDAwLDt3APGpimnMPyOzGZgYGDgFVBnYGBgYCjOr4cnLEZC0QgLC2yasSZlLyOF/wwMDAzoBk1afRFrksabF2BsAXF2nHmBYgAAj4ZhgPqWGNEAAAAASUVORK5CYII=","cucumber":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAy0lEQVR42pWTPQ6CMBzFfxAcNEbDwuRIXLgAgwfgLtzME3gEnY2bg1EHN8XwEUIITiVF/ny9pWma33vtawsT5fp25fp2pebWVDgIPQAOXKrr8W1YY0GAIPR43T4A5EkJgDEGdrwVAPEzY7tzOO3vPM5fY9DgHwZIo4I8KWsDcwosyZwCp1ExbCDBy828Xte33zLoguNnJqY3DHRYSU+W0jsfkkrXm+8tUUpXkBqldLFEdd7FejYItwykK+uDxQ50EOiFG09ZfZixoNIPUzWQF6S1OeYAAAAASUVORK5CYII=","canned_food_2":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAvElEQVR42mNgoBAwYhN0srT9j0183/HDjAQNcLK0/e8TFAjnK6koM0hKyTIwMDAwVBbkYxjCiEuzkooyhgskpWQxDGGiNAwwDNiybj0DAwMDw707dxnu3bkLtxlmOzpgQRf4ofUIbgg60Mr6z3BtGiN+A2CGMDAwMBg5yJLuBXSQLcbPkC3GT54B+DQSNGCSsAqcPfXVR/K9gE8zVgNCNCBRlff2DoZmF55SBpKSMnpqnNTVgz8pk5OZKAYALOw9qwLxvLYAAAAASUVORK5CYII=","soup_pea":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR42mNgGGjAiE3QydL2PzbxfccPM+I1AKZx6cJsBgYGBgYOAWMUxcH+SRgGMSJrhmn8/OEmXBOvgDqcDTMw2D8JbggjsmaYxqN/HqHYfPYuRLzaPAduEMwQJmSFR/88wtDMwMDAYKwMcUXrySkMrSenoMixwBifP9xk8BBxZWBgYGDY8WY3hu0MDAwMze7zGRgYGBh+fDiLaQDMEF4BdYYAlQq4WIAKqmuQNaMYwCugzvD5w004Rg48dIAcO0ywaImOn4pXE7JmjFjAFpXoaQA5LWBNB9gMQTcIXTNVkvLAAwDjjGSMgsuZJAAAAABJRU5ErkJggg==","garlic":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAuElEQVR42mNgGPTAydL2P0Wa37+6/R+fIUz4NC9dmE3QEiZKvciIy8/ItnMIGDME+ycxMDAwMOw7fpgRpwFOlrb/Z0x0YWBgYGDgFVBn+PzhJgOvgDoDh4AxAwMDA8OPD2cZouOnohjCgu4CmEZk8OPDWQYGBgYMcZQwQLYdHSBrXLtxHkrUMuFTjA3AXEN2LKBbADdg3/HDjBn5e3AqhPEz8vegBCLOaEQPD5jheKMRXx5A10g1AAAGvFK2WMg/1AAAAABJRU5ErkJggg==","baguette":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0ElEQVR42mNgoBAwEqPIy0jhPzJ/27kHcH0sxGjMMlaDix179p6BwYjhP8wQFnya+1PcGRgYGBhun78PF7eSEoQwoIYw4dKcZazGcPv8fQZOJUUGvWAnnK5kwmUzTNOltfsYGBgYGFQNFQkHIsxmBgYGDAOQw+DC89fwgGTCZ/P3e/dx2ozVC7DAghly+/x9lABEtx3uBWSnI/uXkGac0YisEZ9mFC8ce/Yew6Bjz97j1YzhAmyG4NOMEo1eRgr/DSRFUTSip3ui0gG2DENTAABzfX7vmTDc3QAAAABJRU5ErkJggg==","pizza_cheese_whole":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR42qWTv0vDQBTHP2kDZhFuiOBkO7V0EwOFQv4CcepmR8fS1TWIa9fiInT0T/A/KAEh7ulUEHQwwmERShHiYO96d8Yi+OAg95L3/ZH3nkdFnJ40y6r8/ePCc3N+VWEy6gJQpJKwJ7YfTChdIN8sTkZdilTSiPsAtM8iAFYyAyAxgBSIr4qHUYtG3KcRw1LmAATiG0DdFXBigGgFltRNvC7u2BdtdkVdsXfOB5q1zpr16g2AvSDUJxARn6sXxFGH48N3np8+rvzfWF1mZcN9rrkAVZIDEXHQHFRaqJmo6ri5XST+XxSoNi5lrt8XqbQVmL6XMteyzZzZWtU1z5yD6PLC8m2ymyDz2xk32RxrDqq64dra2pvZ/2AzluVwPAWwlJiRjaeEPaHZtQV3mYZRyypUfq8nDz+20vvvOn8Bk/+QbyRyYtgAAAAASUVORK5CYII=","butter":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR42mNgGPKAkRhFJ+aF/UcXs0haxcjAwMDAQoxGeZsgBg4BY7j4jw9nGU7MY/hvkbSKkYUUjTDNnz/chPNZSNXIK6COIs6CrBmbRnRbYfSxm48ZsIbBjw9nUfgcAsYoTkYHTIRi4OaWagyxLWt3MBR1HkeNhWM3HzPI2+A3bMvaHQwMDAxwzQSjEZ9GrAmpr9zyPzYDsGkcRgAAwQlJVgZlXEYAAAAASUVORK5CYII=","croissant":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABDUlEQVR42sWTMWoCQRiFvyGLRIIExCqVI1lLySQ3sFBImytY2eUO9ttZeQVLBS08QCAxWEbZtZIUYYlI2HJTmB3W3dmNYOFU8zPz3rx/3vvh3EvkHT7eV8N4PX5bp+5beUCn02Y59wCwlYTBJEySCBO4+1DHVpJiTRK4Hj+rLZudj60kz4PJgRJhAgPclMoAXN1es5x79F8/jG2kWrCV1LIBDTb1D3CRfN3//Kbx1ESIgEL5kt7oJROc+Ylf03cANjv/XxutpHyAYk1qkr8/CbNU5CqISLv7rTETRhciByqtuwPCqA5cT9tpGVh1DgAWw5kmDNy9O/EspFqISBwlNSAeomQWxLFzkDULJ69ftnd+8zVTt5MAAAAASUVORK5CYII=","cake_whole_plain":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA1UlEQVR42qWTPQ6CQBBGvzUWNCTb0NPRyxlMjCcgUBkuwTEs7azkCMbEM2BPtz3NJjR0Wg2Z/UMjX0VmeW+YzQCsjPAVj7v07avfX0osCgi8PZ7ebtVh74gEhwmcdAcAiGQeFJFEcJjAJdiWbH69LC7nMQS8awiws6WHQbVI0nKWTLoLjjSo1hXwAy76NsYsiGWGUfdOB6rHMgMAjLpHkpYArqbAfslXj2SOSObhEQjkwKQ74174ubNI58vJmM/+fEpdNOYi2atsi0hWF014lf/9mVbnA2ErbOxDWzfiAAAAAElFTkSuQmCC","beet":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/ElEQVR42pWSMW7CQBBFnxGFU9jCFERYWQo6ItEhN0jcINfIaXKOXCDXsNykiJSCAixQUiArIOEGLUW8lr1evOZ3M7v//5mvAQPE3Jdi7ktbD6BvJEeBKuX2888x9W4KKGTpGS90EVAlY52gUJde6DYEj7vcLqBERCEioqAke6HL4OkBQKp/jk6ejSa1oIIXhyw9AyhybaK+Tn57XpX1+y4l+VhzesztGSjyd34pHxfDMQDJz5qv340jitGrqxoziA/7kmwIuIZetVDui+GY+LCnC3q6s14n2f/4rQKz0US+Tpd3OTdCrO6tnIFW98Yh3UM0Ctj2bYV+gV1xBZoOgqveznLHAAAAAElFTkSuQmCC","canned_food_1":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAuUlEQVR42mNgoBAwYhN0srT9j0183/HDjAQNcLK0/e8TFAjnK6koM0hKyTIwMDAwVBbkYxjCiEuzkooyhgskpWQxDGGiNAwwDNiybj0DAwMDw707dxnu3bkLtxlmOzpgQRdIYHnLsABqCDqoF/rB0PiOA78BMEMYGBgY5Pm4SfcCxWHgOrcOp2K9+csIhwGyIRwCxgPgheUbn+FUfPDoNfxegKaw/wwMsNTIiaJ4UlcP/qRMTmaiGAAAvqw4IJkTIH8AAAAASUVORK5CYII=","soup_beet":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR42mNgGGjAiE3QydL2PzbxfccPM+I1AKZx6cJsBgYGBgYOAWMUxcH+SRgGMSJrhmn8/OEmXBOvgDqcDTMw2D8JbggjsmaYxttlt1FsvvXjLwMDAwNDxCJ/uEEwQ1iQFaJrhAE1DmaGWz/+MqyI28jAwMDAkLAJ4TW4AZ8/3GQwmuXDwMDAwHAubQuG7RCNTQwMDAwMPz6cxTQAZgivgDqD1ap6uJgVmmuQNaMYwCugzvD5w004Rg48dIAcO0ywaImOn4pXE7JmjFjAFpXoaQA5LWBNB9gMQTcIXTNVkvLAAwDMdWPjPwu+LAAAAABJRU5ErkJggg==","chili_pepper_red":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0UlEQVR42mNgoBeQ1eX7L6vL9x9dnIlYzf5legz+ZXoM2Awh2gVWyfL/cxbboLiEaBfImgkyGDnIYsgxEtIcJi/6/zjfTwZZM0EGBgYGhsen3jM8vvyJkSgXhMmL/s/WUWA4HpkG0XjqPYPlJ3bSAlHZ2p7h7tGDDEvk1BlaBWQYiI4FmO0w8PDTV6zqCLrg7tGDcM1bHr1mWPXwNSNBA9BtxwcY0TUyMDAwYHM6NttRDMBmKyHNWF3gIycK52959JqBgYEBp2asCQnmDUIaqQYA7jJYiJuyppIAAAAASUVORK5CYII=","taco":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA6UlEQVR42mNgGGjAiE/Sy0jhP7rYtnMPUPSwENIwYUYiqkDG/P/IBjEia3ZxlYSr27P7OaZmKCjImA93DRM2zZ5OQiga3l25CsformJB1uwT7MHAwMDA8Pf9KRTNMCCko43CZ2BgYGCCMXyCPeAaT/BKoGjCZlhdjhmDl5HCf7gBk27uRqGRnY4NHLv5GNUFMJuNldUZzt69iTNqYRoxvHCv/wlcI9+Kn3gTz7Gbjxn27H6OiAUY4Fvxk2F1zl4M29BpmGZ4OoDFxJ7dz1ECCd3JMHnk1Ig1IVmpy6I4FVcyxsgLxKR9qgMAiaKChs00cOkAAAAASUVORK5CYII=","burrito":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABGElEQVR42sWTMUvDQBTHfymFTi1FcHe7Qb9HyAcQym39ANIhs8QgTiLForO6hEDAqRC6uzg4FNoho1+gBLuYKS59R5KeNIPgW+4e737/9477H/x3OG0Pak+V1TxKMweg2xa8uw8blaCM0sxx2oLbPKM/VGzzDID+UOFPgv0JbB0FkhXg8+2VvStoT5XNUauQxGa1NvtuFX58mZvCd/5xEDYC0vl2rAH4GvW4dp9qApvVmqOzU5PPkiVRmjkdgW/eH3B38CAuuFyMOT7Rta6yCgzQEcVBXJCMegC4u9w2chU2AjLqeVwYIdfytE3YOFF7qrwKNc/hHBdYABdT3zzXLFnW3Ge1soiISQD8SfAraP0LTb8fgv8kfgCpWIvEHpq6qAAAAABJRU5ErkJggg==","sausage":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArUlEQVR42mNgoCewkxL5bycl8h9ZjIUUzWXeRhDO1nP/Dz17w8jAwMDARIpmVUNFBgYGBoYUZTEGmEuYKPUWEym23z5/n3QD0MG7G08Y5tx9xUBUGBCynYGBgYERl0YGBgYGeKjjsB0jGnFpxAdYkDWnKIvBJZCd/e7GEwYGBgYM2+FeQNYspCGD4mQYwKYZa0pE1gTTyMDAgFUzSiCie4GQRqyxgJxRCGmkGgAAyXFXT+31NIMAAAAASUVORK5CYII=","hotdog":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+ElEQVR42r3TvUrDUBTA8X+CY8ZQSqZA3iAPkNEhjkKfoGIfoGTK5FCKs4igZPIRtHTqHBxu15QihlKCdOiU/TilGJJ6UwXPdrn3x/m4HPiPCH1XQt+VtruzLvhhMqIoFGVcCoDVtwCYqdzQ4s18KmkykMCxZXV/LS9X5xI4tmzm06NVdcJpMpDQd8XUlR3FCx7jS9bLj9ZEpg5HF/4B374qnpNx7b2hwwD7bMvT++6Ai0Jxc/fGTOWG+RvcqKAN77MtQCuusgOYf8G1IUbxgqHXOwnXWig/S4Ze7yTc+IXAsQXojBu7YPUtqnlU8RNuVFC18/2sW5gv58jee0Ln2AgAAAAASUVORK5CYII=","ham":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVR42mNgGGjAiEvCy0jhPzbxbeceoOhhwaWxxcECl9n/kQ1iQtfc4mAB1/zs8zsMGt1gJmTNWcZqKBpgbCleIRQ6y1gN7lIWZJtF3AwYGBgYGEQYGBi+37vPoMrAz/D1zkcMl7y78QTTBTDN3+/dZ/h+7z5cAbcKP4omZM0YYYALqBoqMghpyDC8u/GEQUhDBrcByDZzKimiKIRpfnfjCcOKr9+wxwKyZmyGoTsfxQBkDchsdIBsO0pK9DJS+N+f4o7VCwdaF2HVjJGUcSVfXMl4cAAA0+lzo1I/RT4AAAAASUVORK5CYII=","scallions":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApUlEQVR42mNgIBLI6vL9xybORIwGWV2+/7JmglgNYcGlWdZMkIGBgeE/NrnHlz8x4nQBui3+ZXoM6HxkNUzomtE1wMDjU+8Z/Mv0GDZ2XWLA6wJSAYoBjy9/YtzYdYnBv0yP4fGp96QbgA9gcz5WA5BdQZELjJXV8fKJ9gIujbSJBWSgyaePl0+0C3BpJCr3yery/T9xZdJ/GBubOkZiszB6/MMAAG3FPoRitK0zAAAAAElFTkSuQmCC","flatbread":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2klEQVR42u2SrQ7CMBSFvxKmCQ6mMJDMgkPMj4dYQnBAwqMQEpCEJ8DyCDgIbqIG1S1BLNMTQ0CX/TQYBIajmt7znTb3Xvjra4nqxWTYy/RZRjH9ThsZxXldqkQYAzS4P2xIwwCr6xhfdD2/FCQ0vD9sjEAaBgC1QNfzkSoRoghrswkwBbqeT8Nk0rA2p2FQAovhDYDLdmcsWl2n9KuiZtMVpR7MRwMARsvFxyZqUEYxUiWiCXC63gWQyShm/Tae1ZGx3easXiO8hY8crE2hqL7dyj4tTnUPfq8nLxhdGODmjA0AAAAASUVORK5CYII="};
+Object.assign(ART,{"pumpkin":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA70lEQVR42mNgoDWQ1eX7L6vL959szTmLbf7PP5aM0xAmQoZs7LrEcPbuTYammaEM2AxhwWe7f5keAwMDA4OxsjpOCxiROe5iPP8ZGBgYrokzMaBrrktfzaD18h8DAwMDw85XXxgxDHAX4/lfZaoJNyzm0U0Um9Z7msLZ1QtOwg1hRNfMrc3H8PXqJxTNMDFubT4GBgYGhq9XPzG0nb7OsPPVF0acgQhTjAz+aAgTjgVkRezBijg14jSA5cZbnIqxyeFNBzANMBo9bOAG7Hz1hbHt9HUURdgUowcgznSAHJ3IAGYJ1nSAzSB0gKyRagAAHOdjmeBKwYwAAAAASUVORK5CYII=","pie_pumpkin_slice":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArElEQVR42mNgGGjAiE/Sy0jhP4y97dwDrGpZ8GnOMlZDFvqPzSAWXJrrcswY3hz/wCBiKcDAwMDAkMWghtUgFmyam1yUGRhuvGWQEGRg+MPAgNOgbeceMLJg1YzsRKhBDDfeMrx4zww3iOEsmhewaYaBF++ZcQY0Cy7N+DThDERiNTVNOYUZiPg0w/1NSjpA1tQ05RSKHHJaYMFlC7ImXKkQJSkjJ1tCmgYXAABJoEeTtn/JswAAAABJRU5ErkJggg==","pie_pumpkin_whole":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABBElEQVR42mNgGPKAEZugl5HCf2zi2849wFDPgk1jXY4ZduumMPxHN4gRWTOyRpYbb1H0/tEQhrObppyCG8KC4SQ0jejiyAYxMDAwMCHbjkszukF1OWZw7zLBJN4c/4BhOjbwR0OY4c3xD6gu+MEuyzDt7C24IdgMgom/Of6BYdrZWww/2GVRYyGtdiLDtOZ8BoazDAxZxmoMIpaohsA0MjAwMNRPX8dQWZCPGgtOlrb/88pKGBgYGBhmNedjdX799HUMDAwMDJUF+Qz7jh9mxEhIyIZISskyPH/2mEFSShbFEGTNKIHIwMDAsO/4YcZJXT04AxBdM86k7GRpizUpo2umCgAAjq5noCLjW18AAAAASUVORK5CYII=","chicken_drumstick_raw":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA3klEQVR42q2TMQ6CQBBFH0QKjkCJiQWNiRquYMMhrKj0BByAe3AH8QbSkNDSYSeliQ0FxVot2UVQiE63mXkzf/7uwo9hzCk+h3sBkN0fxGluACzmwLvTEYB1XQKIOM0Ncy7c1iVNdetyiymSJQho8KAHKjQ0NUkLgGEPVKnqVMvxaKobSVp0oAyzD0uorUssxwPgeb2MrvlmooQsx+uaSen96V2Dc7gXq42ryR4z7aOCIdheutMbSEidOklBdn9oxfbS1cCx/bV3EAW+OARbLdm/86+fKQp8oZ4/gX+LF0Z/gGPgH87dAAAAAElFTkSuQmCC","chicken_drumstick_cooked":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA3UlEQVR42q2TMQ6CMBSGfwirIZg42IkFZ2UyTM7sHsQ7eBtcvQKJE7M0rg0TDeEAddA2bUMF1Lc0zev3/v+9tsCP4c05nKexAADacFDWebMK5Gkszoc9AID1LU7XGyjrPP8buGRc5YIpliUIwIAHW9ChIdWiqgFAzSBwWdVVyWIJgKOoagXK8G1YQqxv3yBwuT+cbaoCtOGa2muVxaR1W121kKex2K5XhrJraIMOpLpuX8IZicYL6FEybqhOcmAfzkhkgK7+jXeQkFAcdxsjad/56GdKSCj0/Sfwb/EE/tWBYfTgI2EAAAAASUVORK5CYII=","chicken_nuggets":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAyUlEQVR42mNgoBXwMlL472Wk8J+QOhZsGhkYGBjqcswgAlMY/jMwMDBsO/eAEZsBjOia4RrRQNOUU1gNYSJG85vjH3B6gQmXZpgmfJoxwuDN8Q8MIpYCKPxpZ28RZwBMM7KN087eYkBx2RSG/+jhwITLr9PO3mLIMlZDEavLMWNAj1omWBQhOxWZjewlbIbAvQB1GjzOYYqwhUtdjhncOyiBiOw/mIFZxmooYYQeTkzEJGt8UcpITJ6AuQI5jGCuZSQ2Y+HyKsUAAO8kdyuHhCBHAAAAAElFTkSuQmCC"});
 const MON={"plesn":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACMklEQVR42uVXPW/bMBB9lC1CkN3AyObBW4dO9awpk7MU6NTq12TMv+g/SDsVyKQpE2d36pDNg1cDsQ1Cgs0OMllSXyRlpxl6gADZPN97fEfenYE3NuLqmDwknessZa9DQAKTbQAxPorGINuAiPGxFxFiAyebAcTkIAAgXI4a/Yr5rgy2GRAxOXiRIC7gOvCXr5/V+4/vP2tEfEkEPuA2C5cjpdZZCpzyrsA/Lj7gV/bbKWAx36kz4aJC0Lj7rfm1K7hSoeWwOqdAjI9e0p9jwVsXIiuBp/sMT/fZ2T5tNrQFTt5/KgvMc4abu0Uvn2ol1Q/nP0lB8pAA+wgABPaRQaZTgZu7Bdhzpt77+gAAYi6wmgKztdCv/7CtthfznQiXo+6gGomLHUKWMsjGclab3QbWDtp5BshmQGST8TVVjDgtSeShHwGWMojJoReJ4voKxfUVsJoCUS4ACNBC5h/YR+Ti7VgHbzUJHnPjGjoPJHihwLu83ImLzdbm5wZwJwUAAJyWcvqA5yEBLaxj27Bz5pPAUQ5ncGm0cGrHQ6NSxdxsozqwlNSXSIfdPn7TCpGsVG255JQgEGUl0/2quZZrpytoUyEwDslsjdrDKQFAEOWo5tRYBwg4LWPIK1ip+60EWMqAmEMF0p8oB0tZfScSXF+P8r8bWU1LVS0kiE/O5Kyoisrp9zo54zzpxafhCvZrx3KHp+mt8R9SzOtKXGIkq6SqVcEaiUr57Z0C23TT1+//tj9VOTTy+AyGJwAAAABJRU5ErkJggg==","biala":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABxElEQVR42u2WvUoDQRSFzx2SJYkaEkLYIhJFsLbUxkJ8AJ/ASvQhFC0UfQhFG30B7YNFGlNaC6JiiiUExZ8kRJi1cZdxmNmd2azY5FS7d36+s3dm5w4w1j+Lkgy6ub6N7bO0spC+gQD88vqGcqno6/p5nS651YqRCUoKbjRb2v6ry4vGJihNcBITFAX3Ol241YoV2NYExcFF8PbuJgDg6OAkNRPMFi4/x6nRbMGtVnyv01X+PUw1SIaPqsCEqo2ZTiKm3WYJ4pSR0/+z45VrniZYm4FyqZhq+q0yIOvi7AoAUK+5eGp7iSH1mpvMgDzJU9vDzt5WGDvcPwYAZSwOrDwHhD3g390/aAdFZUMHnZ+bBQCSz4KMXMFMKp3Jl8nwXn9AhXzObglmpmt4fG4r29Y31n69n59eRo4v5HPKk5BUJ2GvP0Ahn/OHwy8A0JqIMw8AjpPF+8cnTU1OmBkQqmBowNaECOecE2NMW4y0S8A5J8fJhiaCSXWGxHbHyYZzRMFjyzHnHIwxHwDEbOgkg02uZkYXEtlIABIlxCn1O6Hwa/oySBU3hRtXQ92ENqCRDEgbE5xzMon/2bVc/npdfKyxTPQNBm3/aqbH59kAAAAASUVORK5CYII=","zarodnik":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACOUlEQVR42u1Wu27bMBQ9TOQojmw1gVAN9dDBhYcOXeoMHTvnC7IX8No/KPoHWQVk72f4A6osHTwU0OAhHVQYTmUztmoH7CIKlERKZBSgS+4k8aFz7zmHVwSe4z8HaVoQRkHhfTycVOZjmsB3XBbThPiOW1lTFwd1wGEUYLmlAMAAsJgmlYQAwHdcNp3P4DsuM2XgQAUe0wQA2Nmxw6bzGTiALImYJuTj67eIaUJaSyBSOp3PKhs4kEi1mJAJ/UoGRPDP7z8V5jgTyy3NZarzzKMYACCtvsyELJZbSs6OHW02LNlgpimbzmcY9F4oNyskYvwbYRQ0JlGRYDycwHfc3Fim0WRY7T4QRgF+3yd4eeKyxfquMOf1TtEkkcqwWgmUT0KZCR1w3SQs1UbxJDQBynxyu/6T7818QbRNKAY/hlc3142gJvPaCdR9+PL8KwDg2/cvhTWqcaN/AY+rm+u8ellVH95caI0ZnQJZM1JR6tmOdHyRUgDAyBvgfpeSk45tZsI6PVWg5TU8CRW4VgI64D8Wv/Lnd96r/HnkDbBKN6Rvd80l4H3g5+LWqHKxWe0e9qRzaNW2Y6kJeTtepRsy8gbG4DyawBuvZGEUYJVu0Le7lXYsVlowX7auFQMiE327i3T/l3i90wIYf9897ElWCCkn0jm0WOs+MB5OYFtHUrb2GhW2TkB1sVis72BpVPjkrbguMqmY+J6x144BXZYEqQgAYltHjfJYT1nhY7xgdI+XXa/aGPA5AOAfkwYjpkl5N2kAAAAASUVORK5CYII=","muszka":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACiUlEQVR42u1XP2gTURz+3jVnjpOegVwSbOBCoQi6lKqDySLo2EE3F+nS0eLukMnBXcjkJlm6pUOnopBFJ4UuFkQICY3aJoGYYrjk/jwHveMl9+7yrkld9MHBu/d+v/d97/f73j/gf/nXC4nr8O55V8iuVNYXS8ADPul3kUvpNMq22WmTQiYvRIKIgqdTCfT6NgWAar0Waf/47kNhEpIIeLPTRq9v0+KGhuKGNpNwtV5DIZOnzU57ZsokEfBCJk+nZ1052MbOzm1UDrYn6nFJRKag9eoMx99HtFqv4cbVe377k9erAICjvUNcf7Ae8KtsNfDp21s/HQBIWCpI1OyJBNxZ12hl9zgAPqtUthoAgJvXNJwNbbKsJrh6iEwBdXEucNb24+cBltUEPbcIZ5Xi2iaKa5uB9qO9QyF/aV5wXh0AVxvCBFjV6qnFbbu81SDxjIamBQCUJaGngmF9/2WfW/dS4Pl5khqaVoAE4YGrikxbp4MA20cvV2PNePdpY+LfyGoYmhZRFdlfEYEIsODd/u8vbMA44ADQOh1AVeSJSMQWoQiJaRt2Ih6JUA0MTYsYWW0i92EArCa8epwocXdCng48QjxdhJUonz99pFTWgxEolXWoiuxHwshqMMc2GVuOHxkR8LHlEHNsB3w8IQqdBbzd2ZvR5SuXkE4qE529kYmfP8Ywshos1yWyJPnRZFPMrgLhC4nlupAlifZGJgAgnVR8EACwXReJqf6w8dlDKSGa0zBwb7CwM3/uG1EEIeGL54UdRosowgRGjkOmRffXCJTKOpJLSz6JkeOQKJJRNnM9TFih8fI/LcS53wVvnn0ItN1/cetinmY8sK8nLazkDMr8k5WcsVASvwAEEEr5E82WzQAAAABJRU5ErkJggg==","jogurt":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACoElEQVR42u1WP2vbQBx9J4QUVRaxa7xcJhdKKXQrpUugmT30E/g7BAodCoYSCGQoFPwBsuUTZPBcjyZ4K5TSwXSIFlPsYKlnCaPr4hOn0+kfbeiSBwLd6Xf33r3f704HPOAB/xlEbgTDUeZj6+o8N0CN0UE3rlJAMBxhuXLR64QcAJYrl/Q6YTqZIF5vDtD2trxowvXmgLS9bW0hptzodUI+nfcBAG9eLrgQKItre1uIGB3247BcuSQYjipFEMVa7vs7AAClZvpdkJcRa4TkXNTBkBuMJYRSE5SaYCwhqjODU4LBKaklYDrvo9cJ+XLlltYNqSowkXP3+EmmfzLm/8QJs6h65bxP530MjvUE3Vac6/sVWBkn5HoqTYEKOe/yimeXEbqtWEsuRKnf1psDrcNGk0NjMuaYXUa144WI6bxfuHVNXWcwHIncp0U3GXN0WzFef8zuhNnZIjdejZm8v623C2S0vW1m28nk1xc3uL640ZLpYgafjpoLKLJdTKq+y6gTU5qCqipX8dj7KbX6Tcqq3AEd+dsPr7TvTWO0B5F6LH/9fpRb6dN3J5m+H5+/5MarMbOzBV48uwUAoh5GhQLC3xbcR3EqImtzM1Bq4m7jkEOPoZYA1YUy8m+Rm+t7bocZ8jBMiOsa2qO4tAbuNg7ZW1cImUzX9v0dXNfgjCXNTsLW1TkOPYYo4mT/ay4VIR4dfH8HxzF40yIEAMQxh2WR9J5QN+cyueiLIk5sm2RSYerIGUtSxZZFIJNXuQEgJYpjDkpN7vs7+P4OlJq5v6JRRC4GqeRRxMl+ksJHrNKyqi8vueUIcp2tjCXEcYxal81gOEIUcdg2+bujWFjehFzAtqtrJydgfy/kaj6bkuvmEoso3QW6vdqU+D7mujf8AQbRZqk1iISxAAAAAElFTkSuQmCC","krol":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACtklEQVR42uVXsW7aUBQ9zzbwIAxIyCtDhg5EqkS+IhKKqDpkYEFKh2wZ+wX9gm4dQGLJ0KkoqpSvKBJSO2ZgRUgM1DxsP7tD/Bz7+T0bTIdKvZKF7Wt8zj33vGsb+N+DlPlTbzSI9+fT2UkEjDLge8cHgHDv+CkyZcI6pjoBXmtY4Wq5hd1phmVVVCqQV50M/rcio4Cqujxwl3H0RoNYLbklRR7J9YC4uQ58tdyiSs1QpeChHtESSN48CX53f4m7+0utOcW1q+UWtYYVnrwK3J1f2EfP5XAZTxG1O024jJOj5kAkV0pqu9NEkensTjNWTTpH5tNZri+OmgMq6QXB9+/eaFvjMq71hVEEFq0IAMBkvEDlzIo3nTp2pwnfC4jnvgBXqan1haUj8OXzj9Rx5Sx9aatNsVmz+PxkvID3+9UvVsUI5bYcbUJRqSo2awYAuP3wVklSVCwrIxvzIA9s1gytNlXmJuNFBkQooyJfpeZhJtRVfmyI+9idJvaOTwpHsRzPj08AgPPrq8Kc8IXsFbQB5viENqzMaLbyWD8/PuHTt4/xfpJEXi4GTnil1aahu+ck+dwo9T5A6yZo3cycl6vfrFnmuFozQ+4HqTmQ24Lz66tY5u5NPwXcvenj19fv2vao2sQcD7RRSb1DWEXVdm/62rwuR+sm2I5n2qS6PtMC3wtIq02VMgPAcHiB4fAil3TyVxUBf20D0byShczxlODJeHj4Ge+zHVeCijYlq6eNSvygOmqxJwF1lR/aplwPcD8gkVleqlOoUTZoowLuB8S0DP13QXKZcD+AaRmplkQSQkdQzsvFmZYRzwLlHBBJHXjAAxKRJwEPSBJQVCjy8pYEL1yGKnC5gt5ogIhEyBwvtdYP+WrKnYSRFyA2GVyoZZiGSoHTPs3m0xkio2jlU5FVkfyn4w9EYKdxVbT/MAAAAABJRU5ErkJggg==","sloik":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACyUlEQVR42q1XPU8jMRB94/iSJVAARSJRhIaKhgYJccWlShWJlpIaiX9zka6mvDYSVSoaEFKaNFQ0oUCC4qCAZcltdq4g3the7+cx0kor73jemzdje02oaGePl87xQbtbKg5VBQ1eCd4as/797UXQ6npUigSVAbZBp5OG4be991GaBJUFtkFtK0uCssDfXgRW16NCwFVJUB54GeAqJEQe+EnvFie92/j7sHeAYe8gl8B00ojVyzJRJvNh7wCHO30c7vQLkVD9k7ZknQromQPA+WgX56PdSmWYThqJpZrZAwumcfYqy6PRjaGCPbayUTOCvj/PjV4IXom8NXb2gkxjpuQGgOu7ixjwaHSDlY1aDPp7fx8AcDweJwi9P88xnTSwvffBaQ0vi8ppZ6nAdZI6CTVHV6MUgaPRDa7vLhLZlTUX8cIK2MC23Mfj8X+TTG1Cm3me3FnW6viYBYLqXnJTklVkA4DNrVnm9z8P9fj96b6JVsfnwK/R2eOlQUJkBVGS63Jf313g9OHK8Pu19d1JUCf5dN+E15xz4NeMjSlRglkgUPci/tn6gcOdvhPQBi/ipxRpdXwEfo285hyDdjepwLcGGxlnBQWA04erXD8pQ7Q6vqFEQoGzx0tEEUEI5jCU+CqTMgQz6O/Hp7KLfoib0lDgq8HjLAmoexFmgaBWx8fTfRN17/OkFHnspQxLZas/9s9q3YuKb0RKusU7h6F0ktHHmYmI4vIuXzj9SBZ50hE5Ny9yHC5ElDzxwlCCaHkkB36NVEPmEkiztF8sfZyZSFeM+ZOv15wbzZ9JQE0qYrrMg3YXWikMFTSSlOiBBWsOQ6lqy8wgyuGhfIveM5xbsc16yRyclmkBVRJlsOcmShBF5qSshsryzSpDKoFBuwshOA6sL0UXgO4bRe5C6bFcPiItsFpqROlBdF8hkkvQjuXyKXU5rXoFz7J/gLy97WWQ9dEAAAAASUVORK5CYII="};
 
 /* ================= SOUND ================= */
@@ -341,21 +355,23 @@ const COIN=tex(16,16,(x)=>{x.fillStyle='#140E1C';x.beginPath();x.arc(8,8,7.5,0,M
 
 /* ================= DATA ================= */
 const KINDS={
-  ziemniak:{r:1,a:2,h:5,n:['Ziemniak','Frytki','Placki'],art:['potato','french_fries','pancakes'],tr:'faint',ab:t=>`zostawia Kiełek ${t}/${t}.`},
-  jablko:{r:1,a:3,h:2,n:['Jabłko','Kawałek szarlotki','Szarlotka'],art:['apple_red','pie_cherry_slice','pie_cherry_whole'],ab:()=>'Bez sztuczek. Mocno chrupie.'},
-  jajko:{r:1,a:1,h:3,n:['Jajko','Jajko sadzone','Tarta'],art:['egg_whole_white','egg_fried','quiche'],tr:'fight',ab:t=>`skorupka blokuje ${t===1?'pierwszy cios':'pierwsze '+t+' ciosy'}.`},
+  ziemniak:{r:1,a:2,h:4,n:['Ziemniak','Frytki','Placki'],art:['potato','french_fries','pancakes'],tr:'faint',ab:t=>`zostawia Kiełek ${t}/${t}.`},
+  jablko:{r:1,a:2,h:3,n:['Jabłko','Kawałek szarlotki','Szarlotka'],art:['apple_red','pie_cherry_slice','pie_cherry_whole'],tr:'sell',ab:t=>`losowy składnik na półce +${t}/+${t} na stałe.`},
+  jajko:{r:1,a:2,h:2,n:['Jajko','Jajko sadzone','Tarta'],art:['egg_whole_white','egg_fried','quiche'],tr:'fight',ab:t=>`skorupka blokuje ${t===1?'pierwszy cios':'pierwsze '+t+' ciosy'}.`},
   cebula:{r:1,a:1,h:3,n:['Cebula','Czerwona cebula','Krążki cebulowe'],art:['onion_brown','onion_purple','onionrings'],tr:'start',ab:t=>`wyciska łzy: ${t} obrażeń każdemu potworowi.`},
-  chleb:{r:1,a:2,h:4,n:['Bułka','Chleb','Kanapka'],art:['breadroll','bread_loaf_brown','sandwich'],tr:'faint',ab:t=>`zostaje Suchar ${t}/${2*t}.`},
-  twarog:{r:2,a:2,h:6,n:['Twaróg','Sernik','Pierogi ruskie'],art:['cheese','cake_slice_plain','dumpling'],tr:'fight',ab:t=>`miękki: każdy cios zadaje mu ${t} mniej.`},
-  ogorek:{r:2,a:2,h:3,n:['Ogórek','Słoik kiszonych','Ogórkowa'],art:['cucumber','canned_food_2','soup_pea'],tr:'morning',ab:t=>`kisi się: +${t}/+${t} na stałe.`},
-  czosnek:{r:2,a:2,h:3,n:['Czosnek','Bagietka czosnkowa','Pizza czosnkowa'],art:['garlic','baguette','pizza_cheese_whole'],tr:'start',ab:t=>`${3*t} obrażeń pierwszemu potworowi.`},
-  maslo:{r:2,a:1,h:4,n:['Masło','Rogal','Tort'],art:['butter','croissant','cake_whole_plain'],tr:'start',ab:t=>`sąsiedzi na półce +${t}/+${t}.`},
-  burak:{r:3,a:2,h:5,n:['Burak','Ćwikła','Barszcz'],art:['beet','canned_food_1','soup_beet'],tr:'after',ab:t=>`leczy walczący składnik o ${2*t}.`},
-  chili:{r:3,a:4,h:2,n:['Chili','Taco','Burrito'],art:['chili_pepper_red','taco','burrito'],tr:'fight',ab:()=>'ostre: trafia też drugiego potwora w kolejce.'},
-  kielbasa:{r:3,a:4,h:7,n:['Kiełbasa','Hot-dog','Szynka'],art:['sausage','hotdog','ham'],ab:()=>'Solidna. Bez fanaberii.'}
+  chleb:{r:1,a:2,h:3,n:['Bułka','Chleb','Kanapka'],art:['breadroll','bread_loaf_brown','sandwich'],tr:'faint',ab:t=>`zostaje Suchar ${t}/${2*t}.`},
+  twarog:{r:2,a:2,h:5,n:['Twaróg','Sernik','Pierogi ruskie'],art:['cheese','cake_slice_plain','dumpling'],tr:'roll',ab:t=>`+${t} życia na stałe za każdą dostawę.`},
+  ogorek:{r:2,a:3,h:3,n:['Ogórek','Słoik kiszonych','Ogórkowa'],art:['cucumber','canned_food_2','soup_pea'],tr:'morning',ab:t=>`kisi się: +${t}/+${t} na stałe.`},
+  czosnek:{r:2,a:3,h:3,n:['Czosnek','Bagietka czosnkowa','Pizza czosnkowa'],art:['garlic','baguette','pizza_cheese_whole'],tr:'start',ab:t=>`${3*t} obrażeń pierwszemu potworowi.`},
+  maslo:{r:2,a:2,h:4,n:['Masło','Rogal','Tort'],art:['butter','croissant','cake_whole_plain'],tr:'start',ab:t=>`sąsiedzi na półce +${t}/+${t}.`},
+  burak:{r:3,a:3,h:6,n:['Burak','Ćwikła','Barszcz'],art:['beet','canned_food_1','soup_beet'],tr:'after',ab:t=>`leczy walczący składnik o ${2*t}.`},
+  chili:{r:3,a:6,h:3,n:['Chili','Taco','Burrito'],art:['chili_pepper_red','taco','burrito'],tr:'fight',ab:()=>'ostre: trafia też drugiego potwora w kolejce.'},
+  kielbasa:{r:3,a:5,h:8,n:['Kiełbasa','Hot-dog','Szynka'],art:['sausage','hotdog','ham'],ab:()=>'Solidna. Bez fanaberii.'},
+  dynia:{r:4,a:5,h:9,n:['Dynia','Kawałek ciasta dyniowego','Ciasto dyniowe'],art:['pumpkin','pie_pumpkin_slice','pie_pumpkin_whole'],tr:'start',ab:t=>`cała półka +${t}/+${t}.`},
+  kurczak:{r:4,a:7,h:7,n:['Kurczak','Udko z pieca','Nuggetsy'],art:['chicken_drumstick_raw','chicken_drumstick_cooked','chicken_nuggets'],tr:'faint',ab:t=>`sąsiedzi dostają +${2*t} ataku.`}
 };
 const TOKENS={kielek:{n:'Kiełek',art:'scallions'},suchar:{n:'Suchar',art:'flatbread'}};
-const TRIG={start:'START NOCY',fight:'W STARCIU',after:'PO STARCIU',faint:'PO ZEPSUCIU',morning:'RANO'};
+const TRIG={start:'START NOCY',fight:'W STARCIU',after:'PO STARCIU',faint:'PO ZEPSUCIU',morning:'RANO',sell:'PRZY SPRZEDAŻY',roll:'PRZY DOSTAWIE'};
 const ENEMIES={
   plesn:{n:'Pleśń',a:1,h:3,c:['#3E8E3A','#7FD06A'],ab:'Zwykła zielona pleśń.'},
   zarodnik:{n:'Zarodnik',a:1,h:1,c:['#A9D46B','#E3F5B0'],ab:'Mały, ale namolny.'},
@@ -369,8 +385,13 @@ const WAVES=[['plesn','plesn'],['plesn','muszka','plesn'],['biala','plesn','musz
   ['biala','jogurt','muszka','muszka','plesn'],['jogurt','biala','biala','muszka'],['jogurt','biala','jogurt','plesn','muszka'],
   ['biala','biala','jogurt','jogurt','muszka','muszka'],['sloik','plesn']];
 const STARS=['★','★★','★★★'];
-const RCOL={1:'var(--r1)',2:'var(--r2)',3:'var(--r3)'};
-const COST=3,MAXHP=5,SLOTS=5;
+const TIERS={1:{n:'I',c:'#A9A2BA',bg:'#F4EFE6',name:'zwykły'},2:{n:'II',c:'#2FAF5A',bg:'#E4F5E8',name:'dobry'},3:{n:'III',c:'#3B8CF0',bg:'#E2EDFD',name:'rzadki'},4:{n:'IV',c:'#B45CF0',bg:'#F1E4FD',name:'legendarny'}};
+const PRICE={1:3,2:4,3:5,4:6};
+// chance (%) of each tier on the counter, per night
+const ODDS=[[100],[100],[70,30],[60,40],[45,40,15],[35,40,25],[25,35,32,8],[20,30,35,15],[15,28,37,20],[10,25,40,25]];
+const BUDGET=10,ROLL=1,MAXHP=5,SLOTS=5;
+const cost=k=>PRICE[KINDS[k].r];
+const NK=Object.keys(KINDS).length;
 const IMG={};Object.keys(KINDS).forEach(k=>{IMG[k]=KINDS[k].art.map(a=>ART[a]);});
 Object.keys(TOKENS).forEach(k=>{IMG[k]=[ART[TOKENS[k].art]];});
 
@@ -409,7 +430,7 @@ function renderDoor(){
   const word=(w,off)=>`<div class="mword">${w.split('').map((ch,i)=>`<span class="mletter" style="--c:${['#E5352B','#FFC93C','#27C46B','#2F7CF6','#C77DFF','#FF7A1A'][(i+off)%6]};--r:${(((i*37+off*11)%13)-6)}deg">${ch}</span>`).join('')}</div>`;
   $('#mlogo').innerHTML=word('MIDNIGHT',0)+word('PANTRY',3);
   $('#parade').innerHTML=['ziemniak','cebula','jajko','burak','chili','kielbasa'].map((k,i)=>`<img class="px" src="${IMG[k][i%3]}" alt="" style="animation-delay:${i*.15}s">`).join('');
-  $('#sticky').innerHTML=`Babcia w sanatorium. Nocą z zamrażalnika wyłazi pleśń. Pilnujcie lodówki!<br>Najdalej: <b>noc ${meta.best}/10</b> · Dania ★★★: <b>${meta.dishes.length}/12</b>`;
+  $('#sticky').innerHTML=`Babcia w sanatorium. Nocą z zamrażalnika wyłazi pleśń. Pilnujcie lodówki!<br>Najdalej: <b>noc ${meta.best}/10</b> · Dania ★★★: <b>${meta.dishes.length}/${NK}</b>`;
   $('#dishmags').innerHTML=meta.dishes.map(k=>`<img class="px" src="${IMG[k][2]}" alt="">`).join('');}
 function doorTitle(show){$('#doorTitle').style.display=show?'contents':'none';}
 async function doorOpen(){SFX.creak();flash(.5,600);door.hidden=false;
@@ -424,12 +445,16 @@ async function doorFade(){if(!RM)await door.animate([{opacity:1},{opacity:0}],{d
 let run=null,B=null,uid=0,paused=false;
 function tierPool(){return run.night>=5?3:run.night>=3?2:1;}
 function stat(u){const K=KINDS[u.k];return{a:K.a*u.t+u.ba,h:K.h*u.t+u.bh};}
-function newRun(){run={night:1,hp:MAXHP,coins:10,team:Array(SLOTS).fill(null),shop:[],sel:null,phase:'shop',speed:1,won:0,newDishes:[],clock:8*60};rollShop();}
-function rollShop(){const mt=tierPool();const pool=Object.keys(KINDS).filter(k=>KINDS[k].r<=mt);
-  const owned=run.team.filter(u=>u&&u.t<3).map(u=>u.k);const n=run.night>=5?4:3;
-  run.shop=Array.from({length:n},()=>({k:owned.length&&Math.random()<.4?rnd(owned):rnd(pool)}));}
+function newRun(){run={night:1,hp:MAXHP,coins:BUDGET,team:Array(SLOTS).fill(null),shop:[],sel:null,phase:'shop',speed:1,won:0,newDishes:[],clock:8*60};rollShop();}
+function odds(){return ODDS[Math.min(run.night,10)-1];}
+function pickTier(){const o=odds();let r=Math.random()*100;for(let i=0;i<o.length;i++){r-=o[i];if(r<0)return i+1;}return 1;}
+function rollShop(keepHeld){const held=keepHeld&&run.shop?run.shop.filter(c=>c.held&&!c.sold).map(c=>({k:c.k,held:true})):[];
+  const n=run.night>=3?4:3,maxT=odds().length;
+  const owned=run.team.filter(u=>u&&!u.tok&&u.t<3&&KINDS[u.k].r<=maxT).map(u=>u.k);const fresh=[];
+  while(held.length+fresh.length<n){let k=owned.length&&Math.random()<.3?rnd(owned):null;if(!k){const t=pickTier();k=rnd(Object.keys(KINDS).filter(x=>KINDS[x].r===t));}fresh.push({k});}
+  run.shop=held.concat(fresh);}
 function owner(k){return run.team.findIndex(u=>u&&u.k===k);}
-function mkEnemy(k){const d=ENEMIES[k],n=run.night;const h=d.h+(d.boss?0:n-1),a=d.a+(d.boss?0:Math.floor((n-1)/3));return Object.assign({},d,{k,uid:++uid,a,h,max:h,clash:0});}
+function mkEnemy(k){const d=ENEMIES[k],n=run.night;const h=d.h+(d.boss?0:Math.round((n-1)*1.4)),a=d.a+(d.boss?0:Math.floor((n-1)/2.5));return Object.assign({},d,{k,uid:++uid,a,h,max:h,clash:0});}
 function unitName(u){return u.tok?TOKENS[u.k].n:KINDS[u.k].n[u.t-1];}
 function unitImg(u){return u.tok?IMG[u.k][0]:IMG[u.k][u.t-1];}
 
@@ -456,33 +481,36 @@ function renderTeam(){const fight=run.phase==='fight';const list=fight?B.allies:
     if(fight&&B.arena&&B.arena.ai===i)cls.push('out');
     if(fight&&u.h<=0)cls.push('dead');
     const st=fight?{a:u.a,h:u.h}:stat(u);
+    const T=u.tok?{n:'',c:'#8A8499'}:TIERS[KINDS[u.k].r];
     const pips=!fight&&!u.tok&&u.t<3?`<div class="pips">${[0,1,2].map(j=>`<i class="${j<u.c?'on':''}"></i>`).join('')}</div>`:'<div class="pips"></div>';
-    return `<div class="${cls.join(' ')}" id="t-${i}" data-act="slot" data-i="${i}"><div class="stars">${u.tok?'':STARS[u.t-1]}</div><div class="bob" style="animation-delay:${i*.31}s"><img class="px sp" src="${unitImg(u)}" alt="${unitName(u)}"></div>${badges(st.a,st.h)}${pips}</div>`;}).join('');}
+    return `<div class="${cls.join(' ')}" id="t-${i}" data-act="slot" data-i="${i}" style="--tc:${T.c}">${T.n?`<span class="tnum">${T.n}</span>`:''}<div class="stars">${u.tok?'':STARS[u.t-1]}</div><div class="bob" style="animation-delay:${i*.31}s"><img class="px sp" src="${unitImg(u)}" alt="${unitName(u)}"></div>${badges(st.a,st.h)}${pips}</div>`;}).join('');}
 function renderShop(){const el=$('#shop');
   if(run.phase!=='shop'){el.innerHTML='';el.style.visibility='hidden';$('#clabel').textContent='NOC';return;}el.style.visibility='';$('#clabel').textContent='ZAKUPY';
-  el.innerHTML=run.shop.map((c,i)=>{if(c.sold)return `<div class="card sold"></div>`;const K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null;
+  $('#clabel').innerHTML='ZAKUPY · '+odds().map((v,j)=>`<span style="color:${TIERS[j+1].c}">${TIERS[j+1].n}</span> ${v}%`).join(' ');
+  el.innerHTML=run.shop.map((c,i)=>{if(c.sold)return `<div class="card sold"></div>`;const K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null,T=TIERS[K.r],p=cost(c.k);
     const sel=run.sel&&run.sel.type==='shop'&&run.sel.i===i;
-    return `<button class="card ${sel?'sel':'wiggle'} ${run.coins<COST?'poor':''}" style="--rc:${RCOL[K.r]};animation-delay:${i*.3}s" data-act="card" data-i="${i}" aria-pressed="${sel}">
-      <span class="price">${COST}</span>${u?`<span class="own">${u.t===3?'MAX':(u.c+1)+'/3'}</span>`:''}
+    return `<button class="card t${K.r} ${sel?'sel':'wiggle'} ${c.held?'held':''} ${run.coins<p?'poor':''}" style="--rc:${T.c};--rb:${T.bg};animation-delay:${i*.3}s" data-act="card" data-i="${i}" aria-pressed="${sel}">
+      <span class="tier">${T.n}</span><span class="price">${p}</span>${u?`<span class="own">${u.t===3?'MAX':(u.c+1)+'/3'}</span>`:''}
       <img class="px sp" src="${IMG[c.k][0]}" alt=""><span class="cn">${K.n[0]}</span><span class="cs"><span class="bdg a">${K.a}</span><span class="bdg h">${K.h}</span></span></button>`;}).join('');}
 function renderActions(){const el=$('#actions');
   if(run.phase==='fight'){el.innerHTML=`<button class="btn b-gray" data-act="speed">TEMPO ×${run.speed}</button>`;return;}
   if(run.phase!=='shop'){el.innerHTML='';return;}
   const s=run.sel;
-  if(s&&s.type==='shop'){const c=run.shop[s.i],o=owner(c.k),u=o>=0?run.team[o]:null;const full=!u&&run.team.every(Boolean);const max=u&&u.t===3;
-    el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-green grow" data-act="buy" ${run.coins<COST||full||max?'disabled':''}>${max?'MAX ★★★':full?'PÓŁKA PEŁNA':u?'KUP · DO PATELNI':'KUP · '+COST}</button>`;return;}
-  if(s&&s.type==='shelf'){const u=run.team[s.i];el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-red grow" data-act="sell">SPRZEDAJ +${u.t}</button>`;return;}
-  el.innerHTML=`<button class="btn b-blue" data-act="reroll" ${run.coins<1?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> 1</button><button class="btn b-orange grow wiggle" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>ZAMKNIJ LODÓWKĘ</button>`;}
+  if(s&&s.type==='shop'){const c=run.shop[s.i],o=owner(c.k),u=o>=0?run.team[o]:null;const full=!u&&run.team.every(Boolean);const max=u&&u.t===3;const p=cost(c.k);
+    el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-blue" data-act="hold">${c.held?'PUŚĆ':'TRZYMAJ'}</button><button class="btn b-green grow" data-act="buy" ${run.coins<p||full||max?'disabled':''}>${max?'MAX':full?'PEŁNO':'KUP · '+p}</button>`;return;}
+  if(s&&s.type==='shelf'){const u=run.team[s.i];el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-red grow" data-act="sell">SPRZEDAJ +${u.inv}</button>`;return;}
+  el.innerHTML=`<button class="btn b-blue" data-act="reroll" ${run.coins<ROLL?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> 1</button><button class="btn b-orange grow wiggle" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>ZAMKNIJ LODÓWKĘ</button>`;}
 function center(title,desc){$('#center').innerHTML=`${title?`<div class="ct">${title}</div>`:''}<div class="cd">${desc||''}</div>`;}
 function defaultCenter(){const n=run.night;let d;
-  if(n===1)d='Przeciągnij produkt z blatu na półkę. <em>Pierwszy z lewej walczy pierwszy.</em>';
-  else if(n===2)d='<em>3 takie same</em> lądują na patelni i robią się lepsze: ★★.';
-  else if(n===3)d='Nowe składniki w dostawie! <em>Kolejne 3</em> robią z ★★ danie ★★★.';
-  else if(n===5)d='Najlepsze produkty na blacie. <em>Dziś przychodzi Król Pleśni.</em>';
+  if(n===1)d='Przeciągnij produkt na półkę. <em>Co rano masz 10 monet, reszta przepada.</em>';
+  else if(n===2)d='<em>3 takie same</em> idą na patelnię: ★★. Sprzedaż zwraca całą cenę.';
+  else if(n===3)d='W dostawie zielone produkty <em>II</em>. Szanse widać na blacie.';
+  else if(n===5)d='Niebieskie <em>III</em> na blacie. Dziś przychodzi Król Pleśni.';
+  else if(n===7)d='Pojawiają się legendarne <em>IV</em>!';
   else if(n===10)d='Ostatnia noc. <em>Zapomniany Słoik</em> czeka z tyłu lodówki.';
   else d='Stuknij, żeby poznać. Przeciągnij, żeby przestawić.';
   center(`RANO · NOC ${n}`,d);}
-function infoUnit(k,t,extra){const K=KINDS[k];return `${K.tr?`<span class="tag">${TRIG[K.tr]}</span>`:''}${K.ab(t)}${extra||''}`;}
+function infoUnit(k,t,extra){const K=KINDS[k],T=TIERS[K.r];return `<span class="tag" style="background:${T.c};color:#fff">${T.n}</span>${K.tr?`<span class="tag">${TRIG[K.tr]}</span>`:''}${K.ab(t)}${extra||''}`;}
 function renderAll(){renderHUD();renderEnemies();renderTeam();renderShop();renderActions();}
 
 /* ================= SHOP ACTIONS ================= */
@@ -514,17 +542,17 @@ async function cookIn(slotIdx,u){ // pan appears over the shelf slot, the pile j
   center(`${KINDS[u.k].n[u.t-1].toUpperCase()}!`,infoUnit(u.k,u.t));
   if(u.t===3&&!meta.dishes.includes(u.k)){meta.dishes.push(u.k);run.newDishes.push(u.k);saveMeta();}}
 async function buy(si,slot){if(busy||si==null)return;const c=run.shop[si];if(!c||c.sold)return;
-  if(run.coins<COST){say('Za mało monet','Sprzedaj coś albo zamknij lodówkę.');return;}
+  const p=cost(c.k);if(run.coins<p){say('Za mało monet','Sprzedaj coś, żeby dozbierać.');return;}
   const o=owner(c.k);const cardEl=document.querySelector(`[data-act="card"][data-i="${si}"]`);
   let target=o;
   if(o<0){if(slot!=null&&!run.team[slot])target=slot;else target=run.team.findIndex(u=>!u);
     if(target<0){say('Półka pełna','Sprzedaj coś, żeby zrobić miejsce.');return;}}
   else if(o>=0&&run.team[o].t>=3)return;
-  busy=true;const old=run.coins;run.coins-=COST;countTo($('#coinN'),old,run.coins);c.sold=true;run.sel=null;SFX.buy();
+  busy=true;const old=run.coins;run.coins-=p;countTo($('#coinN'),old,run.coins);c.sold=true;run.sel=null;SFX.buy();
   if(cardEl)cardEl.style.visibility='hidden';renderActions();
   await flyTo(cardEl,document.getElementById('t-'+target),IMG[c.k][0],56);SFX.plop();
-  if(o<0){run.team[target]={k:c.k,t:1,c:1,ba:0,bh:0};renderAll();const el=document.getElementById('t-'+target);anim(el,'pop');burst(el,['#fff','#BFDDE9'],8,true);defaultCenter();}
-  else{const u=run.team[o];u.c++;
+  if(o<0){run.team[target]={k:c.k,t:1,c:1,ba:0,bh:0,inv:p};renderAll();const el=document.getElementById('t-'+target);anim(el,'pop');burst(el,['#fff','#BFDDE9'],8,true);defaultCenter();}
+  else{const u=run.team[o];u.c++;u.inv+=p;
     if(u.c>=3&&u.t<3){renderAll();await cookIn(o,u);}
     else{renderAll();const el=document.getElementById('t-'+o);anim(el.querySelector('.sp'),'pop');ftxt(el,`${u.c}/3`,'#FFC93C',26,30);defaultCenter();}}
   busy=false;renderActions();}
@@ -534,12 +562,17 @@ function onSlot(i){if(run.phase!=='shop'||busy)return;const s=run.sel;
   select({type:'shelf',i});}
 function swapSlots(a,b){if(a===b)return;const t=run.team[a];run.team[a]=run.team[b];run.team[b]=t;run.sel=null;SFX.whoosh();renderAll();defaultCenter();
   [a,b].forEach(j=>{const el=document.getElementById('t-'+j);if(el&&run.team[j])anim(el,'pop');});}
-function sell(){const s=run.sel;if(!s||s.type!=='shelf')return;const u=run.team[s.i];const el=document.getElementById('t-'+s.i);burst(el,['#F0405A','#fff'],10);
-  const old=run.coins;run.coins+=u.t;run.team[s.i]=null;run.sel=null;SFX.coin();renderAll();countTo($('#coinN'),old,run.coins);defaultCenter();}
+function sell(){const s=run.sel;if(!s||s.type!=='shelf')return;sellAt(s.i);}
+function sellAt(i){const u=run.team[i];if(!u||busy)return;const el=document.getElementById('t-'+i);burst(el,['#FFC93C','#fff'],12,true);
+  const old=run.coins;run.coins+=u.inv;run.team[i]=null;run.sel=null;SFX.coin();SFX.coin(2);renderAll();countTo($('#coinN'),old,run.coins);defaultCenter();
+  ftxt($('#coins'),'+'+u.inv,'#FFC93C',30,-10);
+  if(u.k==='jablko'){const others=run.team.map((x,j)=>x?j:-1).filter(j=>j>=0);if(others.length){const j=rnd(others),w=run.team[j];w.ba+=u.t;w.bh+=u.t;renderTeam();
+    const we=document.getElementById('t-'+j);anim(we,'act');ftxt(we,`+${u.t}/+${u.t}`,'#7CF29A',28);SFX.heal();say('JABŁKO',`${KINDS[w.k].n[w.t-1]} +${u.t}/+${u.t} na stałe.`);}}}
+function rollTriggers(){run.team.forEach((u,j)=>{if(u&&u.k==='twarog'){u.bh+=u.t;const el=document.getElementById('t-'+j);setTimeout(()=>{anim(el,'act');ftxt(el,'+'+u.t,'#FF8FA0',26);},250);}});}
 
 /* ================= NIGHT ================= */
 const wait=ms=>new Promise(res=>{let left=ms;const tick=()=>{if(!paused)left-=40*run.speed;if(left<=0)res();else setTimeout(tick,40);};setTimeout(tick,40);});
-function mkAlly(u){const s=stat(u);return{k:u.k,t:u.t,a:s.a,h:s.h,max:s.h,shell:u.k==='jajko'?u.t:0,soft:u.k==='twarog'?u.t:0,tok:false};}
+function mkAlly(u){const s=stat(u);return{k:u.k,t:u.t,a:s.a,h:s.h,max:s.h,shell:u.k==='jajko'?u.t:0,soft:0,tok:false};}
 function mkTok(k,t){return k==='kielek'?{k,t:1,a:t,h:t,max:t,shell:0,soft:0,tok:true}:{k,t:1,a:t,h:2*t,max:2*t,shell:0,soft:0,tok:true};}
 const frontI=()=>B.allies.findIndex(a=>a&&a.h>0);
 const tEl=i=>(B&&B.arena&&B.arena.ai===i&&document.getElementById('arA'))||document.getElementById('t-'+i);
@@ -567,7 +600,8 @@ async function allyDeaths(){let msg='';const dying=[];
   SFX.die();dying.forEach(i=>{const sp=tEl(i)&&tEl(i).querySelector('.sp');if(sp&&!RM)sp.animate([{filter:'none',transform:'none'},{filter:'sepia(1) hue-rotate(50deg) saturate(2) brightness(.7)',transform:'rotate(-8deg)',offset:.4},{filter:'sepia(1) hue-rotate(50deg) brightness(.5)',transform:'translateY(30px) rotate(40deg)',opacity:.2}],{duration:600,fill:'forwards'});});
   await sleep(600);
   dying.forEach(i=>{const a=B.allies[i];
-    if(!a.tok&&KINDS[a.k].tr==='faint'){const tk=a.k==='ziemniak'?'kielek':'suchar';B.allies[i]=mkTok(tk,a.t);msg=`${KINDS[a.k].n[a.t-1]} się psuje… i zostawia ${TOKENS[tk].n}!`;}
+    if(!a.tok&&a.k==='kurczak'){[i-1,i+1].forEach(j=>{const b=B.allies[j];if(b&&b.h>0){b.a+=2*a.t;updA(j);ftxt(document.getElementById('t-'+j),'+'+2*a.t+' ATK','#FFB020',24);}});msg=`${aName(a)} pada, a sąsiedzi wpadają w szał: +${2*a.t} ataku!`;}
+    else if(!a.tok&&KINDS[a.k].tr==='faint'){const tk=a.k==='ziemniak'?'kielek':'suchar';B.allies[i]=mkTok(tk,a.t);msg=`${KINDS[a.k].n[a.t-1]} się psuje… i zostawia ${TOKENS[tk].n}!`;}
     else msg=`${aName(a)} pleśnieje i spada z półki.`;});
   renderTeam();return msg;}
 function aName(a){return a.tok?TOKENS[a.k].n:KINDS[a.k].n[a.t-1];}
@@ -575,7 +609,7 @@ function setNight(on){game.classList.toggle('night',on);humOn(on);}
 async function bossBanner(e){const b=$('#banner');b.innerHTML=`${e.n.toUpperCase()}<small>${e.ab.replace('BOSS. ','')}</small>`;b.hidden=false;SFX.boss();shake(10);flash(.25,300);
   if(!RM)await b.animate([{transform:'translateX(-110%) skewX(-10deg)'},{transform:'translateX(0) skewX(0)',offset:.25},{transform:'translateX(0)',offset:.8},{transform:'translateX(110%) skewX(10deg)'}],{duration:2000,easing:'ease-in-out'}).finished;else await sleep(1200);
   b.hidden=true;}
-async function startNight(){if(busy)return;busy=true;run.phase='closing';run.sel=null;renderActions();
+async function startNight(){if(busy)return;busy=true;run.leftover=run.coins;run.coins=0;run.phase='closing';run.sel=null;renderActions();
   doorTitle(false);renderDoor();await doorClose();
   run.phase='fight';B={allies:run.team.map(u=>u?mkAlly(u):null),enemies:WAVES[run.night-1].map(mkEnemy),lost:false};
   setNight(true);setClock(23*60);renderHUD();renderTeam();renderEnemies(true);renderShop();renderActions();center(`NOC ${run.night}`,'Ciemno. Coś drapie w zamrażalniku…');
@@ -589,6 +623,7 @@ async function startNight(){if(busy)return;busy=true;run.phase='closing';run.sel
   for(let i=0;i<SLOTS;i++){const a=B.allies[i];if(!a||KINDS[a.k].tr!=='start')continue;const el=tEl(i);anim(el,'act');
     if(a.k==='cebula'){center('ŁZY!',`<span class="tag">START NOCY</span>${aName(a)}: ${a.t} obrażeń każdemu potworowi.`);B.enemies.forEach(e=>hitE(e,a.t));SFX.hit();shake(4);}
     if(a.k==='czosnek'){const e=B.enemies[0];if(e){center('CZOSNEK!',`<span class="tag">START NOCY</span>${aName(a)}: ${3*a.t} obrażeń dla ${e.n}.`);hitE(e,3*a.t,true);SFX.hit();shake(5);}}
+    if(a.k==='dynia'){center('DYNIA!',`<span class="tag">START NOCY</span>Cała półka +${a.t}/+${a.t}.`);B.allies.forEach((b,j)=>{if(b&&j!==i)buffA(j,a.t,a.t);});SFX.heal();}
     if(a.k==='maslo'){center('MASŁO!',`<span class="tag">START NOCY</span>Sąsiedzi ${aName(a)} +${a.t}/+${a.t}.`);[i-1,i+1].forEach(j=>{if(B.allies[j])buffA(j,a.t,a.t);});SFX.heal();}
     await wait(900);if(await clearDead()){center('PĘKA!','Biała pleśń dzieli się na Zarodniki.');await wait(600);}}
   let n=0;while(frontI()>=0&&B.enemies.length&&n<80){n++;await clash(n);}
@@ -636,23 +671,24 @@ async function endNight(win){const n=run.night;let lost=0;
   run.phase='morning';renderActions();
   if(run.hp<=0||(win&&n===10)){gameOver(win);return;}
   doorTitle(false);renderDoor();await doorClose();await sleep(250);
-  setNight(false);run.phase='shop';B=null;setClock(8*60);run.night++;run.preview=null;rollShop();run.sel=null;renderAll();center('DZIEŃ DOBRY!','Lodówka znowu świeci.');
+  setNight(false);run.phase='shop';B=null;setClock(8*60);run.night++;run.preview=null;rollShop(true);run.sel=null;renderAll();center('DZIEŃ DOBRY!','Lodówka znowu świeci.');
   await doorOpen();
   receipt(win,lost,ferm);}
-function receipt(win,lost,ferm){const rows=[['Dniówka',7]];if(win)rows.push(['Przetrwana noc',2]);
-  const total=rows.reduce((s,r)=>s+r[1],0);run.pending=total;const nn=run.night-1;
-  const tip=run.night===5?'Dziś w nocy: KRÓL PLEŚNI':run.night===3?'W dostawie nowe, niebieskie produkty':run.night===5?'':run.night===10?'Ostatnia noc. Babcia wraca jutro!':'Dziękujemy, zapraszamy jutro';
+function receipt(win,lost,ferm){const total=BUDGET;run.pending=total;const nn=run.night-1;const left=run.leftover||0;
+  const tip=run.night===5?'Dziś w nocy: KRÓL PLEŚNI':run.night===3?'W dostawie zielone produkty II':run.night===7?'W dostawie legendarne IV!':run.night===10?'Ostatnia noc. Babcia wraca jutro!':'Wydaj wszystko, reszta przepada';
   overlay(`<div class="receipt">
     <div class="rh">SKLEP „U BABCI”<small>PARAGON · NOC ${nn} · 06:00</small></div><div class="dash"></div>
-    ${rows.map(r=>`<div class="rr"><span>${r[0]}</span><b>+${r[1]}</b></div>`).join('')}
+    <div class="rr ${win?'':'bad'}"><span>${win?'Noc przetrwana':'Pleśń wygrała'}</span><b>${win?'✓':'✗'}</b></div>
+    ${left?`<div class="rr bad"><span>Niewydane wczoraj</span><b>−${left}</b></div>`:''}
+    <div class="rr"><span>Budżet na dziś</span><b>${BUDGET}</b></div>
     ${!win?`<div class="rr bad"><span>Zakwas oberwał</span><b>−${lost} ♥︎</b></div>`:''}
     ${ferm?`<div class="rr"><span>Ogórki ukiszone</span><b>+${ferm}/+${ferm}</b></div>`:''}
-    <div class="dash"></div><div class="tot"><span>RAZEM</span><span>+${total}</span></div><div class="bar"></div><div class="note">${tip}</div>
-    <button class="btn b-orange" data-act="next">ZGARNIJ +${total} ▶︎</button></div>`,'bottom');
+    <div class="dash"></div><div class="tot"><span>NA ZAKUPY</span><span>${total}</span></div><div class="bar"></div><div class="note">${tip}</div>
+    <button class="btn b-orange" data-act="next">ODBIERZ ${total} ▶︎</button></div>`,'bottom');
   const sheet=$('#overlay .receipt');if(!RM)sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:500,easing:'cubic-bezier(.2,.9,.3,1)'});
   const tr=[...document.querySelectorAll('.receipt .rr')];tr.forEach((r,i)=>setTimeout(()=>{r.classList.add('in');SFX.tick();SFX.coin(i);},450+i*280));}
 async function collect(){const sheet=$('#overlay .receipt');if(sheet&&!RM)await sheet.animate([{transform:'none'},{transform:'translateY(110%)'}],{duration:280,easing:'ease-in'}).finished;
-  closeOverlay();const old=run.coins;run.coins+=run.pending;run.pending=0;renderHUD();countTo($('#coinN'),old,run.coins);SFX.coin(3);
+  closeOverlay();const old=0;run.coins=run.pending;run.pending=0;renderHUD();countTo($('#coinN'),old,run.coins);SFX.coin(3);
   burst($('#coins'),['#FFC93C','#FFF3B0'],12,true);defaultCenter();
   if(run.night===2&&!RM){}}
 async function gameOver(win){meta.runs++;if(win)meta.won++;saveMeta();humOff();
@@ -666,13 +702,14 @@ async function goHome(){closeOverlay();renderDoor();doorTitle(true);await doorCl
 function overlay(html,mode){const o=$('#overlay');o.className=mode==='mid'?'mid':'';o.innerHTML=html;o.hidden=false;paused=true;}
 function closeOverlay(){$('#overlay').hidden=true;paused=false;}
 function showHelp(){overlay(`<div class="sheet"><h2>JAK GRAĆ</h2><ol class="howto">
-  <li><b>Rano zakupy.</b> Stuknij produkt na blacie, potem KUP (3 monety). ANULUJ albo drugie stuknięcie odznacza.</li>
+  <li><b>Co rano 10 monet.</b> Niewydane przepadają, więc kupuj, losuj DOSTAWĘ (1) i sprzedawaj. Sprzedaż zwraca całą cenę.</li>
+  <li><b>Przeciągnij</b> produkt na półkę, żeby kupić. Składnik z półki na blat, żeby sprzedać. TRZYMAJ zostawia kartę na później.</li>
   <li><b>3 takie same lądują na patelni</b> i wychodzą lepsze: Ziemniak ★ → Frytki ★★ → Placki ★★★.</li>
   <li><b>Zamknij lodówkę</b> i patrz: pierwszy z lewej na półce bije się z pierwszym potworem z zamrażalnika.</li>
-  <li><b>Kolor ramki</b> to rzadkość: szary od nocy 1, niebieski od 3, fioletowy od 5.</li>
+  <li><b>Poziomy I–IV</b> (kolor ramki): droższe, ale mocniejsze. Szanse rosną z każdą nocą, widać je na blacie.</li>
   <li><b>Przegrana noc</b> spuszcza powietrze z Zakwasu. Przetrwaj 10 nocy do powrotu Babci.</li></ol>
   <button class="btn b-orange" data-act="close">ROZUMIEM</button></div>`,'mid');}
-function showColl(){overlay(`<div class="sheet"><h2>KSIĄŻKA KUCHARSKA</h2><p>Dania ★★★ ugotowane we wszystkich nocach: ${meta.dishes.length}/12. Każde wisi potem na drzwiach jako magnes.</p>
+function showColl(){overlay(`<div class="sheet"><h2>KSIĄŻKA KUCHARSKA</h2><p>Dania ★★★ ugotowane we wszystkich nocach: ${meta.dishes.length}/${NK}. Każde wisi potem na drzwiach jako magnes.</p>
   <div class="coll">${Object.keys(KINDS).map(k=>{const on=meta.dishes.includes(k);return `<div class="${on?'':'lock'}"><img class="px" src="${IMG[k][2]}" alt="">${on?KINDS[k].n[2]:'???'}</div>`;}).join('')}</div>
   <button class="btn b-orange" data-act="close">ZAMKNIJ</button></div>`,'mid');}
 
@@ -689,9 +726,12 @@ document.addEventListener('pointermove',ev=>{if(!drag)return;const dx=ev.clientX
   if(!drag.started){if(dx*dx+dy*dy<100)return;startDrag();}
   const g=app.getBoundingClientRect();drag.ghost.style.left=(ev.clientX-g.left-36)+'px';drag.ghost.style.top=(ev.clientY-g.top-60)+'px';
   const t=document.elementFromPoint(ev.clientX,ev.clientY);let slot=t&&t.closest('#tRow .unit');if(slot===drag.el)slot=null;
+  const sz=drag.type==='unit'&&t&&t.closest('.counter');document.querySelector('.counter').classList.toggle('sellzone',!!sz);drag.sell=!!sz;
   if(drag.over&&drag.over!==slot)drag.over.classList.remove('droptarget');if(slot)slot.classList.add('droptarget');drag.over=slot;});
 function endDrag(drop){const d=drag;drag=null;if(!d||!d.started)return;suppress=true;setTimeout(()=>{suppress=false;},60);
   if(d.ghost)d.ghost.remove();d.el.classList.remove('dragging');document.querySelectorAll('.droptarget,.hintslot,.mergeglow').forEach(x=>x.classList.remove('droptarget','hintslot','mergeglow'));
+  document.querySelector('.counter').classList.remove('sellzone');
+  if(drop&&d.sell){sellAt(d.i);return;}
   if(!drop||!d.over)return;const j=+d.over.dataset.i;
   if(d.type==='unit')swapSlots(d.i,j);else{run.sel=null;buy(d.i,j);}}
 document.addEventListener('pointerup',()=>endDrag(true));
@@ -711,7 +751,8 @@ document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;
     case 'slot':onSlot(i);break;
     case 'sell':sell();break;
     case 'enemy':{if(!run)break;const e=(run.phase==='fight'?B.enemies:run.preview)[i];if(e){SFX.tap();say(e.n+(e.boss?' · BOSS':''),e.ab.replace('BOSS. ',''));}break;}
-    case 'reroll':if(run&&run.coins>=1&&!busy){const old=run.coins;run.coins--;rollShop();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
+    case 'hold':{const s=run.sel;if(s&&s.type==='shop'){const c=run.shop[s.i];c.held=!c.held;SFX.block();run.sel=null;renderAll();defaultCenter();}break;}
+    case 'reroll':if(run&&run.coins>=ROLL&&!busy){const old=run.coins;run.coins-=ROLL;rollShop(true);rollTriggers();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
       document.querySelectorAll('.card').forEach((c,j)=>{if(!RM)c.animate([{transform:'translateX(-120%) rotate(-20deg)',opacity:0},{transform:'none',opacity:1}],{duration:300,delay:j*70,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'});});defaultCenter();}break;
     case 'night':if(run&&run.team.some(Boolean))startNight();break;
     case 'speed':run.speed=run.speed===1?2:run.speed===2?3:1;renderActions();break;
