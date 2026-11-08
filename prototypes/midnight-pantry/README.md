@@ -1,4 +1,4 @@
-# Midnight Pantry (prototyp v5)
+# Midnight Pantry (prototyp v6)
 
 Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią kuchni przed Pleśnią przez 10 nocy.
 
@@ -43,3 +43,18 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Sprzedaż zwraca 100% wydanej kwoty, także za połączone kopie. Składnik z półki można przeciągnąć na blat, żeby sprzedać.
 - TRZYMAJ zostawia kartę na blacie przy dostawie i do następnego ranka.
 - Zdolności, które nagradzają częste zmiany: Jabłko (przy sprzedaży wzmacnia losowy składnik), Twaróg (rośnie przy każdej dostawie).
+
+## Seed i Danie dnia (v6)
+
+- Całe losowanie gry (sklep, poziomy, cele zdolności) idzie z generatora z seedem (`mulberry32`), a animacje dalej używają `Math.random`.
+  Ten sam seed i te same ruchy dają ten sam przebieg.
+- Ruchy gracza są zapisywane w `run.log` (`b` kup, `s` sprzedaj, `r` dostawa, `h` trzymaj, `w` zamiana, `n` noc). To podstawa pod powtórki,
+  sprawdzanie wyników na serwerze i duchy do asynchronicznego PvP.
+- DANIE DNIA: seed z dzisiejszej daty, ten sam dla wszystkich. Wynik = 100 × przetrwane noce + 25 × serca + 300 za wygraną + 50 za nowe dania ★★★.
+  Rekord dnia zapisuje się lokalnie (na razie bez serwera i rankingu online).
+
+## Grafika v6
+
+- Drzwi lodówki są w 3D: front, grubość krawędzi i wewnętrzna strona z półkami na jajka, słoiki i masło.
+  Przy otwieraniu kamera się oddala, drzwi skręcają w perspektywie, wypływa zimna mgła, mruga lampa i kamera wchodzi do środka.
+- Wnętrze lodówki ma ściany boczne i sufit w perspektywie, lampę LED, żeberka na tylnej ścianie, uszczelkę i szklaną półkę z grubością.
