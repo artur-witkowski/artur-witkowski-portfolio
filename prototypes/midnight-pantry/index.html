@@ -1,0 +1,659 @@
+<title>Midnight Pantry</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: one phone-tall column. Hub = closed fridge door with magnets; game = open fridge (freezer on top, 5 shelves), thumb panel at the bottom. Single deliberate look: dark kitchen at midnight, lit fridge. */
+:root{
+  --night:#1C1924; --night-2:#2A2534; --night-3:#3A3346;
+  --enamel:#F4E9DA; --enamel-shade:#E2D2BC; --chrome-hi:#ECE8E2; --chrome-lo:#9C968C;
+  --cold-hi:#F4FBFC; --cold-lo:#CDE6EB; --glass:rgba(132,190,204,.55);
+  --ink:#33241C; --ink-soft:#7A6656; --paper:#FFF8E8; --moon:#E9DCCB;
+  --tomato:#D65F45; --mustard:#E8B54A; --teal:#3E8A86; --leaf:#4F8A3E; --plum:#7D5BA6;
+  --atk-bg:#F7D5C9; --atk-fg:#9B3320; --hp-bg:#D6EACB; --hp-fg:#2F6A23;
+  --f-display:'Bricolage Grotesque','Avenir Next','Segoe UI',system-ui,sans-serif;
+  --f-hand:'Caveat','Bradley Hand','Segoe Print',cursive;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:radial-gradient(120% 60% at 15% 0%,#2B2740 0%,var(--night) 60%);color:var(--paper);font-family:var(--f-display);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+button:focus-visible,[data-act]:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+#app{position:relative;height:100%;max-width:460px;margin:0 auto;box-sizing:border-box;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;flex-direction:column}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+
+/* ---------- HUB: closed fridge door ---------- */
+.door{flex:1;min-height:0;position:relative;color:var(--ink);background:linear-gradient(90deg,var(--enamel) 0 90%,var(--enamel-shade));border-radius:28px 28px 18px 18px;box-shadow:0 30px 70px rgba(0,0,0,.5),inset 0 -8px 0 var(--enamel-shade);display:flex;flex-direction:column;gap:12px;padding:18px 40px 18px 18px;transform-origin:left center;transition:transform .55s cubic-bezier(.6,.05,.4,1),opacity .55s;overflow:hidden}
+.door.opening{transform:perspective(1100px) rotateY(-96deg);opacity:.2}
+.door .freezer-door{display:flex;flex-direction:column;gap:2px;padding-bottom:16px;border-bottom:4px solid var(--enamel-shade);margin-right:-40px;padding-right:40px}
+.badge{align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.24em;padding:3px 8px;border-radius:4px;color:#5d5850;background:linear-gradient(180deg,var(--chrome-hi),var(--chrome-lo));box-shadow:inset 0 1px 0 #fff}
+.wordmark{font-size:clamp(30px,8.5vw,40px);font-weight:800;line-height:.95;letter-spacing:-.02em;margin-top:8px;text-wrap:balance}
+.wordmark small{display:block;font-family:var(--f-hand);font-weight:700;font-size:.62em;color:var(--tomato);letter-spacing:0;margin-top:2px}
+.handle{position:absolute;right:12px;width:11px;border-radius:7px;background:linear-gradient(90deg,var(--chrome-hi),var(--chrome-lo));box-shadow:2px 3px 6px rgba(0,0,0,.2)}
+.handle.top{top:28px;height:56px}.handle.main{top:34%;height:130px}
+.magnets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.magnet{border-radius:10px;padding:6px 2px 5px;text-align:center;background:var(--mc);transform:rotate(var(--r));box-shadow:0 3px 0 rgba(0,0,0,.14),0 6px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+.magnet .me{font-size:20px;line-height:1.1}
+.magnet .mt{font-size:10px;font-weight:800;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.magnet.locked{background:transparent;box-shadow:none;border:2px dashed #CFC1AE;color:#B4A591}
+.magnet.locked .me{filter:grayscale(1);opacity:.35}
+.note{position:relative;background:#FFFDF4;font-family:var(--f-hand);font-size:clamp(19px,5.4vw,23px);line-height:1.12;padding:16px 14px 12px;transform:rotate(-1.4deg);box-shadow:0 8px 16px rgba(0,0,0,.14);color:#3B2C25}
+.note::before{content:"";position:absolute;top:-8px;left:50%;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a85,var(--tomato) 60%,#9c3a28);box-shadow:0 2px 3px rgba(0,0,0,.3)}
+.note .sig{display:block;text-align:right;color:var(--tomato)}
+.hubstats{font-size:13px;color:var(--ink-soft);display:flex;gap:12px;flex-wrap:wrap;margin-top:auto}
+.hubstats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.hubrow{display:flex;gap:8px}
+.btn{border-radius:14px;padding:12px 14px;font-weight:800;font-size:15px;line-height:1.1;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--tomato);color:#fff;box-shadow:0 4px 0 #9c3a28}
+.btn.ghost{background:var(--night-3);color:var(--paper)}
+.btn.light{background:#EADCC8;color:var(--ink)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn.big{font-size:17px;padding:15px}
+.actions .btn.big,.hubrow .btn{flex:1}
+
+/* ---------- GAME ---------- */
+.hud{display:flex;align-items:center;gap:6px;font-weight:800;font-size:14px}
+.chip{background:var(--night-2);border-radius:999px;padding:6px 10px;display:flex;gap:5px;align-items:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.hp{color:#FFB4A3}.chip.crumbs{color:#F5CF7E}
+.hud .sp{flex:1}
+.iconbtn{width:34px;height:34px;border-radius:50%;background:var(--night-2);display:grid;place-items:center;font-size:16px;font-weight:800}
+.fridge{flex:1;min-height:0;background:var(--enamel);border-radius:22px 22px 14px 14px;padding:9px;display:flex;flex-direction:column;gap:7px;box-shadow:inset 0 -6px 0 var(--enamel-shade),0 0 70px rgba(255,232,170,.16)}
+.freezer{flex:0 0 auto;height:clamp(96px,15.5vh,124px);border-radius:12px;position:relative;overflow:hidden;background:radial-gradient(circle at 12% 20%,#fff 0 3px,transparent 4px),radial-gradient(circle at 80% 70%,#fff 0 2px,transparent 3px),radial-gradient(circle at 55% 15%,#fff 0 2px,transparent 3px),linear-gradient(180deg,var(--cold-hi),var(--cold-lo));box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),inset 0 8px 16px rgba(110,165,180,.35)}
+.flabel{position:absolute;top:6px;left:10px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#5C8C97}
+.queue{position:absolute;left:0;right:0;bottom:0;top:18px;display:flex;align-items:flex-end;gap:6px;padding:0 10px 6px;overflow-x:auto;scrollbar-width:none}
+.queue::-webkit-scrollbar{display:none}
+.interior{flex:1;min-height:0;position:relative;border-radius:12px;display:grid;grid-template-columns:minmax(0,1fr) 30px 30px;grid-template-rows:repeat(5,minmax(0,1fr));column-gap:3px;padding:2px 4px 4px 6px;background:radial-gradient(70% 40% at 50% 0%,#FFFDF0 0%,rgba(255,253,240,0) 100%),linear-gradient(180deg,#FBF4E3,#EBE0C8);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.interior.lit{animation:lightOn .7s steps(1) 1}
+@keyframes lightOn{0%{filter:brightness(.4)}15%{filter:brightness(1)}25%{filter:brightness(.6)}40%,100%{filter:brightness(1)}}
+.shelf{grid-column:1;position:relative;display:flex;align-items:center;gap:10px;padding:0 8px;min-height:0;border-bottom:5px solid var(--glass);border-radius:6px 6px 3px 3px;color:var(--ink);transition:background .15s}
+.shelf.valid{background:rgba(62,138,134,.13);box-shadow:inset 0 0 0 2px rgba(62,138,134,.55)}
+.shelf.sel{background:rgba(232,181,74,.22);box-shadow:inset 0 0 0 2px var(--mustard)}
+.shelf .emptytxt{font-size:12px;color:#B9AA95;font-style:italic}
+.food{font-size:clamp(26px,5vh,40px);line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));flex:0 0 auto;display:inline-block}
+.meta{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.name{font-weight:800;font-size:14px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats{display:flex;gap:4px;align-items:center;flex-wrap:nowrap}
+.pill{font-size:12px;font-weight:800;padding:2px 7px;border-radius:999px;font-variant-numeric:tabular-nums;line-height:1.2}
+.pill.atk{background:var(--atk-bg);color:var(--atk-fg)}.pill.hp{background:var(--hp-bg);color:var(--hp-fg)}
+.pips{display:inline-flex;gap:3px;align-items:center;margin-left:2px;font-size:11px;color:#B07F12}
+.pips i{width:7px;height:7px;border-radius:50%;background:#E3D6C2}.pips i.on{background:var(--mustard)}
+.pips.gold{font-weight:800}
+.frontflag{position:absolute;right:6px;top:4px;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tomato)}
+.st{font-size:12px;letter-spacing:-1px;white-space:nowrap}
+.hpbar{height:5px;border-radius:3px;background:#E5D8C4;overflow:hidden;max-width:120px}
+.hpbar i{display:block;height:100%;background:var(--leaf);transition:width .15s}
+.shelf.dead .food{filter:grayscale(1);opacity:.35;transform:rotate(-24deg)}
+.shelf.dead .name{text-decoration:line-through;opacity:.5}
+.shelf.dead .stats,.shelf.dead .hpbar{opacity:.3}
+.bracket{position:relative;margin:12px 0;border:3px solid var(--mustard);border-left:none;border-radius:0 12px 12px 0;cursor:pointer}
+.bracket .dish{position:absolute;top:50%;right:-6px;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--mustard);display:grid;place-items:center;font-size:15px;box-shadow:0 2px 0 #b98a2c}
+
+/* enemies */
+.enemy{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;position:relative}
+.enemy .body{position:relative;width:38px;height:32px;display:grid;place-items:center}
+.enemy.front .body{width:50px;height:42px}
+.enemy.small .body{width:26px;height:22px}
+.enemy.boss .body{width:66px;height:56px}
+.enemy.front::after{content:"▼";position:absolute;bottom:-9px;font-size:8px;color:var(--tomato)}
+.enemy .ep{display:flex;gap:2px}
+.enemy .ep b{font-size:10px;font-weight:800;padding:0 4px;border-radius:6px;font-variant-numeric:tabular-nums}
+.enemy .ep .a{background:var(--atk-bg);color:var(--atk-fg)}.enemy .ep .h{background:var(--hp-bg);color:var(--hp-fg)}
+.eyes{position:absolute;top:30%;left:50%;transform:translateX(-50%);display:flex;gap:18%;width:56%;justify-content:center}
+.eyes i{width:26%;aspect-ratio:1/1.1;background:#fff;border-radius:50%;position:relative;max-width:11px}
+.eyes i::after{content:"";position:absolute;width:48%;height:48%;background:#2a2320;border-radius:50%;left:30%;top:38%}
+.mold .body{border-radius:52% 48% 44% 46%/62% 58% 42% 40%;background:radial-gradient(circle at 28% 26%,rgba(255,255,255,.4) 0 14%,transparent 15%),radial-gradient(circle at 72% 70%,rgba(0,0,0,.09) 0 12%,transparent 13%),radial-gradient(circle at 35% 75%,rgba(0,0,0,.07) 0 9%,transparent 10%),var(--c);box-shadow:0 0 5px 2px var(--c);animation:wob 2.4s ease-in-out infinite}
+@keyframes wob{50%{border-radius:46% 54% 48% 44%/56% 62% 38% 44%}}
+.crown{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:18px}
+.moth .body::before,.moth .body::after{content:"";position:absolute;top:8%;width:62%;height:70%;background:var(--c);border-radius:60% 40% 50% 50%;opacity:.85;animation:flap .35s ease-in-out infinite alternate}
+.moth .body::before{left:-22%;transform-origin:right center}.moth .body::after{right:-22%;transform-origin:left center;transform:scaleX(-1)}
+@keyframes flap{to{transform:scaleY(.6)}}
+.moth .core{position:absolute;inset:18% 26%;background:#8f7a55;border-radius:50%;z-index:1}
+.moth .eyes{z-index:2}
+.cup .body{border-radius:6px 6px 14px 14px;background:linear-gradient(180deg,#fff 0 20%,var(--c) 20%);box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+.cup .body::before{content:"";position:absolute;top:-4px;left:-3px;right:-3px;height:7px;border-radius:4px;background:#9C7AC2}
+.jar .body{border-radius:9px 9px 14px 14px;background:linear-gradient(180deg,#A97F48 0 15%,rgba(205,232,236,.85) 15% 38%,#6C8D45 38%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+.jar .lbl{position:absolute;bottom:14%;left:50%;transform:translateX(-50%);background:#FFFDF4;color:#6a4b2f;font-size:9px;font-weight:800;padding:0 4px;border-radius:3px;z-index:2}
+.emo .body{font-size:28px;line-height:1}.emo.small .body{font-size:18px}.emo.front .body{font-size:36px}
+.enemy .hpbar{width:36px;height:4px}
+.enemy .hpbar i{background:var(--tomato)}
+
+/* panel */
+.panelwrap{position:relative;flex:0 0 auto}
+.panel{background:var(--night-2);border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.info{min-height:34px;font-size:13px;line-height:1.3;color:var(--moon)}
+.info b{color:#fff}.info em{color:#F5CF7E;font-style:normal}
+.shop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.card{position:relative;background:var(--enamel);color:var(--ink);border-radius:12px;padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;transition:transform .12s,box-shadow .12s;box-shadow:0 3px 0 var(--enamel-shade)}
+.card.sel{transform:translateY(-6px);box-shadow:0 0 0 3px var(--teal),0 6px 0 var(--enamel-shade)}
+.card.poor{opacity:.55}
+.card.sold{background:transparent;box-shadow:none;border:2px dashed var(--night-3);color:#6d6478;font-size:11px;justify-content:center;min-height:84px}
+.card.spice{background:#EFE3D0}
+.card .cfood{font-size:28px;line-height:1.1}
+.card .cname{font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.card .cstats{display:flex;gap:3px}.card .cstats b{font-size:10px;padding:0 5px;border-radius:6px}
+.card .cstats .a{background:var(--atk-bg);color:var(--atk-fg)}.card .cstats .h{background:var(--hp-bg);color:var(--hp-fg)}
+.card .cost{position:absolute;top:-7px;right:-4px;background:var(--mustard);color:var(--ink);font-weight:800;border-radius:999px;font-size:11px;padding:1px 6px}
+.card .rhint{position:absolute;top:-7px;left:-4px;background:var(--teal);color:#fff;border-radius:999px;font-size:11px;padding:1px 5px}
+.card .tier{position:absolute;bottom:3px;right:5px;font-size:8px;color:#B6A48E;letter-spacing:1px}
+.actions{display:flex;gap:6px;align-items:stretch}
+.jars{display:flex;gap:4px;align-items:center;padding:0 2px}
+.jarslot{width:30px;height:40px;display:grid;place-items:center;border-radius:8px}
+.jarslot.empty{border:2px dashed var(--night-3)}
+.jarslot.sel{background:rgba(232,181,74,.25);box-shadow:0 0 0 2px var(--mustard)}
+.sjar{position:relative;width:22px;height:28px;border-radius:5px 5px 7px 7px;background:linear-gradient(180deg,rgba(255,255,255,.85) 0 30%,var(--jc) 30%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.75),0 2px 0 rgba(0,0,0,.2)}
+.sjar::before{content:"";position:absolute;top:-5px;left:-2px;right:-2px;height:6px;border-radius:3px;background:var(--tomato)}
+.card .sjar{width:26px;height:33px;margin:2px 0 3px}
+.actions .btn{padding:10px 10px;font-size:14px}
+.actions .grow{flex:1}
+.heat{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.heat button{background:var(--night-3);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:1px;font-weight:800;font-size:13px}
+.heat button small{font-weight:600;font-size:10px;opacity:.75}
+.heat button.on{background:var(--mustard);color:var(--ink);box-shadow:0 3px 0 #b98a2c}
+.heat .fl{font-size:14px;letter-spacing:-3px}
+
+/* bubble, toast, fx, overlay */
+#bubble{position:absolute;left:0;right:0;bottom:calc(100% + 8px);background:var(--paper);color:var(--ink);border-radius:16px;padding:12px 12px 12px 54px;font-size:14px;line-height:1.32;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:30;animation:pop .25s ease-out}
+#bubble::after{content:"";position:absolute;bottom:-7px;left:26px;width:14px;height:14px;background:var(--paper);transform:rotate(45deg)}
+.minifridge{position:absolute;left:12px;top:12px;width:30px;height:42px;border-radius:7px;background:var(--enamel);box-shadow:inset 0 -3px 0 var(--enamel-shade),0 0 0 2px #d8c7ae}
+.minifridge::before{content:"";position:absolute;left:0;right:0;top:13px;height:2px;background:#d8c7ae}
+.minifridge::after{content:"";position:absolute;right:4px;top:18px;width:3px;height:12px;border-radius:2px;background:var(--chrome-lo)}
+#bubble .who{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--tomato);display:block;margin-bottom:2px}
+#bubble .bok{margin-top:8px;display:flex;justify-content:flex-end}
+#bubble .bok button{background:var(--ink);color:var(--paper);border-radius:10px;padding:7px 14px;font-weight:800;font-size:13px}
+#toast{position:absolute;top:52px;left:50%;transform:translateX(-50%);background:var(--paper);color:var(--ink);font-weight:800;font-size:14px;padding:9px 14px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:35;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;animation:pop .25s ease-out}
+#fx{position:absolute;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+.float{position:absolute;transform:translateX(-50%);font-weight:800;font-size:17px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 6px rgba(0,0,0,.25);animation:floatUp .9s ease-out forwards;white-space:nowrap}
+.float.dmg{color:#FF7A5C}.float.heal{color:#7FD36A}.float.block{color:#9FD3E0;font-size:13px}.float.miss{color:#CFE7FF;font-size:13px}
+.float.rot{color:#C7A3F0}.float.burn{color:#FFB547}.float.buff{color:#8EE07A;font-size:15px}.float.steal{color:#F5CF7E;font-size:14px}.float.big{font-size:24px;color:#FFD15C}.float.wilt{color:#E8A06A;font-size:13px}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,6px) scale(.8)}15%{opacity:1;transform:translate(-50%,0) scale(1.1)}100%{opacity:0;transform:translate(-50%,-36px) scale(1)}}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+#toast{animation:toastIn .25s ease-out}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+.atk-up{animation:atkUp .26s ease-out}
+@keyframes atkUp{40%{transform:translateY(-9px) scale(1.12)}}
+.atk-down{animation:atkDown .26s ease-out}
+@keyframes atkDown{40%{transform:translateY(10px) scale(1.1)}}
+.hurt{animation:hurt .3s}
+@keyframes hurt{20%{transform:translateX(-4px) rotate(-4deg)}50%{transform:translateX(4px) rotate(3deg)}80%{transform:translateX(-2px)}}
+.pulse{animation:pulseK .5s}
+@keyframes pulseK{40%{transform:scale(1.18);filter:drop-shadow(0 0 10px #ffd86b)}}
+#overlay{position:absolute;inset:0;z-index:60;background:rgba(18,15,26,.74);display:grid;place-items:center;padding:16px max(16px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--paper);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:400px;max-height:88%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:pop .25s ease-out;display:flex;flex-direction:column;gap:12px}
+.sheet h2{margin:0;font-size:26px;line-height:1.05;font-weight:800;text-wrap:balance}
+.sheet .kicker{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--tomato)}
+.sheet p{margin:0;font-size:15px;line-height:1.4}
+.sheet .hand{font-family:var(--f-hand);font-size:23px;line-height:1.12;color:#4a382e}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:6px 0;border-bottom:1px dashed #E3D3BC}
+.row b{font-variant-numeric:tabular-nums}
+.recipe{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #E3D3BC}
+.recipe .re{font-size:28px;text-align:center}
+.recipe .rn{font-weight:800}.recipe .ri{font-size:18px;letter-spacing:2px}.recipe .rf{font-size:13px;color:var(--ink-soft)}
+.recipe.unknown{opacity:.6}
+.howto{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.4}
+.sheet .btn{align-self:stretch}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media (max-height:640px){.freezer{height:88px}.food{font-size:24px}.name{font-size:13px}.card .cfood{font-size:22px}.info{min-height:30px;font-size:12px}.hub-note-wrap .note{font-size:18px}}
+</style>
+
+<div id="app">
+  <section id="hub" class="screen">
+    <div class="door" id="door">
+      <span class="handle top"></span><span class="handle main"></span>
+      <div class="freezer-door">
+        <span class="badge">BIEGUN</span>
+        <div class="wordmark">Midnight Pantry<small>nocna kuchnia babci</small></div>
+      </div>
+      <div class="magnets" id="magnets"></div>
+      <div class="hub-note-wrap"><div class="note" id="note"></div></div>
+      <div class="hubstats" id="hubstats"></div>
+      <div class="hubrow">
+        <button class="btn light" data-act="book">📖 Przepisy</button>
+        <button class="btn light" data-act="help">Jak grać?</button>
+      </div>
+      <button class="btn primary big" data-act="open">Otwórz lodówkę</button>
+    </div>
+  </section>
+
+  <section id="game" class="screen" hidden>
+    <div class="hud" id="hud"></div>
+    <div class="fridge">
+      <div class="freezer"><span class="flabel" id="flabel">Zamrażalnik</span><div class="queue" id="queue"></div></div>
+      <div class="interior" id="interior"></div>
+    </div>
+    <div class="panelwrap">
+      <div id="bubble" hidden><span class="minifridge"></span><span class="who">Lodówka</span><span id="btxt"></span><div class="bok"><button data-act="bubble-ok">OK</button></div></div>
+      <div class="panel" id="panel"></div>
+    </div>
+    <div id="toast" hidden></div>
+  </section>
+
+  <div id="fx"></div>
+  <div id="overlay" hidden></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const app=$('#app'), fx=$('#fx');
+
+/* ================= DATA ================= */
+const UNITS={
+  ziemniak:{n:'Ziemniak',e:'🥔',t:1,atk:2,hp:6,grp:'Warzywo',spawn:'ziemniaczek',ab:'Po zepsuciu kiełkuje: zostawia Ziemniaczka (1/2).'},
+  marchew:{n:'Marchewka',e:'🥕',t:1,atk:3,hp:3,grp:'Warzywo',spd:.7,ab:'Chrupiąca: atakuje szybciej niż inni.'},
+  jajko:{n:'Jajko',e:'🥚',t:1,atk:2,hp:3,grp:'Nabiał',shell:1,ab:'Skorupka: pierwszy cios tylko ją pęka.'},
+  cebula:{n:'Cebula',e:'🧅',t:1,atk:1,hp:4,grp:'Warzywo',ranged:1,ab:'Łzy: atakuje z każdej półki. Trafiony wróg przez 3 s czasem pudłuje.'},
+  chleb:{n:'Chleb',e:'🍞',t:1,atk:2,hp:5,grp:'Pieczywo',spawn:'suchar',ab:'Po zepsuciu czerstwieje: wraca jako Suchar (1/3).'},
+  twarog:{n:'Twaróg',e:'🧀',t:2,atk:2,hp:7,grp:'Nabiał',soft:1,ab:'Miękki: każdy cios zadaje mu 1 mniej.'},
+  czosnek:{n:'Czosnek',e:'🧄',t:2,atk:2,hp:3,grp:'Warzywo',ranged:1,anti:1,ab:'Atakuje z każdej półki. Podwójne obrażenia przeciw Pleśni.'},
+  kapusta:{n:'Kapusta',e:'🥬',t:2,atk:1,hp:4,grp:'Warzywo',layers:3,ab:'Warstwy: 3 pierwsze ciosy zdejmują tylko liść.'},
+  ogorek:{n:'Ogórek',e:'🥒',t:2,atk:2,hp:3,grp:'Warzywo',ferment:1,ab:'Kisi się: +1/+1 na stałe po każdej nocy w lodówce.'},
+  grzyb:{n:'Grzyb',e:'🍄',t:2,atk:2,hp:4,grp:'Grzyb',umami:1,ab:'Umami: na start nocy sąsiednie półki dostają +1 Smaku.'},
+  miod:{n:'Miód',e:'🍯',t:3,atk:1,hp:6,grp:'Słodkie',heal:1,ab:'Co 2 s leczy wszystkich o 1. Nigdy się nie psuje: odporny na Zepsucie.'},
+  chili:{n:'Chili',e:'🌶️',t:3,atk:5,hp:3,grp:'Warzywo',burn:1,ab:'Podpala: trafiony wróg traci 1 co sekundę przez 3 s.'},
+  maslo:{n:'Masło',e:'🧈',t:3,atk:1,hp:5,grp:'Nabiał',butter:1,ab:'Z masłem wszystko lepsze: sąsiednie półki +2/+2 na start nocy.'},
+  kielbasa:{n:'Kiełbasa',e:'🌭',t:3,atk:4,hp:8,grp:'Mięso',ab:'Solidna. Bez fanaberii.'},
+  ziemniaczek:{n:'Ziemniaczek',e:'🌱',token:1,atk:1,hp:2,ab:'Kiełek po Ziemniaku.'},
+  suchar:{n:'Suchar',e:'🥖',token:1,atk:1,hp:3,soft:1,ab:'Twardy jak skała.'}
+};
+const SPICES={
+  sol:{n:'Sól',c:'#F1F0EA',ab:'Wszystkie składniki +1 Smaku.'},
+  pieprz:{n:'Pieprz',c:'#3B3330',ab:'Pierwszy atak każdego składnika zadaje ×2.'},
+  koperek:{n:'Koperek',c:'#7FB069',ab:'Warzywa +3 Świeżości.'},
+  majeranek:{n:'Majeranek',c:'#A3B46E',ab:'Składniki w przepisach dodatkowo +1/+1.'},
+  laur:{n:'Liść laurowy',c:'#5F7F35',ab:'Na start nocy losowy składnik +3/+3.'},
+  galka:{n:'Gałka muszk.',c:'#A0663A',ab:'Cały Smak ×2, ale twoje składniki tracą 1 Świeżości co 3 s.'}
+};
+function buff(a,da,dh){a.atk+=da;a.hp+=dh;a.max+=dh;a.pre[0]+=da;a.pre[1]+=dh;}
+const RECIPES=[
+  {id:'placki',n:'Placki ziemniaczane',e:'🥞',need:['ziemniak','jajko'],fx:'Składniki +3 Smaku.',ap:a=>buff(a,3,0)},
+  {id:'kanapka',n:'Chleb z masłem',e:'🥪',need:['chleb','maslo'],fx:'Składniki +6 Świeżości.',ap:a=>buff(a,0,6)},
+  {id:'pierogi',n:'Pierogi ruskie',e:'🥟',need:['ziemniak','twarog','cebula'],fx:'Składniki +2 Smaku i +4 Świeżości.',ap:a=>buff(a,2,4)},
+  {id:'bigos',n:'Bigos',e:'🍲',need:['kapusta','grzyb'],fx:'Im starszy, tym lepszy: składniki rosną +1/+1 na stałe co noc.',ap:(a,u)=>{u.bonusAtk++;u.bonusHp++;buff(a,1,1);}},
+  {id:'ognisko',n:'Kiełbaska z ogniska',e:'🔥',need:['kielbasa','chili'],fx:'Oba składniki podpalają wrogów.',ap:a=>{a.burn=true;}},
+  {id:'ogorki',n:'Ogórki z miodem',e:'🫙',need:['ogorek','miod'],fx:'Ogórek kisi się podwójnie, Miód +2 Smaku.',ap:a=>{if(a.id==='miod')buff(a,2,0);}}
+];
+const ENEMIES={
+  plesn:{n:'Pleśń',atk:1,hp:4,c:'#8DB360',shape:'mold',mold:1,ab:'Zwykła zielona pleśń. Lubi wilgoć i ciemność.'},
+  biala:{n:'Biała pleśń',atk:1,hp:5,c:'#E6E3D2',shape:'mold',mold:1,split:1,ab:'Po pokonaniu dzieli się na dwa Zarodniki.'},
+  zarodnik:{n:'Zarodnik',atk:1,hp:1,c:'#B7CF8B',shape:'mold',mold:1,small:1,ab:'Mały, ale namolny.'},
+  mol:{n:'Mól spożywczy',atk:2,hp:3,c:'#D8C69C',shape:'moth',flyer:1,ab:'Przelatuje nad frontem i gryzie najniższą półkę.'},
+  mysz:{n:'Mysz',atk:2,hp:5,e:'🐭',shape:'emo',spd:.7,thief:1,ab:'Szybka. Każde trafienie kradnie 1 okruszek.'},
+  jogurt:{n:'Zepsuty jogurt',atk:1,hp:6,c:'#D3BDE6',shape:'cup',rot:1,ab:'Zepsucie: trafiony traci 1 Świeżości co sekundę przez 3 s.'},
+  muszki:{n:'Owocówki',atk:1,hp:2,e:'🪰',shape:'emo',small:1,spd:.6,ab:'Szybkie i małe. Przychodzą stadami.'},
+  krol:{n:'Król Pleśni',atk:4,hp:40,c:'#6F9A45',shape:'mold',mold:1,boss:1,crown:1,ab:'Boss. Co 5 s wypuszcza Zarodnik na koniec kolejki.'},
+  sloik:{n:'Zapomniany Słoik (2009)',atk:5,hp:90,shape:'jar',mold:1,boss:1,ab:'Boss. Co 6 s smród: wszystkie twoje składniki łapią Zepsucie.'}
+};
+const WAVES=[
+  ['plesn','plesn'],
+  ['plesn','mol','plesn'],
+  ['biala','plesn','mysz'],
+  ['jogurt','plesn','mol','muszki','muszki'],
+  ['krol','plesn'],
+  ['biala','jogurt','mysz','mol'],
+  ['jogurt','biala','muszki','muszki','muszki','mol'],
+  ['mysz','biala','jogurt','mol','mol'],
+  ['biala','biala','jogurt','mysz','mol','muszki'],
+  ['sloik','jogurt','plesn']
+];
+const MAGNETS=[
+  {id:'torun',t:'Toruń',e:'⭐',c:'#F2C6B4',r:-4,how:'Przetrwaj pierwszą noc.'},
+  {id:'krakow',t:'Kraków',e:'🐉',c:'#CFE3C3',r:3,how:'Odkryj pierwszy przepis.'},
+  {id:'zakopane',t:'Zakopane',e:'🏔️',c:'#C9DDE6',r:-2,how:'Wygraj noc na dużym ogniu.'},
+  {id:'hel',t:'Hel',e:'🦭',c:'#F6DDA0',r:5,how:'Miej 3 przyprawy naraz.'},
+  {id:'sopot',t:'Sopot',e:'🌊',c:'#BFE0E6',r:2,how:'Ugotuj składnik na Złocisto ★★★.'},
+  {id:'wieliczka',t:'Wieliczka',e:'🧂',c:'#EDE6DA',r:-5,how:'Pokonaj Króla Pleśni (noc 5).'},
+  {id:'gdansk',t:'Gdańsk',e:'⚓',c:'#E7C9DE',r:4,how:'Odkryj 4 przepisy.'},
+  {id:'ciechocinek',t:'Ciechocinek',e:'⛲',c:'#F7D18A',r:-3,how:'Doczekaj powrotu Babci (noc 10).'}
+];
+const NOTES=[
+  'Kochani! Jadę do Ciechocinka na wody. Zakwas karmić codziennie! Lodówka trzyma, tylko czasem trzeba ją kopnąć w bok.',
+  'Słoika z 2009 roku NIE WYRZUCAĆ. To jeszcze dobre.',
+  'Pierogi: ziemniaki, twaróg, cebulka. Nie żałować cebulki, cebula wszystko naprawia.',
+  'Pocztówka: Tu wody pachną jajami, ale towarzystwo przednie. Pan Zdzisław tańczy jak młody bóg!',
+  'Kto zostawił otwartą lodówkę?! Prąd kosztuje!',
+  'Pocztówka: Pan Zdzisław zaprosił mnie na fajfa. Ogórki niech się kiszą, nie ruszać.',
+  'Wracam w niedzielę. Mam nadzieję, że w kuchni czysto. Całuję.',
+  'Wróciłam! Kuchnia lśni jak nigdy. Kto tu sprzątał po nocach? I czemu zakwas jest taki zadowolony?'
+];
+const QUIPS_WIN=['Brr. Dobra robota.','Ktoś tu pachnie czosnkiem. Lubię to.','Mój kompresor tego nie lubi, ale wy tak.','Za moich czasów pleśń była porządniejsza.','Cicho już. Babcia by była dumna.'];
+const QUIPS_LOSE=['Ała. Coś mi zamarzło w sercu.','Pleśń się panoszy. Jutro lepiej poustawiaj półki.','Zakwas jęknął. To nie był dobry znak.'];
+const HINTS={
+  buy:'Psst, tu Lodówka. Babcia wyjechała, a nocą z zamrażalnika wyłazi Pleśń. Stuknij składnik na targu na dole, potem półkę, na której ma stać.',
+  front:'Najwyższa zajęta półka walczy pierwsza. Gdy się zepsuje, walczy następna. Cebula strzela z każdej półki. Stuknij składnik na półce, a potem inną półkę, żeby je zamienić.',
+  fight:'Walka idzie sama. Ty kręcisz ogniem na dole: duży ogień mocniej bije, ale składniki więdną. Mały leczy, ale słabiej bije.',
+  merge:'Ten sam składnik postaw na tej samej półce, żeby go wzmocnić. 3 sztuki to Podsmażone ★★, 6 to Złociste ★★★.',
+  recipe:'Składniki na sąsiednich półkach gotują dania! Znaczek ✨ na karcie oznacza, że coś z nią ugotujesz. Spróbuj: Ziemniak tuż obok Jajka to Placki.',
+  enemies:'W zamrażalniku widać, kto przyjdzie tej nocy. Stuknij potwora, żeby go poznać.',
+  spice:'Przyprawy działają na całą lodówkę naraz. Masz 3 miejsca w przyprawniku, obok przycisku losowania.',
+  crumbs:'Nie wydane okruszki się kiszą: każde 5 w słoiku daje +1 rano (maks. +3). Czasem warto oszczędzać.'
+};
+const LV=['Surowe','Podsmażone ★★','Złociste ★★★'];
+const HEAT=[{n:'Mały ogień',d:'leczy · ×0,75',f:'🔥'},{n:'Średni',d:'normalnie',f:'🔥🔥'},{n:'Duży ogień',d:'×1,5 · więdną',f:'🔥🔥🔥'}];
+
+/* ================= META (persistent fridge) ================= */
+const KEY='midnight-pantry-v1';
+let meta={magnets:[],recipes:[],best:0,runs:0,won:0,seen:{}};
+try{const s=localStorage.getItem(KEY);if(s)meta=Object.assign(meta,JSON.parse(s));}catch(e){}
+function saveMeta(){try{localStorage.setItem(KEY,JSON.stringify(meta));}catch(e){}}
+
+/* ================= RUN STATE ================= */
+let run=null,battle=null,raf=0,last=0,uid=0,hintQ=[],toastQ=[],toastBusy=false;
+const has=id=>run.spices.includes(id);
+function level(u){return u.copies>=6?3:u.copies>=3?2:1}
+function stat(u){const d=UNITS[u.id],l=level(u);return{atk:d.atk+(u.copies-1)+(l-1)+u.bonusAtk,hp:d.hp+(u.copies-1)+(l-1)+u.bonusHp}}
+function mkEnemy(k){const d=ENEMIES[k],n=run.night;const sc=d.boss?1:1+.25*(n-1);const hp=Math.round(d.hp*sc);
+  return Object.assign({},d,{key:k,uid:++uid,atk:d.atk+(d.boss?0:Math.floor((n-1)/2)),hp,max:hp,cd:.5+Math.random()*.5,int:1.3*(d.spd||1),burnT:0,burnAcc:0,tearT:0,spawnAcc:0});}
+function pool(){const mt=run.night>=4?3:run.night>=2?2:1;return Object.keys(UNITS).filter(k=>!UNITS[k].token&&UNITS[k].t<=mt);}
+function rollShop(){run.shop=[0,1,2].map(()=>({kind:'unit',id:rnd(pool())}));
+  if(run.night>=2){const av=Object.keys(SPICES).filter(k=>!run.spices.includes(k));if(av.length)run.shop.push({kind:'spice',id:rnd(av)});}}
+function newRun(){run={night:1,hp:10,crumbs:10,shelves:[null,null,null,null,null],spices:[],shop:[],sel:null,phase:'shop',heat:1,speed:1,won:0,info:'',newMagnets:[],newRecipes:[],curRecipes:[],activeRecipes:[]};
+  run.preview=WAVES[0].map(mkEnemy);rollShop();}
+
+function findRecipes(ids){const out=[];RECIPES.forEach(r=>{const L=r.need.length,key=[...r.need].sort().join();
+  for(let s=0;s+L<=5;s++){const w=ids.slice(s,s+L);if(w.includes(null))continue;if([...w].sort().join()===key){out.push({r,start:s,len:L});break;}}});return out;}
+function recipeHint(id){const owned=new Set(run.shelves.filter(Boolean).map(u=>u.id));
+  for(const r of RECIPES){if(!r.need.includes(id)||owned.has(id))continue;if(r.need.filter(x=>x!==id).every(x=>owned.has(x)))return meta.recipes.includes(r.id)?r.e:'✨';}return '';}
+
+/* ================= RENDER ================= */
+function renderHub(){
+  $('#magnets').innerHTML=MAGNETS.map(m=>{const on=meta.magnets.includes(m.id);
+    return `<div class="magnet ${on?'':'locked'}" style="--mc:${m.c};--r:${m.r}deg" title="${on?m.t:m.how}"><span class="me">${on?m.e:'?'}</span><span class="mt">${on?m.t:'???'}</span></div>`;}).join('');
+  const i=meta.won>0?NOTES.length-1:Math.min(meta.runs,NOTES.length-2);
+  $('#note').innerHTML=`${NOTES[i]}<span class="sig">— Babcia</span>`;
+  $('#hubstats').innerHTML=`<span>Najdalej: <b>noc ${meta.best}</b>/10</span><span>Przepisy: <b>${meta.recipes.length}</b>/${RECIPES.length}</span><span>Magnesy: <b>${meta.magnets.length}</b>/${MAGNETS.length}</span>`;
+  $('#door').classList.remove('opening');
+}
+function renderHUD(){
+  $('#hud').innerHTML=`<span class="chip hp" title="Zakwas: życie całej gry">🫙 ♥ ${run.hp}</span><span class="chip">Noc ${run.night}/10</span><span class="chip crumbs" title="Okruszki">🍪 ${run.crumbs}</span><span class="sp"></span><button class="iconbtn" data-act="book" aria-label="Przepisy">📖</button><button class="iconbtn" data-act="help" aria-label="Jak grać">?</button>`;
+}
+function enemyHTML(e,i,front){
+  const cls=['enemy',e.shape,front?'front':'',e.small?'small':'',e.boss?'boss':''].join(' ');
+  let inner='';
+  if(e.shape==='emo')inner=e.e;
+  else if(e.shape==='jar')inner=`<span class="eyes"><i></i><i></i></span><span class="lbl">2009</span>`;
+  else if(e.shape==='moth')inner=`<span class="core"></span><span class="eyes"><i></i><i></i></span>`;
+  else inner=`<span class="eyes"><i></i><i></i></span>${e.crown?'<span class="crown">👑</span>':''}`;
+  const bar=run.phase==='fight'?`<span class="hpbar"><i style="width:${Math.max(0,e.hp/e.max*100)}%"></i></span>`:'';
+  return `<div class="${cls}" id="en-${e.uid}" data-act="enemy" data-i="${i}" style="--c:${e.c||'#999'}"><span class="body">${inner}</span>${bar}<span class="ep"><b class="a">⚔${e.atk}</b><b class="h">♥${Math.max(0,e.hp)}</b></span></div>`;
+}
+function renderQueue(){
+  const list=run.phase==='fight'?battle.enemies.filter(e=>e.hp>0):run.preview;
+  $('#flabel').textContent=run.phase==='fight'?'Zamrażalnik · kolejka':`Zamrażalnik · noc ${run.night} przyjdą:`;
+  $('#queue').innerHTML=list.map((e,i)=>enemyHTML(e,i,i===0)).join('');
+  list.forEach(e=>{e.el=document.getElementById('en-'+e.uid);});
+}
+function pips(u){const l=level(u);if(l===3)return '<span class="pips gold">★★★</span>';const n=u.copies-(l===1?0:3);let s='';
+  for(let k=0;k<3;k++)s+=`<i class="${k<n?'on':''}"></i>`;return `<span class="pips">${l===2?'<b>★★</b>':''}${s}</span>`;}
+function validTarget(i){const s=run.sel;if(!s||run.phase!=='shop')return false;
+  if(s.type==='shop'){const it=run.shop[s.i];if(!it||it.sold||it.kind!=='unit')return false;const u=run.shelves[i];return !u||(u.id===it.id&&u.copies<6);}
+  if(s.type==='shelf')return i!==s.i;return false;}
+function statusIcons(a){let s='';if(a.shell>0)s+='🥚';if(a.layers>0)s+='🍃'.repeat(a.layers);if(a.rotT>0)s+='🦠';if(a.burn)s+='🔥';return s;}
+function renderShelves(){
+  const fight=run.phase==='fight';let html='';
+  const firstIdx=fight?battle.allies.findIndex(a=>a&&a.hp>0):run.shelves.findIndex(Boolean);
+  for(let i=0;i<5;i++){
+    const cls=['shelf'];if(!fight){if(run.sel&&run.sel.type==='shelf'&&run.sel.i===i)cls.push('sel');if(validTarget(i))cls.push('valid');}
+    const flag=i===firstIdx?'<span class="frontflag">walczy pierwszy</span>':'';
+    if(fight){const a=battle.allies[i];
+      if(!a){html+=`<div class="${cls.join(' ')}" id="shelf-${i}" style="grid-row:${i+1}"></div>`;continue;}
+      const d=UNITS[a.id];if(a.hp<=0)cls.push('dead');
+      html+=`<div class="${cls.join(' ')}" id="shelf-${i}" style="grid-row:${i+1}"><span class="food">${d.e}</span><span class="meta"><span class="name">${d.n}</span><span class="hpbar"><i style="width:${Math.max(0,a.hp/a.max*100)}%"></i></span><span class="stats"><b class="pill atk">⚔ <span class="v-atk">${a.atk}</span></b><b class="pill hp">♥ <span class="v-hp">${Math.max(0,a.hp)}</span></b><span class="st">${statusIcons(a)}</span></span></span>${flag}</div>`;
+    }else{const u=run.shelves[i];
+      if(!u){html+=`<div class="${cls.join(' ')}" id="shelf-${i}" data-act="shelf" data-i="${i}" style="grid-row:${i+1}"><span class="emptytxt">pusta półka</span></div>`;continue;}
+      const d=UNITS[u.id],s=stat(u);
+      html+=`<div class="${cls.join(' ')}" id="shelf-${i}" data-act="shelf" data-i="${i}" style="grid-row:${i+1}"><span class="food">${d.e}</span><span class="meta"><span class="name">${d.n}</span><span class="stats"><b class="pill atk">⚔ ${s.atk}</b><b class="pill hp">♥ ${s.hp}</b>${pips(u)}</span></span>${flag}</div>`;}
+  }
+  const recs=fight?run.activeRecipes:findRecipes(run.shelves.map(u=>u?u.id:null));
+  if(!fight)run.curRecipes=recs;
+  const cols=[[],[]];
+  recs.forEach((x,k)=>{const c=cols[0].some(y=>x.start<y.start+y.len&&y.start<x.start+x.len)?1:0;cols[c].push(x);
+    html+=`<div class="bracket" data-act="bracket" data-i="${k}" style="grid-column:${c+2};grid-row:${x.start+1} / span ${x.len}" title="${x.r.n}"><span class="dish">${x.r.e}</span></div>`;});
+  $('#interior').innerHTML=html;
+  if(fight)battle.allies.forEach((a,i)=>{if(a)a.el=document.getElementById('shelf-'+i);});
+}
+function jarHTML(id){return `<span class="sjar" style="--jc:${SPICES[id].c}"></span>`;}
+function cardHTML(it,i){
+  const sel=run.sel&&run.sel.type==='shop'&&run.sel.i===i;
+  if(it.sold)return `<div class="card sold">kupione</div>`;
+  if(it.kind==='spice'){const s=SPICES[it.id];return `<button class="card spice ${sel?'sel':''} ${run.crumbs<4?'poor':''}" data-act="shop" data-i="${i}"><span class="cost">4</span>${jarHTML(it.id)}<span class="cname">${s.n}</span><span class="cstats"><b class="a" style="background:#E5D6F0;color:#5a3d82">przyprawa</b></span></button>`;}
+  const d=UNITS[it.id],h=recipeHint(it.id),dup=run.shelves.some(u=>u&&u.id===it.id);
+  return `<button class="card ${sel?'sel':''} ${run.crumbs<3?'poor':''}" data-act="shop" data-i="${i}"><span class="cost">3</span>${h?`<span class="rhint">${h}</span>`:dup?'<span class="rhint" style="background:var(--plum)">+1</span>':''}<span class="cfood">${d.e}</span><span class="cname">${d.n}</span><span class="cstats"><b class="a">⚔${d.atk}</b><b class="h">♥${d.hp}</b></span><span class="tier">${'•'.repeat(d.t)}</span></button>`;
+}
+function defaultInfo(){return run.phase==='shop'?`Noc ${run.night}: kup składniki i ustaw je na półkach. <em>Stuknij kartę, potem półkę.</em>`:'';}
+function renderPanel(){
+  const p=$('#panel');
+  if(run.phase==='shop'){
+    const s=run.sel;const canSell=s&&(s.type==='shelf'&&run.shelves[s.i]||s.type==='jar');
+    const sellVal=s&&s.type==='shelf'&&run.shelves[s.i]?level(run.shelves[s.i]):2;
+    const jars=[0,1,2].map(k=>{const id=run.spices[k];const sl=s&&s.type==='jar'&&s.i===k;
+      return id?`<button class="jarslot ${sl?'sel':''}" data-act="jar" data-i="${k}" aria-label="${SPICES[id].n}">${jarHTML(id)}</button>`:`<span class="jarslot empty"></span>`;}).join('');
+    const any=run.shelves.some(Boolean);
+    p.innerHTML=`<div class="info" id="info">${run.info||defaultInfo()}</div>
+      <div class="shop">${run.shop.map(cardHTML).join('')}</div>
+      <div class="actions"><div class="jars" title="Przyprawnik">${jars}</div>
+        ${canSell?`<button class="btn ghost" data-act="sell">Sprzedaj +${sellVal} 🍪</button>`:`<button class="btn ghost" data-act="reroll" ${run.crumbs<1?'disabled':''}>🔄 1 🍪</button>`}
+        <button class="btn primary grow" data-act="night" ${any?'':'disabled'}>${any?`Zamknij drzwi ▶`:'Postaw coś na półce'}</button></div>`;
+  }else{
+    p.innerHTML=`<div class="info" id="info">${run.info}</div>
+      <div class="heat">${HEAT.map((h,k)=>`<button class="${run.heat===k?'on':''}" data-act="heat" data-v="${k}"><span class="fl">${h.f}</span>${h.n}<small>${h.d}</small></button>`).join('')}</div>
+      <div class="actions"><span class="info grow" id="fightinfo" style="min-height:0;align-self:center"></span><button class="btn ghost" data-act="speed">Tempo ×${run.speed}</button></div>`;
+  }
+}
+function renderAll(){renderHUD();renderQueue();renderShelves();renderPanel();}
+function info(html){run.info=html;const el=$('#info');if(el)el.innerHTML=html;}
+
+/* ================= FEEDBACK ================= */
+function toast(html){toastQ.push(html);if(!toastBusy)nextToast();}
+function nextToast(){const t=$('#toast');if(!toastQ.length){toastBusy=false;t.hidden=true;return;}toastBusy=true;t.innerHTML=toastQ.shift();t.hidden=false;
+  t.style.animation='none';void t.offsetWidth;t.style.animation='';setTimeout(nextToast,1700);}
+function hint(k){if(meta.seen[k]||hintQ.includes(k))return;hintQ.push(k);if($('#bubble').hidden)showHint();}
+function showHint(){const b=$('#bubble');if(!hintQ.length){b.hidden=true;return;}$('#btxt').textContent=HINTS[hintQ[0]];b.hidden=false;}
+function award(id){if(meta.magnets.includes(id))return;meta.magnets.push(id);saveMeta();const m=MAGNETS.find(x=>x.id===id);if(run)run.newMagnets.push(id);toast(`Nowy magnes: ${m.e} ${m.t}`);}
+function float(o,text,cls){const host=o&&o.el;if(!host||!host.isConnected)return;const el=host.querySelector('.food,.body')||host;
+  const r=el.getBoundingClientRect(),g=app.getBoundingClientRect();const f=document.createElement('div');f.className='float '+(cls||'');f.textContent=text;
+  f.style.left=(r.left+r.width/2-g.left+(Math.random()*18-9))+'px';f.style.top=(r.top-g.top)+'px';fx.appendChild(f);setTimeout(()=>f.remove(),950);}
+function anim(o,cls){const host=o&&o.el;if(!host)return;const el=host.querySelector('.food,.body')||host;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);}
+
+/* ================= SHOP ACTIONS ================= */
+function afterRoster(){
+  findRecipes(run.shelves.map(u=>u?u.id:null)).forEach(({r})=>{if(!meta.recipes.includes(r.id)){meta.recipes.push(r.id);saveMeta();run.newRecipes.push(r.id);
+    toast(`Nowy przepis! ${r.e} ${r.n}`);award('krakow');if(meta.recipes.length>=4)award('gdansk');}});
+  if(run.shop.some(s=>s.kind==='unit'&&!s.sold&&run.shelves.some(u=>u&&u.id===s.id)))hint('merge');
+  renderAll();
+}
+function lvlToast(u,before){const a=level(u);if(a>before){toast(`${UNITS[u.id].e} ${UNITS[u.id].n}: ${LV[a-1]}!`);if(a===3)award('sopot');}}
+function buyTo(si,i){const it=run.shop[si];
+  if(run.crumbs<3){info('Za mało okruszków. Sprzedaj coś albo zamknij drzwi i przetrwaj noc.');return;}
+  const u=run.shelves[i];if(u&&(u.id!==it.id||u.copies>=6)){info('Ta półka jest zajęta. Wybierz pustą albo tę z tym samym składnikiem.');return;}
+  run.crumbs-=3;it.sold=true;
+  if(!u)run.shelves[i]={id:it.id,copies:1,bonusAtk:0,bonusHp:0};else{const b=level(u);u.copies++;lvlToast(u,b);}
+  run.sel=null;run.info='';hint('front');afterRoster();}
+function autoTarget(id){const same=run.shelves.findIndex(u=>u&&u.id===id&&u.copies<6);return same>=0?same:run.shelves.findIndex(u=>!u);}
+function buySpice(si){const it=run.shop[si];
+  if(run.crumbs<4){info('Za mało okruszków na przyprawę (4 🍪).');return;}
+  if(run.spices.length>=3){info('Przyprawnik pełny. Stuknij słoik obok losowania i go sprzedaj.');return;}
+  run.crumbs-=4;it.sold=true;run.spices.push(it.id);run.sel=null;run.info=`Przyprawa w słoiku: <b>${SPICES[it.id].n}</b>. ${SPICES[it.id].ab}`;
+  if(run.spices.length===3)award('hel');renderAll();}
+function unitInfo(u){const d=UNITS[u.id],s=stat(u);const extra=u.bonusAtk||u.bonusHp?` (w tym ukiszone/dojrzałe +${u.bonusAtk}/+${u.bonusHp})`:'';
+  return `${d.e} <b>${d.n}</b> · ${LV[level(u)-1]} · ⚔ ${s.atk} Smak · ♥ ${s.hp} Świeżość${extra}. ${d.ab} <em>Stuknij inną półkę, żeby przestawić.</em>`;}
+
+function onShop(i){const it=run.shop[i];if(!it||it.sold)return;
+  if(run.sel&&run.sel.type==='shop'&&run.sel.i===i){
+    if(it.kind==='spice')buySpice(i);else{const t=autoTarget(it.id);if(t>=0)buyTo(i,t);else info('Brak wolnej półki. Sprzedaj coś albo dołóż ten sam składnik.');}
+    return;}
+  run.sel={type:'shop',i};
+  if(it.kind==='spice'){const s=SPICES[it.id];run.info=`<b>${s.n}</b>: ${s.ab} <em>Stuknij jeszcze raz, żeby kupić (4 🍪).</em>`;}
+  else{const d=UNITS[it.id];const h=recipeHint(it.id);run.info=`${d.e} <b>${d.n}</b> · ⚔ ${d.atk} Smak · ♥ ${d.hp} Świeżość. ${d.ab}${h?' ✨ Coś z nim ugotujesz!':''} <em>Stuknij półkę albo jeszcze raz kartę (3 🍪).</em>`;}
+  renderAll();}
+function onShelf(i){if(run.phase!=='shop')return;const s=run.sel;
+  if(s&&s.type==='shop'){const it=run.shop[s.i];if(it.kind==='unit'){buyTo(s.i,i);return;}}
+  if(s&&s.type==='shelf'){
+    if(s.i===i){run.sel=null;run.info='';renderAll();return;}
+    const a=run.shelves[s.i],b=run.shelves[i];
+    if(a&&b&&a.id===b.id&&a.copies+b.copies<=6){const bf=level(b);b.copies+=a.copies;b.bonusAtk+=a.bonusAtk;b.bonusHp+=a.bonusHp;run.shelves[s.i]=null;lvlToast(b,bf);}
+    else{run.shelves[i]=a;run.shelves[s.i]=b;}
+    run.sel=null;run.info='';afterRoster();return;}
+  const u=run.shelves[i];if(!u){run.sel=null;run.info='';renderAll();return;}
+  run.sel={type:'shelf',i};run.info=unitInfo(u);renderAll();}
+
+/* ================= BATTLE ================= */
+function mkAlly(u,i,tokId){const id=tokId||u.id,d=UNITS[id];const s=tokId?{atk:d.atk,hp:d.hp}:stat(u);
+  return{id,shelf:i,atk:s.atk,hp:s.hp,max:s.hp,cd:.35+i*.12,int:1.2*(d.spd||1),shell:d.shell||0,layers:d.layers||0,soft:d.soft||0,ranged:!!d.ranged,anti:!!d.anti,burn:!!d.burn,heal:!!d.heal,immune:!!d.heal,first:true,rotT:0,rotAcc:0,healAcc:0,pre:[0,0],el:null};}
+function startNight(){
+  run.phase='fight';run.sel=null;
+  const ids=run.shelves.map(u=>u?u.id:null);
+  run.activeRecipes=findRecipes(ids);
+  const A=run.shelves.map((u,i)=>u?mkAlly(u,i):null);
+  A.forEach(a=>{if(!a)return;if(has('sol'))buff(a,1,0);if(has('koperek')&&UNITS[a.id].grp==='Warzywo')buff(a,0,3);});
+  A.forEach((a,i)=>{if(!a)return;const d=UNITS[a.id];[i-1,i+1].forEach(j=>{const b=A[j];if(!b)return;if(d.umami)buff(b,1,0);if(d.butter)buff(b,2,2);});});
+  run.activeRecipes.forEach(({r,start,len})=>{for(let k=start;k<start+len;k++){r.ap(A[k],run.shelves[k]);if(has('majeranek'))buff(A[k],1,1);}});
+  if(has('laur')){const al=A.filter(Boolean);if(al.length)buff(rnd(al),3,3);}
+  battle={allies:A,enemies:WAVES[run.night-1].map(mkEnemy),t:0,heatAcc:0,galkaAcc:0,over:false,stolen:0};
+  run.info=run.activeRecipes.length?`Na półkach gotuje się: ${run.activeRecipes.map(x=>x.r.e+' '+x.r.n).join(', ')}.`:'Noc zapada. Drzwi zamknięte, światło gaśnie…';
+  renderAll();
+  A.forEach(a=>{if(a&&(a.pre[0]||a.pre[1]))float(a,`+${a.pre[0]}/+${a.pre[1]}`,'buff');});
+  run.activeRecipes.forEach(x=>toast(`${x.r.e} ${x.r.n} się gotuje!`));
+  hint('fight');
+  setTimeout(()=>{if(!battle||battle.over)return;last=performance.now();raf=requestAnimationFrame(loop);},1100);
+}
+function loop(ts){if(!battle||battle.over)return;const dt=Math.min(.1,(ts-last)/1000);last=ts;
+  if(!battle.paused){let acc=dt*run.speed;while(acc>1e-6&&!battle.over){const s=Math.min(.05,acc);step(s);acc-=s;}}
+  const fi=$('#fightinfo');if(fi&&!battle.over){const aa=battle.allies.filter(a=>a&&a.hp>0).length,ee=battle.enemies.filter(e=>e.hp>0).length;fi.textContent=`${aa} na półkach · ${ee} w kolejce · ${Math.floor(battle.t)} s`;}
+  if(!battle.over)raf=requestAnimationFrame(loop);}
+function heatMult(){return[.75,1,1.5][run.heat];}
+function step(dt){const B=battle;B.t+=dt;
+  const aF=B.allies.findIndex(a=>a&&a.hp>0),eF=B.enemies.findIndex(e=>e.hp>0);
+  if(eF<0)return endFight(true);if(aF<0)return endFight(false);if(B.t>45)return endFight(false,'timeout');
+  B.allies.forEach((a,i)=>{if(!a||a.hp<=0)return;
+    if(a.rotT>0){a.rotT-=dt;a.rotAcc+=dt;if(a.rotAcc>=1){a.rotAcc-=1;hurtAlly(a,1,'rot');if(a.hp<=0)return;}}
+    if(a.heal){a.healAcc+=dt;if(a.healAcc>=2){a.healAcc-=2;anim(a,'pulse');B.allies.forEach(b=>{if(b&&b.hp>0&&b.hp<b.max){b.hp++;float(b,'+1','heal');updAlly(b);}});}}
+    a.cd-=dt;if(a.cd<=0){const ef=B.enemies.findIndex(e=>e.hp>0);if(ef<0)return;
+      if(i===B.allies.findIndex(x=>x&&x.hp>0)||a.ranged){allyAttack(a,B.enemies[ef]);a.cd+=a.int;}else a.cd=0;}});
+  B.enemies.forEach((e,i)=>{if(e.hp<=0)return;
+    if(e.burnT>0){e.burnT-=dt;e.burnAcc+=dt;if(e.burnAcc>=1){e.burnAcc-=1;hurtEnemy(e,1,'burn');if(e.hp<=0)return;}}
+    if(e.tearT>0)e.tearT-=dt;
+    if(e.key==='krol'){e.spawnAcc+=dt;if(e.spawnAcc>=5){e.spawnAcc-=5;B.enemies.push(mkEnemy('zarodnik'));renderQueue();float(e,'zarodniki!','rot');}}
+    if(e.key==='sloik'){e.spawnAcc+=dt;if(e.spawnAcc>=6){e.spawnAcc-=6;float(e,'smród!','rot');B.allies.forEach(a=>{if(a&&a.hp>0&&!a.immune){a.rotT=3;updAlly(a);}});}}
+    e.cd-=dt;if(e.cd<=0){const front=i===B.enemies.findIndex(x=>x.hp>0);if(front||e.flyer){enemyAttack(e);e.cd+=e.int;}else e.cd=0;}});
+  B.heatAcc+=dt;if(B.heatAcc>=2){B.heatAcc-=2;
+    if(run.heat===0)B.allies.forEach(a=>{if(a&&a.hp>0&&a.hp<a.max){a.hp++;float(a,'+1','heal');updAlly(a);}});
+    if(run.heat===2)B.allies.forEach(a=>{if(a&&a.hp>1&&!a.immune){a.hp--;float(a,'więdnie','wilt');updAlly(a);}});}
+  if(has('galka')){B.galkaAcc+=dt;if(B.galkaAcc>=3){B.galkaAcc-=3;B.allies.forEach(a=>{if(a&&a.hp>1){a.hp--;updAlly(a);}});}}
+}
+function allyAttack(a,e){let m=heatMult();if(has('galka'))m*=2;if(a.anti&&e.mold)m*=2;if(a.first&&has('pieprz'))m*=2;a.first=false;
+  const dmg=Math.max(1,Math.round(a.atk*m));anim(a,'atk-up');hurtEnemy(e,dmg,m>=2?'big':'dmg');
+  if(a.burn&&e.hp>0)e.burnT=3;if(a.id==='cebula'&&e.hp>0)e.tearT=3;}
+function hurtEnemy(e,dmg,cls){e.hp-=dmg;float(e,'-'+dmg,cls==='burn'?'burn':cls);anim(e,'hurt');
+  if(e.el){const b=e.el.querySelector('.hpbar i');if(b)b.style.width=Math.max(0,e.hp/e.max*100)+'%';const h=e.el.querySelector('.ep .h');if(h)h.textContent='♥'+Math.max(0,e.hp);}
+  if(e.hp<=0){float(e,'💨','block');const idx=battle.enemies.indexOf(e);
+    if(e.split)battle.enemies.splice(idx+1,0,mkEnemy('zarodnik'),mkEnemy('zarodnik'));
+    setTimeout(()=>{if(battle&&!battle.over)renderQueue();},120);}}
+function enemyAttack(e){const B=battle;const al=B.allies.map((a,i)=>a&&a.hp>0?i:-1).filter(i=>i>=0);if(!al.length)return;
+  const a=B.allies[e.flyer?al[al.length-1]:al[0]];anim(e,'atk-down');
+  if(e.tearT>0&&Math.random()<.35){float(a,'pudło (łzy)','miss');return;}
+  hurtAlly(a,e.atk,'hit');
+  if(e.rot&&!a.immune&&a.hp>0){a.rotT=3;updAlly(a);}
+  if(e.thief&&run.crumbs>0){run.crumbs--;B.stolen++;float(a,'−1 🍪','steal');renderHUD();}}
+function hurtAlly(a,dmg,kind){
+  if(kind==='hit'){if(a.shell>0){a.shell--;float(a,'skorupka pęka','block');updAlly(a);return;}
+    if(a.layers>0){a.layers--;float(a,'−liść','block');updAlly(a);return;}dmg=Math.max(1,dmg-a.soft);}
+  a.hp-=dmg;float(a,'-'+dmg,kind==='rot'?'rot':'dmg');anim(a,'hurt');
+  if(a.hp<=0){const sp=UNITS[a.id].spawn;
+    if(sp){const t=mkAlly(null,a.shelf,sp);battle.allies[a.shelf]=t;renderShelves();float(t,sp==='suchar'?'czerstwieje!':'kiełkuje!','buff');return;}
+    renderShelves();return;}
+  updAlly(a);}
+function updAlly(a){if(!a.el)return;const h=a.el.querySelector('.v-hp');if(h)h.textContent=Math.max(0,a.hp);
+  const b=a.el.querySelector('.hpbar i');if(b)b.style.width=Math.max(0,a.hp/a.max*100)+'%';const st=a.el.querySelector('.st');if(st)st.textContent=statusIcons(a);}
+
+function endFight(win,reason){const B=battle;if(B.over)return;B.over=true;cancelAnimationFrame(raf);
+  const n=run.night;let lost=0;
+  if(!win){const alive=B.enemies.filter(e=>e.hp>0);lost=reason==='timeout'?1:Math.min(5,1+alive.length+(alive.some(e=>e.boss)?2:0));run.hp=Math.max(0,run.hp-lost);}
+  const dbl=run.activeRecipes.some(x=>x.r.id==='ogorki');let ferm=0;
+  run.shelves.forEach(u=>{if(u&&UNITS[u.id].ferment){const k=dbl?2:1;u.bonusAtk+=k;u.bonusHp+=k;ferm=Math.max(ferm,k);}});
+  if(win){run.won++;award('torun');if(run.heat===2)award('zakopane');if(n===5)award('wieliczka');if(n===10)award('ciechocinek');}
+  meta.best=Math.max(meta.best,win?n:n-1);saveMeta();renderHUD();
+  info(win?'Ostatni potwór znika w szczelinie zamrażalnika. Cisza.':'Pleśń przebija się przez półki…');
+  setTimeout(()=>{if(run.hp<=0)gameOver(false);else if(win&&n===10)gameOver(true);else summary(win,lost,reason,ferm,B.stolen);},900);}
+function summary(win,lost,reason,ferm,stolen){
+  const base=6,wb=win?2:0,kis=Math.min(3,Math.floor(run.crumbs/5));run.pending=base+wb+kis;
+  const rows=[`<div class="row"><span>Dniówka</span><b>+${base} 🍪</b></div>`,win?`<div class="row"><span>Za przetrwaną noc</span><b>+${wb} 🍪</b></div>`:'',
+    `<div class="row"><span>Kiszenie (${run.crumbs} w słoiku)</span><b>+${kis} 🍪</b></div>`,
+    stolen?`<div class="row"><span>Myszy ukradły</span><b>−${stolen} 🍪</b></div>`:'',
+    ferm?`<div class="row"><span>Ogórki się ukisiły</span><b>+${ferm}/+${ferm}</b></div>`:'',
+    !win?`<div class="row"><span>Zakwas ${reason==='timeout'?'(noc za długa)':'oberwał'}</span><b>−${lost} ♥</b></div>`:''].join('');
+  overlay(`<span class="kicker">${win?'Noc '+run.night+' przetrwana':'Noc '+run.night+' przegrana'}</span>
+    <h2>${win?rnd(QUIPS_WIN):rnd(QUIPS_LOSE)}</h2><p style="color:var(--ink-soft)">— Lodówka</p>
+    <div class="rows">${rows}</div>
+    ${run.night===4?'<p><b>Uwaga:</b> następnej nocy przychodzi <b>Król Pleśni</b>.</p>':''}${run.night===9?'<p><b>Uwaga:</b> ostatnia noc. Z tyłu lodówki coś się rusza… <b>Zapomniany Słoik</b>.</p>':''}
+    <button class="btn primary big" data-act="next-day">Rano: idę na targ ▶</button>`);}
+function nextDay(){run.crumbs+=run.pending;run.night++;run.phase='shop';battle=null;run.info='';run.sel=null;
+  run.preview=WAVES[run.night-1].map(mkEnemy);rollShop();closeOverlay();renderAll();
+  if(run.night===2){hint('recipe');hint('enemies');}if(run.night===3)hint('crumbs');if(run.shop.some(s=>s.kind==='spice'))hint('spice');
+  if(run.shop.some(s=>s.kind==='unit'&&run.shelves.some(u=>u&&u.id===s.id)))hint('merge');}
+function gameOver(win){meta.runs++;if(win)meta.won++;saveMeta();
+  const nm=run.newMagnets.map(id=>{const m=MAGNETS.find(x=>x.id===id);return m.e+' '+m.t;}).join(', ');
+  const nr=run.newRecipes.map(id=>{const r=RECIPES.find(x=>x.id===id);return r.e+' '+r.n;}).join(', ');
+  overlay(win?`<span class="kicker">Niedziela rano</span><h2>Babcia wróciła z Ciechocinka!</h2><p class="hand">${NOTES[NOTES.length-1]}</p>
+      <div class="rows"><div class="row"><span>Przetrwane noce</span><b>10/10</b></div>${nr?`<div class="row"><span>Nowe przepisy</span><b>${nr}</b></div>`:''}${nm?`<div class="row"><span>Nowe magnesy</span><b>${nm}</b></div>`:''}</div>
+      <button class="btn primary big" data-act="to-hub">Zamknij lodówkę</button>`
+    :`<span class="kicker">Zakwas opadł</span><h2>Rano wszystko wraca na półki.</h2><p>Przetrwane noce: <b>${run.won}</b>. Pleśń wróci jutro, ale lodówka pamięta.</p>
+      <div class="rows">${nr?`<div class="row"><span>Nowe przepisy</span><b>${nr}</b></div>`:''}${nm?`<div class="row"><span>Nowe magnesy</span><b>${nm}</b></div>`:''}<div class="row"><span>Najlepszy wynik</span><b>noc ${meta.best}</b></div></div>
+      <button class="btn primary big" data-act="to-hub">Zamknij lodówkę</button>`);}
+
+/* ================= OVERLAYS ================= */
+function overlay(html){const o=$('#overlay');o.innerHTML=`<div class="sheet" role="dialog">${html}</div>`;o.hidden=false;if(battle&&!battle.over)battle.paused=true;}
+function closeOverlay(){$('#overlay').hidden=true;if(battle&&!battle.over){battle.paused=false;last=performance.now();}}
+function showBook(){overlay(`<span class="kicker">Książka kucharska babci</span><h2>Przepisy ${meta.recipes.length}/${RECIPES.length}</h2>
+  <p style="font-size:13px;color:var(--ink-soft)">Postaw składniki na sąsiednich półkach, w dowolnej kolejności.</p>
+  <div>${RECIPES.map(r=>{const k=meta.recipes.includes(r.id);return k?`<div class="recipe"><span class="re">${r.e}</span><span><span class="rn">${r.n}</span><br><span class="ri">${r.need.map(x=>UNITS[x].e).join(' + ')}</span><br><span class="rf">${r.fx}</span></span></div>`
+    :`<div class="recipe unknown"><span class="re">❔</span><span><span class="rn">???</span><br><span class="ri">${UNITS[r.need[0]].e}${' + ?'.repeat(r.need.length-1)}</span></span></div>`;}).join('')}</div>
+  <span class="kicker" style="margin-top:6px">Przyprawy</span>
+  <div>${Object.values(SPICES).map(s=>`<div class="recipe"><span class="re" style="display:grid;place-items:center"><span class="sjar" style="--jc:${s.c}"></span></span><span><span class="rn">${s.n}</span><br><span class="rf">${s.ab}</span></span></div>`).join('')}</div>
+  <button class="btn primary" data-act="close-overlay">Zamknij</button>`);}
+function showHelp(){overlay(`<span class="kicker">Jak grać</span><h2>Przetrwaj 10 nocy do powrotu Babci</h2>
+  <ol class="howto">
+   <li><b>Rano targ.</b> Stuknij kartę, potem półkę (albo stuknij kartę 2×). Składnik kosztuje 3 🍪.</li>
+   <li><b>Najwyższa zajęta półka walczy pierwsza.</b> Gdy się zepsuje, walczy kolejna. Cebula i Czosnek atakują z każdej półki. Mole gryzą najniższą.</li>
+   <li><b>Ten sam składnik na tej samej półce</b> = mocniejszy. 3 szt. Podsmażone ★★, 6 szt. Złociste ★★★.</li>
+   <li><b>Sąsiednie półki gotują dania</b> z bonusami (żółta klamra po prawej). ✨ na karcie = coś z nią ugotujesz.</li>
+   <li><b>Przyprawy</b> (od nocy 2) działają na całą lodówkę. Masz 3 słoiki.</li>
+   <li><b>Nocą walka idzie sama.</b> Ty sterujesz ogniem: mały leczy, duży bije mocniej, ale składniki więdną.</li>
+   <li><b>Przegrana noc</b> zabiera Zakwasowi ♥. Na zero kończy się run, ale przepisy i magnesy zostają na lodówce.</li>
+   <li><b>Nie wydane okruszki się kiszą:</b> każde 5 daje +1 rano (maks. +3).</li>
+  </ol><button class="btn primary" data-act="close-overlay">Rozumiem</button>`);}
+
+/* ================= INPUT ================= */
+app.addEventListener('click',ev=>{const t=ev.target.closest('[data-act]');if(!t)return;const act=t.dataset.act,i=+t.dataset.i;
+  switch(act){
+    case 'open':{const d=$('#door');d.classList.add('opening');setTimeout(()=>{$('#hub').hidden=true;$('#game').hidden=false;newRun();renderAll();
+      const it=$('#interior');it.classList.remove('lit');void it.offsetWidth;it.classList.add('lit');hint('buy');},matchMedia('(prefers-reduced-motion: reduce)').matches?0:520);break;}
+    case 'book':showBook();break;
+    case 'help':showHelp();break;
+    case 'close-overlay':closeOverlay();break;
+    case 'shop':if(run.phase==='shop')onShop(i);break;
+    case 'shelf':onShelf(i);break;
+    case 'jar':if(run.phase!=='shop')break;if(run.sel&&run.sel.type==='jar'&&run.sel.i===i){run.sel=null;run.info='';}else{run.sel={type:'jar',i};const s=SPICES[run.spices[i]];run.info=`<b>${s.n}</b>: ${s.ab}`;}renderAll();break;
+    case 'enemy':{const list=run.phase==='fight'?battle.enemies.filter(e=>e.hp>0):run.preview;const e=list[i];if(e)info(`<b>${e.n}</b> · ⚔ ${e.atk} · ♥ ${Math.max(0,e.hp)}. ${e.ab}`);break;}
+    case 'bracket':{const x=(run.phase==='fight'?run.activeRecipes:run.curRecipes)[i];if(x)info(`${x.r.e} <b>${x.r.n}</b>: ${x.r.fx}`);break;}
+    case 'sell':run.phase==='shop'&&(function(){const s=run.sel;if(!s)return;
+      if(s.type==='shelf'&&run.shelves[s.i]){run.crumbs+=level(run.shelves[s.i]);run.shelves[s.i]=null;}else if(s.type==='jar'){run.spices.splice(s.i,1);run.crumbs+=2;}
+      run.sel=null;run.info='';afterRoster();})();break;
+    case 'reroll':if(run.crumbs>=1){run.crumbs--;rollShop();run.sel=null;run.info='';renderAll();if(run.shop.some(s=>s.kind==='spice'))hint('spice');}break;
+    case 'night':if(run.shelves.some(Boolean)){$('#bubble').hidden=true;hintQ=hintQ.filter(k=>k==='fight');startNight();}break;
+    case 'heat':run.heat=+t.dataset.v;renderPanel();break;
+    case 'speed':run.speed=run.speed===1?2:run.speed===2?3:1;renderPanel();break;
+    case 'bubble-ok':{const k=hintQ.shift();if(k){meta.seen[k]=true;saveMeta();}showHint();break;}
+    case 'next-day':nextDay();break;
+    case 'to-hub':closeOverlay();run=null;battle=null;$('#bubble').hidden=true;hintQ=[];$('#game').hidden=true;$('#hub').hidden=false;renderHub();break;
+  }
+});
+
+renderHub();
+})();
+</script>
