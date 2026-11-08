@@ -85,3 +85,16 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - W aplikacji: Cloudflare Worker + D1 w `server/` (instrukcja w `server/README.md`), adres podawany przez `MP_API` przy budowaniu.
   Gracz ma losowe id urządzenia i nick do zmiany w oknie rankingu.
 - Bez żadnego z nich wynik zapisuje się tylko lokalnie.
+
+## Przyprawy, noce bez końca, nowa ekonomia (v9)
+
+- Przyprawy (tablica `SPICES`): co drugi ranek paczka od Babci, wybór 1 z 3 albo „Pomiń”. Przyprawnik ma 5 słoików (górny pasek);
+  pełny przyprawnik pyta, co wyrzucić. 12 przypraw: Sól (łączenie z 2 kopii), Pieprz (pierwszy cios ×2), Majeranek, Liść laurowy,
+  Gałka (atak ×2, połowa życia), Ziele angielskie (+1/+1 po wygranej), Wanilia (dania ★★★ +5/+5), Słoik na drobne (monety zostają + odsetki),
+  Kminek (2 darmowe dostawy), Szafran (+1 moneta za ★★/★★★), Bazylia (poziom I za 2), Imbir (sprzedaż +2).
+- Po nocy 10 Babcia wraca (wygrana, odblokowania), a gracz wybiera ZAKOŃCZ albo GRAJ DALEJ. Noce 11+ są generowane z seeda,
+  potwory rosną o 13% na noc, boss co 5 nocy. Wynik liczy wszystkie noce.
+- Rano monety za wynik nocy: dniówka (5) + 1 za każdy ocalały składnik + 1 za każdą gwiazdkę ponad pierwszą na ocalałych + 2 za wygraną
+  + przyprawy. Niewydane przepadają (chyba że Słoik na drobne).
+- Sprzedaż tylko przeciągnięciem składnika z półki na blat; stuknięcie pokazuje opis i cenę sprzedaży.
+- `#dev` w adresie włącza hak testowy `window.__mp` (używany przez automatyczne testy późnych nocy).

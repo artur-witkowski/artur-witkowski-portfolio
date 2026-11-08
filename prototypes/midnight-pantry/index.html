@@ -73,6 +73,7 @@ img.px{display:block}
 .jar i{position:absolute;left:0;right:0;bottom:0;background:#F3E3BC;transition:height .5s;box-shadow:inset 0 3px 0 #FFF6DA}
 .jar i::after{content:"";position:absolute;left:5px;top:6px;width:4px;height:4px;background:#fff;animation:bub 1.8s infinite}
 @keyframes bub{0%{transform:translateY(8px);opacity:0}50%{opacity:1}100%{transform:translateY(-6px);opacity:0}}
+.jar b{position:absolute;inset:0;display:grid;place-items:center;font-weight:400;font-size:22px;color:#140E1C;text-shadow:0 1px 0 rgba(255,255,255,.7);z-index:1}
 .jarlbl{display:flex;flex-direction:column;line-height:.9;font-size:16px;color:var(--muted)}
 .jarlbl b{font-weight:400;font-size:24px;color:#FFE3A8}
 .cal{width:44px;height:42px;background:var(--paper);color:var(--ink);border-radius:4px;display:flex;flex-direction:column;align-items:center;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.4);margin-left:6px}
@@ -220,6 +221,21 @@ img{-webkit-user-drag:none;user-select:none}
 .nickrow input{flex:1;font:inherit;font-size:20px;padding:6px 8px;border-radius:8px;border:2px solid #3D3456;background:#120D1A;color:var(--text)}
 .bignote .mini{font-size:18px;display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .bignote .mini .me{color:#B3261E}
+/* spices */
+.rack{flex:1;display:flex;gap:3px;justify-content:flex-end;align-items:flex-end;min-width:0}
+.rack .sj{width:18px;height:24px;display:block;cursor:pointer;filter:drop-shadow(1px 2px 0 rgba(0,0,0,.5))}
+.rack .se{width:16px;height:22px;border:2px dashed #3D3456;border-radius:4px;box-sizing:border-box}
+.spicepick{display:flex;gap:8px;width:min(100%,320px)}
+.spcard{flex:1;min-width:0;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 5px 0 rgba(0,0,0,.35);transform:rotate(var(--r))}
+.spcard img{width:36px;height:48px}
+.spcard b{font-weight:400;font-size:19px;line-height:1;text-align:center}
+.spcard small{font-size:15px;line-height:1.02;text-align:center;color:#4A3F5C}
+.spcard.pick{box-shadow:0 0 0 4px var(--gold),0 5px 0 rgba(0,0,0,.35)}
+.picktitle{font-size:22px;color:#B3261E;text-align:center}
+#door.darkdoor .picktitle{color:var(--gold)}
+.droprow{display:flex;gap:8px;justify-content:center}
+.droprow button{background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:4px 6px}
+.droprow img{width:24px;height:32px}
 /* tiers */
 .card{background:var(--rb,var(--paper))}
 .card.t3,.card.t4{border-width:4px}
@@ -316,11 +332,10 @@ img{-webkit-user-drag:none;user-select:none}
 <div id="app">
   <section id="game" class="screen" hidden>
     <div class="hud">
-      <div class="jar" aria-hidden="true"><i id="jarFill"></i></div>
-      <div class="jarlbl"><span>ZAKWAS</span><b id="jarN"></b></div>
+      <div class="jar" title="Zakwas"><i id="jarFill"></i><b id="jarN"></b></div>
       <div class="cal" aria-label="Noc"><b>NOC</b><span id="calN">1</span></div>
       <div class="clock" id="clock">08:00</div>
-      <div class="sp"></div>
+      <div class="rack" id="rack" aria-label="Przyprawnik"></div>
       <button class="iconbtn" data-act="mute" id="muteBtn" aria-label="Dźwięk">♪</button>
       <button class="iconbtn" data-act="help" aria-label="Jak grać">?</button>
     </div>
@@ -513,7 +528,31 @@ function checkUnlocks(r){meta.unlocked=meta.unlocked||[];const fresh=[];
   if(fresh.length){saveMeta();if(r)r.newUnlocks=(r.newUnlocks||[]).concat(fresh);}return fresh;}
 function unlockName(u){return u.type==='kind'?KINDS[u.id].n[0]:'Lodówka '+fridgeOf(u.id).name;}
 function unlockImg(u){return u.type==='kind'?`<img class="px" src="${IMG[u.id][0]}" alt="">`:`<span class="fchip" style="background:${fridgeOf(u.id).color}"></span>`;}
-const cost=k=>PRICE[KINDS[k].r];
+const cost=k=>(run&&has('bazylia')&&KINDS[k].r===1)?2:PRICE[KINDS[k].r];
+// Spices: picked 1 of 3 every second morning, they bend the rules of the whole run (like boons in Hades / jokers in Balatro).
+const SPICES={
+  sol:{n:'Sól',c:'#F2F2F2',d:'Łączenie wymaga tylko 2 takich samych.'},
+  pieprz:{n:'Pieprz',c:'#3A302C',d:'Pierwszy cios każdego składnika w nocy zadaje ×2.'},
+  majeranek:{n:'Majeranek',c:'#86A85A',d:'Pierwszy na półce dostaje +1/+1 za każdy składnik za nim.'},
+  laur:{n:'Liść laurowy',c:'#5F7F35',d:'Na start nocy losowy składnik ma podwójny atak.'},
+  galka:{n:'Gałka muszk.',c:'#A0663A',d:'Cały atak ×2, ale składniki mają połowę życia.'},
+  ziele:{n:'Ziele angielskie',c:'#6B4226',d:'Po każdej wygranej nocy cała półka +1/+1 na stałe.'},
+  wanilia:{n:'Wanilia',c:'#F2E2B0',d:'Dania ★★★ dostają +5/+5.'},
+  skarbonka:{n:'Słoik na drobne',c:'#C9B27A',d:'Niewydane monety zostają, a co 5 dokłada 1 (maks. 5).'},
+  kminek:{n:'Kminek',c:'#9C8A5A',d:'Pierwsze 2 dostawy każdego dnia za darmo.'},
+  szafran:{n:'Szafran',c:'#E8642C',d:'Rano +1 moneta za każdy składnik ★★ i ★★★.'},
+  bazylia:{n:'Bazylia',c:'#3FA34D',d:'Składniki poziomu I kosztują 2.'},
+  imbir:{n:'Imbir',c:'#E0B060',d:'Sprzedaż daje 2 monety więcej.'}
+};
+const RACK=5;
+const has=id=>!!(run&&run.spices&&run.spices.includes(id));
+const mergeNeed=()=>has('sol')?2:3;
+const _jars={};
+function JAR(id){if(_jars[id])return _jars[id];return _jars[id]=tex(12,16,(x)=>{const c=SPICES[id].c;
+  x.fillStyle='#140E1C';x.fillRect(2,0,8,1);x.fillRect(1,1,1,3);x.fillRect(10,1,1,3);x.fillRect(1,4,10,1);x.fillRect(0,5,1,10);x.fillRect(11,5,1,10);x.fillRect(1,15,10,1);
+  x.fillStyle='#B3261E';x.fillRect(2,1,8,3);x.fillStyle='#E8574A';x.fillRect(2,1,8,1);
+  x.fillStyle='#DDEFF5';x.fillRect(1,5,10,10);x.fillStyle=c;x.fillRect(1,8,10,7);
+  x.fillStyle='rgba(0,0,0,.18)';x.fillRect(1,13,10,2);x.fillStyle='rgba(255,255,255,.7)';x.fillRect(2,6,1,7);x.fillStyle='#FFF8E8';x.fillRect(3,9,6,3);});}
 const NK=Object.keys(KINDS).length;
 const IMG={};Object.keys(KINDS).forEach(k=>{IMG[k]=KINDS[k].art.map(a=>ART[a]);});
 Object.keys(TOKENS).forEach(k=>{IMG[k]=[ART[TOKENS[k].art]];});
@@ -608,7 +647,7 @@ function tierPool(){return run.night>=5?3:run.night>=3?2:1;}
 function stat(u){const K=KINDS[u.k];return{a:K.a*u.t+u.ba,h:K.h*u.t+u.bh};}
 function newRun(daily){const seed=daily?hashStr('midnight-pantry/'+today()):(Math.random()*4294967296)>>>0;rng=mulberry32(seed);
   const F=daily?FRIDGES[0]:fridgeOf(meta.fridge);SLOTS=F.slots;BUDGET=F.budget;MAXHP=F.hp;
-  run={seed,daily:!!daily,fridge:F,freeRoll:!!F.freeRoll,newUnlocks:[],log:[],night:1,hp:MAXHP,coins:BUDGET,team:Array(SLOTS).fill(null),shop:[],sel:null,phase:'shop',speed:1,won:0,newDishes:[],clock:8*60};rollShop();}
+  run={seed,daily:!!daily,fridge:F,spices:[],freeRolls:F.freeRoll?1:0,carry:0,beat10:false,newUnlocks:[],log:[],night:1,hp:MAXHP,coins:BUDGET,team:Array(SLOTS).fill(null),shop:[],sel:null,phase:'shop',speed:1,won:0,newDishes:[],clock:8*60};rollShop();}
 function odds(){return ODDS[Math.min(run.night+((run.fridge&&run.fridge.oddsShift)||0),10)-1];}
 function pickTier(){const o=odds();let r=rng()*100;for(let i=0;i<o.length;i++){r-=o[i];if(r<0)return i+1;}return 1;}
 function rollShop(keepHeld){const held=keepHeld&&run.shop?run.shop.filter(c=>c.held&&!c.sold).map(c=>({k:c.k,held:true})):[];
@@ -618,19 +657,28 @@ function rollShop(keepHeld){const held=keepHeld&&run.shop?run.shop.filter(c=>c.h
   while(held.length+fresh.length<n){let k=owned.length&&rng()<.3?srnd(owned):null;if(!k){let t=pickTier();while(t>1&&!pool(t).length)t--;k=srnd(pool(t));}fresh.push({k});}
   run.shop=held.concat(fresh);}
 function owner(k){return run.team.findIndex(u=>u&&u.k===k);}
-function mkEnemy(k){const d=ENEMIES[k],n=run.night;const h=d.h+(d.boss?0:Math.round((n-1)*1.4))+((run.fridge&&run.fridge.enemyHp)||0),a=d.a+(d.boss?0:Math.floor((n-1)/2.5));return Object.assign({},d,{k,uid:++uid,a,h,max:h,clash:0});}
+// Nights 1-10 are hand-made; after Babcia comes back the waves are generated from the seed and grow exponentially (like Balatro's endless antes).
+function waveFor(n){if(n<=10)return WAVES[n-1];run._w=run._w||{};if(run._w[n])return run._w[n];
+  const r=mulberry32((run.seed^Math.imul(n,2654435761))>>>0),pool=['plesn','biala','muszka','jogurt'],w=[];
+  if(n%5===0)w.push(n%10===0?'sloik':'krol');const cnt=Math.min(8,4+Math.floor((n-10)/3));while(w.length<cnt)w.push(pool[Math.floor(r()*pool.length)]);return run._w[n]=w;}
+const isBossNight=n=>waveFor(n).some(k=>ENEMIES[k].boss);
+function mkEnemy(k){const d=ENEMIES[k],n=run.night,ex=n>10?Math.pow(1.13,n-10):1;
+  let h=d.h+(d.boss?0:Math.round((n-1)*1.4))+((run.fridge&&run.fridge.enemyHp)||0),a=d.a+(d.boss?0:Math.floor((n-1)/2.5));
+  if(n>10){h=Math.round(h*ex*(d.boss?1.6:1));a=Math.round(a*Math.sqrt(ex)*(d.boss?1.3:1));}return Object.assign({},d,{k,uid:++uid,a,h,max:h,clash:0});}
 function unitName(u){return u.tok?TOKENS[u.k].n:KINDS[u.k].n[u.t-1];}
 function unitImg(u){return u.tok?IMG[u.k][0]:IMG[u.k][u.t-1];}
 
 /* ================= RENDER ================= */
 function setClock(min){run.clock=min;const h=Math.floor(min/60)%24,m=min%60;$('#clock').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;}
-function renderHUD(){
-  $('#jarFill').style.height=(run.hp/MAXHP*100)+'%';$('#jarN').textContent=`${run.hp}/${MAXHP}`;
+function renderRack(){const r=$('#rack');if(!r||!run)return;r.innerHTML=Array.from({length:RACK},(_,i)=>{const id=run.spices[i];
+    return id?`<img class="px sj" src="${JAR(id)}" alt="${SPICES[id].n}" data-act="jar" data-i="${i}">`:'<span class="se"></span>';}).join('');}
+function renderHUD(){renderRack();
+  $('#jarFill').style.height=(run.hp/MAXHP*100)+'%';$('#jarN').textContent=run.hp;
   $('#calN').textContent=run.night;
   $('#coins').innerHTML=`<img class="px" src="${COIN}" alt=""><span id="coinN">${run.coins}</span>`;
   $('#muteBtn').textContent=muted?'×':'♪';}
 function badges(a,h){return `<div class="badges"><span class="bdg a">${a}</span><span class="bdg h">${Math.max(0,h)}</span></div>`;}
-function renderEnemies(hiddenIn){const list=run.phase==='fight'?B.enemies:(run.preview||(run.preview=WAVES[run.night-1].map(mkEnemy)));
+function renderEnemies(hiddenIn){const list=run.phase==='fight'?B.enemies:(run.preview||(run.preview=waveFor(run.night).map(mkEnemy)));
   $('#eCount').textContent=run.phase==='fight'?`${list.length} w kolejce`:`dziś w nocy: ${list.length}`;
   const ar=B&&B.arena;
   $('#eRow').innerHTML=list.map((e,i)=>`<div class="unit enemy ${e.boss?'boss':''} ${i===0?'front':''} ${ar&&ar.eu===e.uid?'out':''}" id="e-${e.uid}" data-act="enemy" data-i="${i}" ${hiddenIn?'style="opacity:0"':''}><div class="bob" style="animation-delay:${i*.23}s"><img class="px sp" src="${MON[e.k]}" alt="${e.n}"></div>${badges(e.a,e.h)}</div>`).join('');}
@@ -646,7 +694,7 @@ function renderTeam(){const fight=run.phase==='fight';const list=fight?B.allies:
     if(fight&&u.h<=0)cls.push('dead');
     const st=fight?{a:u.a,h:u.h}:stat(u);
     const T=u.tok?{n:'',c:'#8A8499'}:TIERS[KINDS[u.k].r];
-    const pips=!fight&&!u.tok&&u.t<3?`<div class="pips">${[0,1,2].map(j=>`<i class="${j<u.c?'on':''}"></i>`).join('')}</div>`:'<div class="pips"></div>';
+    const pips=!fight&&!u.tok&&u.t<3?`<div class="pips">${Array.from({length:mergeNeed()},(_,j)=>`<i class="${j<u.c?'on':''}"></i>`).join('')}</div>`:'<div class="pips"></div>';
     return `<div class="${cls.join(' ')}" id="t-${i}" data-act="slot" data-i="${i}" style="--tc:${T.c}">${T.n?`<span class="tnum">${T.n}</span>`:''}<div class="stars">${u.tok?'':STARS[u.t-1]}</div><div class="bob" style="animation-delay:${i*.31}s"><img class="px sp" src="${unitImg(u)}" alt="${unitName(u)}"></div>${badges(st.a,st.h)}${pips}</div>`;}).join('');}
 function renderShop(){const el=$('#shop');
   if(run.phase!=='shop'){el.innerHTML='';el.style.visibility='hidden';$('#clabel').textContent='NOC';return;}el.style.visibility='';$('#clabel').textContent='ZAKUPY';
@@ -654,7 +702,7 @@ function renderShop(){const el=$('#shop');
   el.innerHTML=run.shop.map((c,i)=>{if(c.sold)return `<div class="card sold"></div>`;const K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null,T=TIERS[K.r],p=cost(c.k);
     const sel=run.sel&&run.sel.type==='shop'&&run.sel.i===i;
     return `<button class="card t${K.r} ${sel?'sel':'wiggle'} ${c.held?'held':''} ${run.coins<p?'poor':''}" style="--rc:${T.c};--rb:${T.bg};animation-delay:${i*.3}s" data-act="card" data-i="${i}" aria-pressed="${sel}">
-      <span class="tier">${T.n}</span><span class="price">${p}</span>${u?`<span class="own">${u.t===3?'MAX':(u.c+1)+'/3'}</span>`:''}
+      <span class="tier">${T.n}</span><span class="price">${p}</span>${u?`<span class="own">${u.t===3?'MAX':(u.c+1)+'/'+mergeNeed()}</span>`:''}
       <img class="px sp" src="${IMG[c.k][0]}" alt=""><span class="cn">${K.n[0]}</span><span class="cs"><span class="bdg a">${K.a}</span><span class="bdg h">${K.h}</span></span></button>`;}).join('');}
 function renderActions(){const el=$('#actions');
   if(run.phase==='fight'){el.innerHTML=`<button class="btn b-gray" data-act="speed">TEMPO ×${run.speed}</button>`;return;}
@@ -662,10 +710,9 @@ function renderActions(){const el=$('#actions');
   const s=run.sel;
   if(s&&s.type==='shop'){const c=run.shop[s.i],o=owner(c.k),u=o>=0?run.team[o]:null;const full=!u&&run.team.every(Boolean);const max=u&&u.t===3;const p=cost(c.k);
     el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-blue" data-act="hold">${c.held?'PUŚĆ':'TRZYMAJ'}</button><button class="btn b-green grow" data-act="buy" ${run.coins<p||full||max?'disabled':''}>${max?'MAX':full?'PEŁNO':'KUP · '+p}</button>`;return;}
-  if(s&&s.type==='shelf'){const u=run.team[s.i];el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-red grow" data-act="sell">SPRZEDAJ +${u.inv}</button>`;return;}
   const armed=run.warnUntil>Date.now();
-  const warn=armed?`<div class="warn" role="alert">Zostało <b>${run.coins} ${run.coins===1?'moneta':run.coins<5?'monety':'monet'}</b>${run.freeRoll?' i darmowa dostawa':''}. Rano przepadnie! Stuknij jeszcze raz, żeby zamknąć.</div>`:'';
-  el.innerHTML=`${warn}<button class="btn b-blue" data-act="reroll" ${run.coins<(run.freeRoll?0:ROLL)?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> ${run.freeRoll?0:ROLL}</button><button class="btn b-orange grow ${armed?'armed':'wiggle'}" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>${armed?'ZAMKNIJ MIMO TO':'ZAMKNIJ LODÓWKĘ'}</button>`;}
+  const warn=armed?`<div class="warn" role="alert">Zostało <b>${run.coins} ${run.coins===1?'moneta':run.coins<5?'monety':'monet'}</b>${run.freeRolls?' i darmowa dostawa':''}. Rano przepadnie! Stuknij jeszcze raz, żeby zamknąć.</div>`:'';
+  el.innerHTML=`${warn}<button class="btn b-blue" data-act="reroll" ${run.coins<(run.freeRolls?0:ROLL)?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> ${run.freeRolls?0:ROLL}</button><button class="btn b-orange grow ${armed?'armed':'wiggle'}" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>${armed?'ZAMKNIJ MIMO TO':'ZAMKNIJ LODÓWKĘ'}</button>`;}
 function center(title,desc){$('#center').innerHTML=`${title?`<div class="ct">${title}</div>`:''}<div class="cd">${desc||''}</div>`;}
 function defaultCenter(){const n=run.night;let d;
   if(n===1)d=(run.daily?'<em>Danie dnia:</em> wszyscy mają dziś te same dostawy. ':'')+'Przeciągnij produkt na półkę. <em>Co rano 10 monet, reszta przepada.</em>';
@@ -683,10 +730,10 @@ function renderAll(){renderHUD();renderEnemies();renderTeam();renderShop();rende
 function select(sel){run.sel=sel;run.warnUntil=0;SFX.tap();
   if(!sel){defaultCenter();}
   else if(sel.type==='shop'){const c=run.shop[sel.i],K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null;
-    const tail=u&&u.t<3?`<br><em>Na półce ${u.c}/3 → ${K.n[u.t]}</em>`:`<br><em>→ ${K.n[1]} → ${K.n[2]}</em>`;
+    const tail=u&&u.t<3?`<br><em>Na półce ${u.c}/${mergeNeed()} → ${K.n[u.t]}</em>`:`<br><em>→ ${K.n[1]} → ${K.n[2]}</em>`;
     center(K.n[0],infoUnit(c.k,1,tail));}
   else if(sel.type==='shelf'){const u=run.team[sel.i],K=KINDS[u.k],s=stat(u);
-    center(`${K.n[u.t-1]} ${STARS[u.t-1]}`,infoUnit(u.k,u.t,u.t<3?`<br><em>${u.c}/3 → ${K.n[u.t]}</em>`:''));}
+    center(`${K.n[u.t-1]} ${STARS[u.t-1]}`,infoUnit(u.k,u.t,(u.t<3?`<br><em>${u.c}/${mergeNeed()} → ${K.n[u.t]}</em>`:'')+`<br>Przeciągnij na blat, żeby sprzedać za ${u.inv+(has('imbir')?2:0)}.`));}
   renderAll();}
 let busy=false;
 async function cookIn(slotIdx,u){ // pan appears over the shelf slot, the pile jumps in, sizzles, flips out evolved
@@ -719,8 +766,8 @@ async function buy(si,slot){if(busy||si==null)return;const c=run.shop[si];if(!c|
   await flyTo(cardEl,document.getElementById('t-'+target),IMG[c.k][0],56);SFX.plop();
   if(o<0){run.team[target]={k:c.k,t:1,c:1,ba:0,bh:0,inv:p};renderAll();const el=document.getElementById('t-'+target);anim(el,'pop');burst(el,['#fff','#BFDDE9'],8,true);defaultCenter();}
   else{const u=run.team[o];u.c++;u.inv+=p;
-    if(u.c>=3&&u.t<3){renderAll();await cookIn(o,u);}
-    else{renderAll();const el=document.getElementById('t-'+o);anim(el.querySelector('.sp'),'pop');ftxt(el,`${u.c}/3`,'#FFC93C',26,30);defaultCenter();}}
+    if(u.c>=mergeNeed()&&u.t<3){renderAll();await cookIn(o,u);}
+    else{renderAll();const el=document.getElementById('t-'+o);anim(el.querySelector('.sp'),'pop');ftxt(el,`${u.c}/${mergeNeed()}`,'#FFC93C',26,30);defaultCenter();}}
   busy=false;renderActions();}
 function onSlot(i){if(run.phase!=='shop'||busy)return;const s=run.sel;
   if(!run.team[i]){select(null);return;}
@@ -730,15 +777,16 @@ function swapSlots(a,b){if(a===b)return;run.log.push(['w',a,b]);const t=run.team
   [a,b].forEach(j=>{const el=document.getElementById('t-'+j);if(el&&run.team[j])anim(el,'pop');});}
 function sell(){const s=run.sel;if(!s||s.type!=='shelf')return;sellAt(s.i);}
 function sellAt(i){const u=run.team[i];if(!u||busy)return;run.log.push(['s',i]);const el=document.getElementById('t-'+i);burst(el,['#FFC93C','#fff'],12,true);
-  const old=run.coins;run.coins+=u.inv;run.team[i]=null;run.sel=null;SFX.coin();SFX.coin(2);renderAll();countTo($('#coinN'),old,run.coins);defaultCenter();
-  ftxt($('#coins'),'+'+u.inv,'#FFC93C',30,-10);
+  const gain=u.inv+(has('imbir')?2:0);const old=run.coins;run.coins+=gain;run.team[i]=null;run.sel=null;SFX.coin();SFX.coin(2);renderAll();countTo($('#coinN'),old,run.coins);defaultCenter();
+  ftxt($('#coins'),'+'+gain,'#FFC93C',30,-10);
   if(u.k==='jablko'){const others=run.team.map((x,j)=>x?j:-1).filter(j=>j>=0);if(others.length){const j=srnd(others),w=run.team[j];w.ba+=u.t;w.bh+=u.t;renderTeam();
     const we=document.getElementById('t-'+j);anim(we,'act');ftxt(we,`+${u.t}/+${u.t}`,'#7CF29A',28);SFX.heal();say('JABŁKO',`${KINDS[w.k].n[w.t-1]} +${u.t}/+${u.t} na stałe.`);}}}
 function rollTriggers(){run.team.forEach((u,j)=>{if(u&&u.k==='twarog'){u.bh+=u.t;const el=document.getElementById('t-'+j);setTimeout(()=>{anim(el,'act');ftxt(el,'+'+u.t,'#FF8FA0',26);},250);}});}
 
 /* ================= NIGHT ================= */
 const wait=ms=>new Promise(res=>{let left=ms;const tick=()=>{if(!paused)left-=40*run.speed;if(left<=0)res();else setTimeout(tick,40);};setTimeout(tick,40);});
-function mkAlly(u){const s=stat(u);return{k:u.k,t:u.t,a:s.a,h:s.h,max:s.h,shell:u.k==='jajko'?u.t:0,soft:0,tok:false};}
+function mkAlly(u){const s=stat(u);let a=s.a,h=s.h;if(has('wanilia')&&u.t===3){a+=5;h+=5;}if(has('galka')){a*=2;h=Math.max(1,Math.ceil(h/2));}
+  return{k:u.k,t:u.t,a,h,max:h,shell:u.k==='jajko'?u.t:0,soft:0,tok:false,first:has('pieprz')};}
 function mkTok(k,t){return k==='kielek'?{k,t:1,a:t,h:t,max:t,shell:0,soft:0,tok:true}:{k,t:1,a:t,h:2*t,max:2*t,shell:0,soft:0,tok:true};}
 const frontI=()=>B.allies.findIndex(a=>a&&a.h>0);
 const tEl=i=>(B&&B.arena&&B.arena.ai===i&&document.getElementById('arA'))||document.getElementById('t-'+i);
@@ -777,7 +825,7 @@ async function bossBanner(e){const b=$('#banner');b.innerHTML=`${e.n.toUpperCase
   b.hidden=true;}
 async function startNight(){if(busy)return;busy=true;run.log.push(['n']);run.leftover=run.coins;run.coins=0;run.phase='closing';run.sel=null;renderActions();
   doorTitle(false);renderDoor();await doorClose();
-  run.phase='fight';B={allies:run.team.map(u=>u?mkAlly(u):null),enemies:WAVES[run.night-1].map(mkEnemy),lost:false};
+  run.phase='fight';B={allies:run.team.map(u=>u?mkAlly(u):null),enemies:waveFor(run.night).map(mkEnemy),lost:false};
   setNight(true);setClock(23*60);renderHUD();renderTeam();renderEnemies(true);renderShop();renderActions();center(`NOC ${run.night}`,'Ciemno. Coś drapie w zamrażalniku…');
   await sleep(500);await doorFade();busy=false;
   for(const e of B.enemies){const el=eEl(e);if(!el)continue;SFX.ice();burst(el,['#FFFFFF','#BFDDE9','#8FD3F0'],10);
@@ -786,6 +834,8 @@ async function startNight(){if(busy)return;busy=true;run.log.push(['n']);run.lef
   B.enemies.forEach(e=>{const el=eEl(e);if(el)el.style.opacity=1;});
   await wait(400);
   const boss=B.enemies.find(e=>e.boss);if(boss)await bossBanner(boss);
+  {const fi=frontI();if(has('majeranek')&&fi>=0){const behind=B.allies.filter((x,j)=>x&&j>fi).length;if(behind){center('MAJERANEK',`Pierwszy na półce +${behind}/+${behind}.`);buffA(fi,behind,behind);SFX.heal();await wait(700);}}
+   if(has('laur')){const al=B.allies.map((x,j)=>x?j:-1).filter(j=>j>=0);if(al.length){const j=srnd(al);center('LIŚĆ LAUROWY',`${aName(B.allies[j])}: podwójny atak.`);buffA(j,B.allies[j].a,0);SFX.heal();await wait(700);}}}
   for(let i=0;i<SLOTS;i++){const a=B.allies[i];if(!a||KINDS[a.k].tr!=='start')continue;const el=tEl(i);anim(el,'act');
     if(a.k==='cebula'){center('ŁZY!',`<span class="tag">START NOCY</span>${aName(a)}: ${a.t} obrażeń każdemu potworowi.`);B.enemies.forEach(e=>hitE(e,a.t));SFX.hit();shake(4);}
     if(a.k==='czosnek'){const e=B.enemies[0];if(e){center('CZOSNEK!',`<span class="tag">START NOCY</span>${aName(a)}: ${3*a.t} obrażeń dla ${e.n}.`);hitE(e,3*a.t,true);SFX.hit();shake(5);}}
@@ -806,7 +856,7 @@ async function clash(n){const i=frontI(),a=B.allies[i],e=B.enemies[0];
   else await wait(300);
   anim(document.getElementById('arA'),'lungeR');anim(document.getElementById('arE'),'lungeL');SFX.whoosh();
   await wait(140);
-  const big=a.a>=8;hitE(e,a.a,big);SFX.hit();shake(big?9:4);
+  let dmg=a.a;if(a.first){dmg*=2;a.first=false;}const big=dmg>=8;hitE(e,dmg,big);if(dmg!==a.a)ftxt(tEl(i),'PIEPRZ ×2','#FFC93C',20,50);SFX.hit();shake(big?9:4);
   let extra='';
   if(a.k==='chili'&&!a.tok&&B.enemies[1]){hitE(B.enemies[1],a.a);extra='Ostre! Obrywa też następny.';}
   const landed=hitA(i,e.a);if(landed)SFX.hurt();
@@ -826,9 +876,19 @@ async function clash(n){const i=frontI(),a=B.allies[i],e=B.enemies[0];
       B.allies.forEach((x,j)=>{if(x&&x.h>0)hitA(j,1);});await wait(700);const m=await allyDeaths();if(m){say('',m);await wait(600);}}}
   if(B.arena&&B.arena.stale)B.arena=null;}
 async function endNight(win){const n=run.night;let lost=0;
-  if(!win){lost=WAVES[n-1].some(k=>ENEMIES[k].boss)?2:1;run.hp=Math.max(0,run.hp-lost);}
+  if(!win){lost=isBossNight(n)?2:1;run.hp=Math.max(0,run.hp-lost);}
   let ferm=0;run.team.forEach(u=>{if(u&&u.k==='ogorek'){u.ba+=u.t;u.bh+=u.t;ferm=Math.max(ferm,u.t);}});
-  if(win){run.won++;meta.stats.nights++;if(WAVES[n-1].includes('krol'))meta.stats.boss++;}meta.best=Math.max(meta.best,win?n:n-1);saveMeta();
+  if(win&&has('ziele'))run.team.forEach(u=>{if(u){u.ba++;u.bh++;}});
+  // morning pay: a base, +1 per ingredient that survived, +1 per extra star on survivors, +2 for winning, spices on top
+  const alive=B?B.allies.filter(a=>a&&a.h>0&&!a.tok):[],stars=alive.reduce((x,a)=>x+a.t-1,0);
+  const rows=[['Dniówka',Math.max(3,run.fridge.budget-5)]];
+  if(alive.length)rows.push([`Ocaleli: ${alive.length}`,alive.length]);
+  if(stars)rows.push(['Gwiazdki ocalałych',stars]);
+  if(win)rows.push(['Za wygraną',2]);
+  if(has('szafran')){const sz=run.team.filter(u=>u&&u.t>=2).length;if(sz)rows.push(['Szafran',sz]);}
+  let lostCoins=0;if(has('skarbonka')){const keep=run.leftover||0,intr=Math.min(5,Math.floor(keep/5));if(keep)rows.push(['Słoik na drobne',keep]);if(intr)rows.push(['Odsetki',intr]);}else lostCoins=run.leftover||0;
+  run.income={rows,total:rows.reduce((x,r)=>x+r[1],0),lost:lostCoins};
+  if(win){run.won++;meta.stats.nights++;if(waveFor(n).includes('krol'))meta.stats.boss++;}meta.best=Math.max(meta.best,win?n:n-1);saveMeta();
   checkUnlocks(run);
   if(B)B.arena=null;(win?SFX.win:SFX.lose)();if(!win)shake(12);renderHUD();renderTeam();renderEnemies();
   center(win?'CISZA.':'PLEŚŃ WYGRAŁA',win?'Ostatni potwór znika w szczelinie zamrażalnika.':`Zakwas traci ${lost} ♥.`);
@@ -837,9 +897,19 @@ async function endNight(win){const n=run.night;let lost=0;
   const t0=run.clock;for(let k=1;k<=8;k++){setClock(Math.round(t0+(30*60-t0)*k/8));SFX.tick();await sleep(60);}
   run.phase='morning';renderActions();
   doorTitle(false);renderDoor();await doorClose();
-  if(run.hp<=0||(win&&n===10)){gameOver(win);return;}
-  setNight(false);humOff();run.phase='shop';B=null;setClock(8*60);run.night++;run.freeRoll=!!run.fridge.freeRoll;run.preview=null;rollShop(true);run.sel=null;run.coins=0;renderAll();defaultCenter();
-  morningNote(win,lost,ferm);}
+  if(run.hp<=0){gameOver(run.beat10);return;}
+  if(win&&n===10&&!run.beat10){run.beat10=true;meta.won++;saveMeta();checkUnlocks(run);victoryNote(lost,ferm);return;}
+  prepMorning();morningNote(win,lost,ferm);}
+function prepMorning(){setNight(false);humOff();run.phase='shop';B=null;setClock(8*60);run.night++;
+  run.freeRolls=(run.fridge.freeRoll?1:0)+(has('kminek')?2:0);run.preview=null;rollShop(true);run.sel=null;run.coins=0;renderAll();defaultCenter();
+  if((run.night-1)%2===0)run.offer=spiceOffer();}
+function spiceOffer(){const left=Object.keys(SPICES).filter(k=>!run.spices.includes(k)),o=[];while(o.length<3&&left.length){const k=srnd(left);o.push(k);left.splice(left.indexOf(k),1);}return o;}
+function victoryNote(lost,ferm){noteIn(`<div class="bignote"><h3>Wróciłam!</h3>
+    <div class="nl"><span>10 nocy przetrwane. Kuchnia lśni!</span><b></b></div>
+    <div class="nl"><span>Wynik do tej pory</span><b>${score()} pkt</b></div>
+    <div class="nl"><span>Pleśń nie odpuści. Zostaniecie na noce bez końca?</span><b></b></div>${unlockLines()}
+    <span class="sig">— Babcia</span></div>
+    <div class="btns"><button class="btn b-gray" data-act="finish">ZAKOŃCZ</button><button class="btn b-orange" data-act="endless">GRAJ DALEJ</button></div>`);}
 function noteIn(html){const box=$('#doorNote');box.innerHTML=html;box.hidden=false;const note=box.querySelector('.bignote');
   SFX.plop();if(!RM){note.animate([{transform:'translateY(-60px) rotate(10deg) scale(1.25)',opacity:0},{transform:'translateY(4px) rotate(-3.5deg) scale(.98)',opacity:1,offset:.7},{transform:'rotate(-2.5deg)'}],{duration:460,easing:'cubic-bezier(.3,1.3,.5,1)'});
     box.querySelector('.btns').animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:300,delay:500+box.querySelectorAll('.nl').length*200,fill:'backwards'});}
@@ -848,16 +918,26 @@ async function noteOut(){const box=$('#doorNote'),note=box.querySelector('.bigno
   if(note&&!RM){SFX.whoosh();box.querySelector('.btns').animate([{opacity:1},{opacity:0}],{duration:150,fill:'forwards'});
     await note.animate([{transform:'rotate(-2.5deg)'},{transform:'translate(-10px,-14px) rotate(-8deg) scale(1.04)',offset:.3},{transform:'translate(260px,120px) rotate(40deg) scale(.9)',opacity:0}],{duration:420,easing:'cubic-bezier(.5,0,.8,.4)'}).finished;}
   box.hidden=true;box.innerHTML='';}
-function morningNote(win,lost,ferm){const nn=run.night-1,left=run.leftover||0;
-  const tip=run.night===5?'Dziś w nocy przyjdzie <span class="bad">Król Pleśni</span>!':run.night===3?'W dostawie zielone produkty II.':run.night===7?'W dostawie legendarne IV!':run.night===10?'Ostatnia noc. Wracam jutro!':'Wydajcie wszystko, reszta przepada.';
+function morningNote(win,lost,ferm){const nn=run.night-1,inc=run.income||{rows:[],total:BUDGET,lost:0};
+  const tip=isBossNight(run.night)?`Dziś w nocy przyjdzie <span class="bad">${ENEMIES[waveFor(run.night).find(k=>ENEMIES[k].boss)].n}</span>!`:run.night===3?'W dostawie zielone produkty II.':run.night===7?'W dostawie legendarne IV!':run.night===10?'Ostatnia noc. Wracam jutro!':run.night>10?`Noc ${run.night}: pleśń rośnie w siłę.`:'Im więcej ocaleje, tym więcej monet.';
+  const offer=run.offer;
   noteIn(`<div class="bignote"><h3>${win?'Noc '+nn+' przetrwana!':'Pleśń wygrała…'}</h3>
-    ${!win?`<div class="nl bad"><span>Zakwas oberwał</span><b>−${lost} ♥︎</b></div>`:`<div class="nl good"><span>Zakwas cały</span><b>${run.hp}/${MAXHP} ♥︎</b></div>`}
+    ${!win?`<div class="nl bad"><span>Zakwas oberwał</span><b>−${lost} ♥︎</b></div>`:''}
     ${ferm?`<div class="nl good"><span>Ogórki się ukisiły</span><b>+${ferm}/+${ferm}</b></div>`:''}
-    ${left?`<div class="nl bad"><span>Przepadło wczoraj</span><b>−${left}</b></div>`:''}
-    <div class="nl"><span>Na zakupy dziś</span><b>${BUDGET} monet</b></div>
+    ${inc.rows.map(r=>`<div class="nl"><span>${r[0]}</span><b>+${r[1]}</b></div>`).join('')}
+    ${inc.lost?`<div class="nl bad"><span>Przepadło wczoraj</span><b>−${inc.lost}</b></div>`:''}
+    <div class="nl good"><span>Na zakupy dziś</span><b>${inc.total} monet</b></div>
     <div class="nl"><span>${tip}</span><b></b></div>${unlockLines()}
     <span class="sig">— Babcia</span></div>
-    <div class="btns"><button class="btn b-orange wiggle" data-act="next">OTWÓRZ LODÓWKĘ</button></div>`);}
+    ${offer?`<div class="picktitle">Paczka od Babci! Wybierz przyprawę:</div><div class="spicepick" id="spicepick">${offer.map((k,i)=>`<button class="spcard" data-act="spice" data-i="${i}" style="--r:${[-2,1.5,-1][i]}deg"><img class="px" src="${JAR(k)}" alt=""><b>${SPICES[k].n}</b><small>${SPICES[k].d}</small></button>`).join('')}</div>`:''}
+    <div class="btns">${offer?'<button class="btn b-gray" data-act="skipspice">POMIŃ</button>':''}<button class="btn b-orange wiggle" data-act="next" ${offer?'disabled':''}>OTWÓRZ LODÓWKĘ</button></div>`);}
+function takeSpice(i){const k=run.offer&&run.offer[i];if(!k)return;
+  if(run.spices.length>=RACK){run.pendingSpice=k;const box=$('#spicepick');box.outerHTML=`<div class="picktitle" id="droptitle">Przyprawnik pełny. Co wyrzucić?</div><div class="droprow" id="spicepick">${run.spices.map((id,j)=>`<button data-act="spdrop" data-i="${j}" aria-label="Wyrzuć ${SPICES[id].n}"><img class="px" src="${JAR(id)}" alt=""></button>`).join('')}</div>`;return;}
+  addSpice(k);}
+function addSpice(k){run.spices.push(k);run.log.push(['p',k]);run.offer=null;SFX.merge();renderRack();
+  const pick=$('#spicepick');if(pick){pick.remove();}document.querySelectorAll('#doorNote .picktitle').forEach(x=>x.remove());
+  const nb=document.querySelector('#doorNote [data-act="next"]');if(nb)nb.disabled=false;const sk=document.querySelector('[data-act="skipspice"]');if(sk)sk.remove();
+  const j=$('#rack').querySelector(`[data-i="${run.spices.length-1}"]`);if(j){anim(j,'pop');burst(j,[SPICES[k].c,'#FFC93C','#fff'],14,true);}}
 function unlockLines(){const l=(run.newUnlocks||[]).splice(0);if(!l.length)return '';SFX.merge();
   return l.map(u=>`<div class="nl unl"><span>${unlockImg(u)} Nowość: <b>${unlockName(u)}</b></span><b>!</b></div>`).join('');}
 function receipt(win,lost,ferm){const total=BUDGET;run.pending=total;const nn=run.night-1;const left=run.leftover||0;
@@ -874,16 +954,16 @@ function receipt(win,lost,ferm){const total=BUDGET;run.pending=total;const nn=ru
   const sheet=$('#overlay .receipt');if(!RM)sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:500,easing:'cubic-bezier(.2,.9,.3,1)'});
   const tr=[...document.querySelectorAll('.receipt .rr')];tr.forEach((r,i)=>setTimeout(()=>{r.classList.add('in');SFX.tick();SFX.coin(i);},450+i*280));}
 async function collect(){if(busy)return;busy=true;await noteOut();
-  await doorOpen();run.coins=BUDGET;run.pending=0;renderHUD();countTo($('#coinN'),0,run.coins);SFX.coin(3);burst($('#coins'),['#FFC93C','#FFF3B0'],12,true);renderAll();defaultCenter();busy=false;}
-function score(win){return run.won*100+run.hp*25+(win?300:0)+run.newDishes.length*50;}
-async function gameOver(win){meta.runs++;if(win)meta.won++;checkUnlocks(run);const sc=score(win);let rec='';
+  await doorOpen();run.coins=(run.income?run.income.total:BUDGET);run.pending=0;renderHUD();countTo($('#coinN'),0,run.coins);SFX.coin(3);burst($('#coins'),['#FFC93C','#FFF3B0'],12,true);renderAll();defaultCenter();busy=false;}
+function score(){return run.won*100+run.hp*25+(run.beat10?300:0)+run.newDishes.length*50;}
+async function gameOver(win){meta.runs++;checkUnlocks(run);const sc=score();let rec='';
   if(run.daily){meta.daily=meta.daily||{};const d=today(),prev=meta.daily[d];if(!prev||sc>prev.score){meta.daily[d]={score:sc,night:run.won};rec=prev?'nowy rekord!':'pierwszy wynik';}else rec=`rekord ${prev.score}`;}
   saveMeta();humOff();
   const nd=run.newDishes.map(k=>`<img class="px" src="${IMG[k][2]}" alt="${KINDS[k].n[2]}">`).join('');
   setNight(false);humOff();
-  noteIn(`<div class="bignote"><h3>${win?'Wróciłam!':'Zakwas opadł…'}</h3>
-    <div class="nl"><span>${win?'Kuchnia lśni. Kto tu sprzątał po nocach?':'Rano wszystko wraca na półki.'}</span><b></b></div>
-    <div class="nl"><span>Przetrwane noce</span><b>${run.won}/10</b></div>
+  noteIn(`<div class="bignote"><h3>${win?(run.night>10?'Koniec nocy bez końca':'Wróciłam!'):'Zakwas opadł…'}</h3>
+    <div class="nl"><span>${win?(run.night>10?'Zakwas opadł, ale Babcia jest dumna.':'Kuchnia lśni. Kto tu sprzątał po nocach?'):'Rano wszystko wraca na półki.'}</span><b></b></div>
+    <div class="nl"><span>Przetrwane noce</span><b>${run.won}</b></div>${run.spices.length?`<div class="dishes">${run.spices.map(k=>`<img class="px" src="${JAR(k)}" alt="${SPICES[k].n}" style="width:24px;height:32px">`).join('')}</div>`:''}
     <div class="nl big"><span style="flex:1">${sc} pkt</span></div>
     ${run.daily?`<div class="nl"><span>Danie dnia ${today()}</span><b>${rec}</b></div><div class="nl" id="rankLine"><span>Ranking…</span><b></b></div><div class="mini" id="rankMini"></div>`:''}
     ${nd?`<div class="nl"><span>Nowe magnesy:</span><b></b></div><div class="dishes">${nd}</div>`:''}${unlockLines()}
@@ -943,8 +1023,10 @@ async function showRank(){const d=today();
 function overlay(html,mode){const o=$('#overlay');o.className=mode==='mid'?'mid':'';o.innerHTML=html;o.hidden=false;paused=true;}
 function closeOverlay(){$('#overlay').hidden=true;paused=false;}
 function showHelp(){overlay(`<div class="sheet"><h2>JAK GRAĆ</h2><ol class="howto">
-  <li><b>Co rano 10 monet.</b> Niewydane przepadają, więc kupuj, losuj DOSTAWĘ (1) i sprzedawaj. Sprzedaż zwraca całą cenę.</li>
-  <li><b>Przeciągnij</b> produkt na półkę, żeby kupić. Składnik z półki na blat, żeby sprzedać. TRZYMAJ zostawia kartę na później.</li>
+  <li><b>Rano dostajesz monety za wynik nocy:</b> dniówka, +1 za każdy ocalały składnik, + gwiazdki, +2 za wygraną. Niewydane przepadają.</li>
+  <li><b>Przeciągnij</b> produkt na półkę, żeby kupić. Składnik z półki na blat, żeby sprzedać (zwrot 100%). TRZYMAJ zostawia kartę na później.</li>
+  <li><b>Co drugi ranek paczka od Babci:</b> wybierasz 1 z 3 przypraw, które zmieniają zasady całej gry. Masz 5 słoików.</li>
+  <li><b>Po nocy 10 Babcia wraca</b>, ale możesz grać dalej: noce bez końca, coraz silniejsza pleśń i boss co 5 nocy.</li>
   <li><b>3 takie same lądują na patelni</b> i wychodzą lepsze: Ziemniak ★ → Frytki ★★ → Placki ★★★.</li>
   <li><b>Zamknij lodówkę</b> i patrz: pierwszy z lewej na półce bije się z pierwszym potworem z zamrażalnika.</li>
   <li><b>Poziomy I–IV</b> (kolor ramki): droższe, ale mocniejsze. Szanse rosną z każdą nocą, widać je na blacie.</li>
@@ -961,6 +1043,8 @@ let drag=null,suppress=false;
 document.addEventListener('dragstart',ev=>ev.preventDefault());
 document.addEventListener('change',ev=>{if(ev.target&&ev.target.id==='nickIn'){try{localStorage.setItem('mp-nick',ev.target.value.trim().slice(0,16));}catch(e){}}});
 LB.init();
+// test hook, only with #dev in the address: lets an automated check jump to late nights
+if(/dev/.test(location.hash))window.__mp={run:()=>run,set:f=>{f(run,{KINDS,waveFor,renderAll});}};
 document.addEventListener('pointerdown',ev=>{if(!run||run.phase!=='shop'||busy)return;
   const el=ev.target.closest('.card[data-act="card"],#tRow .unit:not(.empty)');if(!el)return;
   drag={el,x:ev.clientX,y:ev.clientY,started:false,type:el.classList.contains('card')?'card':'unit',i:+el.dataset.i,ghost:null,over:null};});
@@ -999,15 +1083,21 @@ document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;
     case 'sell':sell();break;
     case 'enemy':{if(!run)break;const e=(run.phase==='fight'?B.enemies:run.preview)[i];if(e){SFX.tap();say(e.n+(e.boss?' · BOSS':''),e.ab.replace('BOSS. ',''));}break;}
     case 'hold':{const s=run.sel;if(s&&s.type==='shop'){const c=run.shop[s.i];c.held=!c.held;run.log.push(['h',s.i]);SFX.block();run.sel=null;renderAll();defaultCenter();}break;}
-    case 'reroll':if(run&&!busy&&run.coins>=(run.freeRoll?0:ROLL)){const old=run.coins;run.coins-=run.freeRoll?0:ROLL;run.freeRoll=false;run.log.push(['r']);rollShop(true);rollTriggers();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
+    case 'reroll':if(run&&!busy&&run.coins>=(run.freeRolls?0:ROLL)){const old=run.coins;if(run.freeRolls)run.freeRolls--;else run.coins-=ROLL;run.log.push(['r']);rollShop(true);rollTriggers();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
       document.querySelectorAll('.card').forEach((c,j)=>{if(!RM)c.animate([{transform:'translateX(-120%) rotate(-20deg)',opacity:0},{transform:'none',opacity:1}],{duration:300,delay:j*70,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'});});defaultCenter();}break;
     case 'night':{if(!run||!run.team.some(Boolean)||busy)break;
-      if((run.coins>0||run.freeRoll)&&!(run.warnUntil>Date.now())){run.warnUntil=Date.now()+4000;SFX.block();renderActions();anim($('#coins'),'pop');
+      if(((run.coins>0&&!has('skarbonka'))||run.freeRolls>0)&&!(run.warnUntil>Date.now())){run.warnUntil=Date.now()+4000;SFX.block();renderActions();anim($('#coins'),'pop');
         setTimeout(()=>{if(run&&run.phase==='shop'&&run.warnUntil&&Date.now()>=run.warnUntil){run.warnUntil=0;renderActions();}},4050);break;}
       run.warnUntil=0;startNight();break;}
     case 'speed':run.speed=run.speed===1?2:run.speed===2?3:1;renderActions();break;
     case 'next':collect();break;
     case 'home':goHome();break;
+    case 'spice':takeSpice(i);break;
+    case 'spdrop':{const k=run.pendingSpice;if(!k)break;run.spices.splice(i,1);run.pendingSpice=null;$('#droptitle')&&$('#droptitle').remove();addSpice(k);break;}
+    case 'skipspice':{run.offer=null;SFX.tap();const pk=$('#spicepick');if(pk)pk.remove();document.querySelectorAll('#doorNote .picktitle').forEach(x=>x.remove());t.remove();const nb=document.querySelector('#doorNote [data-act="next"]');if(nb)nb.disabled=false;break;}
+    case 'jar':{if(!run)break;const id=run.spices[i];if(id){SFX.tap();say(SPICES[id].n,SPICES[id].d);}break;}
+    case 'endless':{if(busy)break;run.endless=true;await noteOut();prepMorning();run.income=run.income||{rows:[],total:BUDGET,lost:0};morningNote(true,0,0);break;}
+    case 'finish':{if(busy)break;await noteOut();gameOver(true);break;}
     case 'fprev':case 'fnext':{const i0=FRIDGES.findIndex(f=>f.id===meta.fridge),d=act==='fnext'?1:-1;meta.fridge=FRIDGES[(i0+d+FRIDGES.length)%FRIDGES.length].id;saveMeta();SFX.tap();renderDoor();
       if(!RM)door.querySelector('.front').animate([{transform:'rotateY(0)'},{transform:`rotateY(${d*-3}deg)`},{transform:'rotateY(0)'}],{duration:260,easing:'ease-out'});break;}
     case 'again':{const d=run&&run.daily;await goHome();if(busy)break;busy=true;newRun(d);game.hidden=false;setClock(8*60);renderAll();defaultCenter();doorTitle(false);await doorOpen();busy=false;break;}

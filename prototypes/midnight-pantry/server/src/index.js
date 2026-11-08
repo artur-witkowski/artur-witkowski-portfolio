@@ -8,8 +8,8 @@
 // through the game rules to recompute the score (needs the game logic extracted into a shared module).
 
 const SEED_PREFIX = 'midnight-pantry/';
-// 10 nights × 100 + 5 hearts × 25 + 300 for winning + 14 new ★★★ dishes × 50
-const MAX_SCORE = 10 * 100 + 5 * 25 + 300 + 14 * 50;
+// The game is endless after night 10, so the cap comes from nights and hearts (see validate), not from a fixed total.
+const MAX_NIGHTS = 999;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const PLAYER_RE = /^[a-zA-Z0-9_-]{4,40}$/;
 
@@ -50,13 +50,14 @@ export function validate(date, b, now) {
   if (!b || typeof b !== 'object') return 'body';
   if (!PLAYER_RE.test(String(b.player || ''))) return 'player';
   const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
-  if (!int(b.score, 0, MAX_SCORE)) return 'score';
-  if (!int(b.night, 0, 10)) return 'night';
+  if (!int(b.night, 0, MAX_NIGHTS)) return 'night';
+  if (!int(b.score, 0, MAX_NIGHTS * 100 + 5 * 25 + 300 + 14 * 50)) return 'score';
   if (!int(b.hp, 0, 5)) return 'hp';
   if (b.seed !== hashStr(SEED_PREFIX + date)) return 'seed';
-  if (typeof b.log !== 'string' || b.log.length > 8000) return 'log';
+  if (typeof b.log !== 'string' || b.log.length > 60000) return 'log';
   // a score can't be higher than what the nights and hearts allow
-  if (b.score > b.night * 100 + b.hp * 25 + (b.night === 10 ? 300 : 0) + 14 * 50) return 'score';
+  // nights × 100 + hearts × 25 + 300 once night 10 is beaten + 50 per new ★★★ dish (14 dishes)
+  if (b.score > b.night * 100 + b.hp * 25 + (b.night >= 10 ? 300 : 0) + 14 * 50) return 'score';
   return null;
 }
 
