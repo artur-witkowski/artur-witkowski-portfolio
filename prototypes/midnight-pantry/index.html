@@ -10,7 +10,7 @@
 :root{
   --ink:#140E1C; --paper:#FFF9E8; --text:#F4EFE6; --muted:#A79FBF;
   --enamel:#E6ECF1; --enamel-d:#B9C6D2; --frost:#BFDDE9; --night:#151B2E;
-  --gold:#FFC93C; --atk:#FF8A1F; --hp:#F0405A;
+  --gold:#FFC93C; --atk:#FFB020; --hp:#E8435A;
   --orange:#FF7A1A; --orange-d:#B34D00; --blue:#2F7CF6; --blue-d:#1B4FA8; --green:#27C46B; --green-d:#17834A;
   --red:#EF4444; --red-d:#A12828; --gray:#4A4560; --gray-d:#2D2A3D;
   --r1:#B9B2C8; --r2:#4FA3FF; --r3:#C77DFF;
@@ -104,17 +104,47 @@ img.px{display:block}
 .unit.swapok{outline:2px dashed #C2410C;outline-offset:2px;border-radius:12px}
 .unit.dead .sp{filter:grayscale(1) sepia(.6) hue-rotate(50deg) brightness(.55)}
 .unit.dead{opacity:.6}
-.unit.front::before{content:"▼";position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:14px;color:#C2410C}
+.unit.front::before{content:"▼";position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:14px;color:#C2410C;animation:arrow .8s ease-in-out infinite}
+@keyframes arrow{50%{transform:translate(-50%,4px)}}
 .enemy.front::before{color:#B3261E}
 .stars{height:16px;font-size:18px;line-height:16px;color:var(--gold);letter-spacing:-1px;text-shadow:1px 1px 0 var(--ink),-1px 0 0 var(--ink)}
 .badges{display:flex;justify-content:space-between;width:64px;max-width:100%;margin-top:-10px;position:relative;z-index:2}
 .bdg{min-width:24px;height:24px;padding:0 3px;box-sizing:border-box;border-radius:6px;display:grid;place-items:center;font-size:20px;color:#fff;border:2px solid var(--ink);text-shadow:1px 1px 0 rgba(0,0,0,.4)}
-.bdg.a{background:var(--atk)}.bdg.h{background:var(--hp)}
+.bdg.a{background:var(--atk);color:var(--ink);text-shadow:none;border-radius:5px}.bdg.h{background:var(--hp);border-radius:50%}
 .pips{display:flex;gap:3px;height:8px;margin-top:3px}
 .pips i{width:8px;height:6px;border-radius:2px;background:rgba(60,70,90,.35)}
 .pips i.on{background:var(--gold);box-shadow:0 0 0 1px var(--ink)}
 .enemy .badges{width:100%}
 .enemy.boss{flex-basis:96px;width:96px}.enemy.boss .sp{width:96px}
+/* idle life, drag & drop, hints, arena */
+.unit,.card{touch-action:none}
+img{-webkit-user-drag:none;user-select:none}
+.unit img,.card img{pointer-events:none}
+.bob{animation:idle 2.4s ease-in-out infinite}
+.freezer .bob{animation:idleE 1.7s ease-in-out infinite}
+@keyframes idle{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-2px) scaleY(1.03)}}
+@keyframes idleE{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(1px) scale(1.04,.96)}}
+.unit.out{opacity:.22}
+.unit.dragging,.card.dragging{opacity:.3}
+.ghost{position:absolute;z-index:75;width:72px;height:72px;pointer-events:none;filter:drop-shadow(4px 8px 0 rgba(0,0,0,.35));transform:rotate(-8deg) scale(1.1)}
+.unit.droptarget{outline:3px solid var(--green);outline-offset:2px;border-radius:12px;background:rgba(39,196,107,.15)}
+.unit.empty.hintslot{border-color:var(--green);animation:slotp 1s ease-in-out infinite}
+@keyframes slotp{50%{background:rgba(39,196,107,.18)}}
+.unit.mergeglow .sp{filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 7px var(--gold))}
+.unit.mergeglow::after{content:"+1";position:absolute;top:-4px;right:-2px;background:var(--green);color:#fff;border:2px solid var(--ink);border-radius:6px;font-size:15px;padding:0 4px;animation:arrow2 .8s ease-in-out infinite}
+@keyframes arrow2{50%{transform:translateY(-3px)}}
+.arena{display:flex;flex-direction:column;align-items:center;width:100%;gap:2px}
+.arena .duel{display:flex;align-items:center;justify-content:space-between;width:100%;gap:4px}
+.fighter{display:flex;flex-direction:column;align-items:center;position:relative;width:96px}
+.fighter .sp{width:96px;height:96px;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.3))}
+.fighter .badges{width:84px;margin-top:-12px}
+.fighter .bdg{min-width:30px;height:30px;font-size:24px}
+.arena .mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.arena .sn{font-size:16px;letter-spacing:.1em;color:#7C7491}
+.arena .vsx{font-size:34px;line-height:1;color:var(--gold);text-shadow:2px 2px 0 var(--ink)}
+.arena .cap{font-size:19px;line-height:1.05;text-align:center;min-height:22px;max-width:330px;position:relative;z-index:3}
+.lungeR{animation:lr .3s ease-out}@keyframes lr{45%{transform:translateX(28px) scale(1.15) rotate(6deg)}}
+.lungeL{animation:ll .3s ease-out}@keyframes ll{45%{transform:translateX(-28px) scale(1.15) rotate(-6deg)}}
 /* night */
 #game.night .cavity{background:linear-gradient(180deg,rgba(30,40,70,.95),rgba(18,24,44,.97))}
 #game.night .cavity::before{opacity:0}
@@ -124,6 +154,7 @@ img.px{display:block}
 #game.night #center{color:var(--text)}
 #game.night #center .cd{color:#DCE6F5}
 #game.night #center .cd em{color:var(--gold)}
+#game.night .arena .sn{color:#8D9BB8}
 #game.night #center .ct{color:var(--gold)}
 #game.night .counter{filter:brightness(.45) saturate(.7)}
 #game.night .glass{opacity:.5}
@@ -187,7 +218,7 @@ img.px{display:block}
 .receipt .bar{height:34px;margin:6px 10px 2px;background:repeating-linear-gradient(90deg,#2A2238 0 2px,transparent 2px 4px,#2A2238 4px 7px,transparent 7px 9px,#2A2238 9px 10px,transparent 10px 13px)}
 .receipt .note{font-size:18px;text-align:center;color:#6B6380}
 .receipt .btn{margin-top:6px}
-@media (max-height:700px){.row{min-height:84px}.unit{flex-basis:56px}.card{height:106px;width:80px}.card .sp{width:40px;height:40px}.shop{min-height:112px}#center{min-height:40px}#center .cd{font-size:17px}.hud{height:40px}}
+@media (max-height:700px){.fighter{width:72px}.fighter .sp{width:72px;height:72px}.fighter .badges{width:64px}.row{min-height:84px}.unit{flex-basis:56px}.card{height:106px;width:80px}.card .sp{width:40px;height:40px}.shop{min-height:112px}#center{min-height:40px}#center .cd{font-size:17px}.hud{height:40px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -412,17 +443,21 @@ function renderHUD(){
 function badges(a,h){return `<div class="badges"><span class="bdg a">${a}</span><span class="bdg h">${Math.max(0,h)}</span></div>`;}
 function renderEnemies(hiddenIn){const list=run.phase==='fight'?B.enemies:(run.preview||(run.preview=WAVES[run.night-1].map(mkEnemy)));
   $('#eCount').textContent=run.phase==='fight'?`${list.length} w kolejce`:`dziś w nocy: ${list.length}`;
-  $('#eRow').innerHTML=list.map((e,i)=>`<div class="unit enemy ${e.boss?'boss':''} ${i===0?'front':''}" id="e-${e.uid}" data-act="enemy" data-i="${i}" ${hiddenIn?'style="opacity:0"':''}><img class="px sp" src="${MON[e.k]}" alt="${e.n}">${badges(e.a,e.h)}</div>`).join('');}
+  const ar=B&&B.arena;
+  $('#eRow').innerHTML=list.map((e,i)=>`<div class="unit enemy ${e.boss?'boss':''} ${i===0?'front':''} ${ar&&ar.eu===e.uid?'out':''}" id="e-${e.uid}" data-act="enemy" data-i="${i}" ${hiddenIn?'style="opacity:0"':''}><div class="bob" style="animation-delay:${i*.23}s"><img class="px sp" src="${MON[e.k]}" alt="${e.n}"></div>${badges(e.a,e.h)}</div>`).join('');}
 function renderTeam(){const fight=run.phase==='fight';const list=fight?B.allies:run.team;
   const front=list.findIndex(u=>u&&(!fight||u.h>0));
-  $('#tRow').innerHTML=list.map((u,i)=>{const s=run.sel;
-    if(!u)return `<div class="unit empty" id="t-${i}" data-act="slot" data-i="${i}"></div>`;
+  const s=run.sel,pick=!fight&&s&&s.type==='shop'?run.shop[s.i]:null,pickOwner=pick?owner(pick.k):-1;
+  $('#tRow').innerHTML=list.map((u,i)=>{
+    if(!u)return `<div class="unit empty ${pick&&pickOwner<0?'hintslot':''}" id="t-${i}" data-act="slot" data-i="${i}"></div>`;
     const cls=['unit'];if(i===front)cls.push('front');
-    if(!fight&&s&&s.type==='shelf'){if(s.i===i)cls.push('sel');else cls.push('swapok');}
+    if(!fight&&s&&s.type==='shelf'&&s.i===i)cls.push('sel');
+    if(pick&&pickOwner===i&&u.t<3)cls.push('mergeglow');
+    if(fight&&B.arena&&B.arena.ai===i)cls.push('out');
     if(fight&&u.h<=0)cls.push('dead');
     const st=fight?{a:u.a,h:u.h}:stat(u);
     const pips=!fight&&!u.tok&&u.t<3?`<div class="pips">${[0,1,2].map(j=>`<i class="${j<u.c?'on':''}"></i>`).join('')}</div>`:'<div class="pips"></div>';
-    return `<div class="${cls.join(' ')}" id="t-${i}" data-act="slot" data-i="${i}"><div class="stars">${u.tok?'':STARS[u.t-1]}</div><img class="px sp" src="${unitImg(u)}" alt="${unitName(u)}">${badges(st.a,st.h)}${pips}</div>`;}).join('');}
+    return `<div class="${cls.join(' ')}" id="t-${i}" data-act="slot" data-i="${i}"><div class="stars">${u.tok?'':STARS[u.t-1]}</div><div class="bob" style="animation-delay:${i*.31}s"><img class="px sp" src="${unitImg(u)}" alt="${unitName(u)}"></div>${badges(st.a,st.h)}${pips}</div>`;}).join('');}
 function renderShop(){const el=$('#shop');
   if(run.phase!=='shop'){el.innerHTML='';el.style.visibility='hidden';$('#clabel').textContent='NOC';return;}el.style.visibility='';$('#clabel').textContent='ZAKUPY';
   el.innerHTML=run.shop.map((c,i)=>{if(c.sold)return `<div class="card sold"></div>`;const K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null;
@@ -437,15 +472,15 @@ function renderActions(){const el=$('#actions');
   if(s&&s.type==='shop'){const c=run.shop[s.i],o=owner(c.k),u=o>=0?run.team[o]:null;const full=!u&&run.team.every(Boolean);const max=u&&u.t===3;
     el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-green grow" data-act="buy" ${run.coins<COST||full||max?'disabled':''}>${max?'MAX ★★★':full?'PÓŁKA PEŁNA':u?'KUP · DO PATELNI':'KUP · '+COST}</button>`;return;}
   if(s&&s.type==='shelf'){const u=run.team[s.i];el.innerHTML=`<button class="btn b-gray" data-act="cancel">ANULUJ</button><button class="btn b-red grow" data-act="sell">SPRZEDAJ +${u.t}</button>`;return;}
-  el.innerHTML=`<button class="btn b-blue" data-act="reroll" ${run.coins<1?'disabled':''}>NOWA DOSTAWA · 1</button><button class="btn b-orange grow wiggle" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>ZAMKNIJ ▶</button>`;}
+  el.innerHTML=`<button class="btn b-blue" data-act="reroll" ${run.coins<1?'disabled':''}>DOSTAWA <img class="px" src="${COIN}" alt="" style="display:inline-block;width:18px;height:18px;vertical-align:-2px"> 1</button><button class="btn b-orange grow wiggle" data-act="night" ${run.team.some(Boolean)?'':'disabled'}>ZAMKNIJ LODÓWKĘ</button>`;}
 function center(title,desc){$('#center').innerHTML=`${title?`<div class="ct">${title}</div>`:''}<div class="cd">${desc||''}</div>`;}
 function defaultCenter(){const n=run.night;let d;
-  if(n===1)d='Kup coś na blacie i postaw na półce. <em>Pierwszy z lewej walczy pierwszy.</em>';
+  if(n===1)d='Przeciągnij produkt z blatu na półkę. <em>Pierwszy z lewej walczy pierwszy.</em>';
   else if(n===2)d='<em>3 takie same</em> lądują na patelni i robią się lepsze: ★★.';
   else if(n===3)d='Nowe składniki w dostawie! <em>Kolejne 3</em> robią z ★★ danie ★★★.';
   else if(n===5)d='Najlepsze produkty na blacie. <em>Dziś przychodzi Król Pleśni.</em>';
   else if(n===10)d='Ostatnia noc. <em>Zapomniany Słoik</em> czeka z tyłu lodówki.';
-  else d='Stuknij składnik albo potwora, żeby go poznać.';
+  else d='Stuknij, żeby poznać. Przeciągnij, żeby przestawić.';
   center(`RANO · NOC ${n}`,d);}
 function infoUnit(k,t,extra){const K=KINDS[k];return `${K.tr?`<span class="tag">${TRIG[K.tr]}</span>`:''}${K.ab(t)}${extra||''}`;}
 function renderAll(){renderHUD();renderEnemies();renderTeam();renderShop();renderActions();}
@@ -454,10 +489,10 @@ function renderAll(){renderHUD();renderEnemies();renderTeam();renderShop();rende
 function select(sel){run.sel=sel;SFX.tap();
   if(!sel){defaultCenter();}
   else if(sel.type==='shop'){const c=run.shop[sel.i],K=KINDS[c.k],o=owner(c.k),u=o>=0?run.team[o]:null;
-    const tail=u&&u.t<3?`<br><em>Na półce masz ${u.c}/3: ${u.c===2?'ten trafi z nimi na patelnię → '+K.n[u.t]+' '+STARS[u.t]:'jeszcze '+(3-u.c)+' do '+K.n[u.t]}</em>`:`<br><em>${K.n[1]} ★★ → ${K.n[2]} ★★★</em>`;
+    const tail=u&&u.t<3?`<br><em>Na półce ${u.c}/3 → ${K.n[u.t]}</em>`:`<br><em>→ ${K.n[1]} → ${K.n[2]}</em>`;
     center(K.n[0],infoUnit(c.k,1,tail));}
   else if(sel.type==='shelf'){const u=run.team[sel.i],K=KINDS[u.k],s=stat(u);
-    center(`${K.n[u.t-1]} ${STARS[u.t-1]}`,infoUnit(u.k,u.t,`<br>Atak ${s.a} · Życie ${s.h}${u.t<3?` · ${u.c}/3 do ${K.n[u.t]}`:''}. <em>Stuknij inne miejsce, żeby przestawić.</em>`));}
+    center(`${K.n[u.t-1]} ${STARS[u.t-1]}`,infoUnit(u.k,u.t,u.t<3?`<br><em>${u.c}/3 → ${K.n[u.t]}</em>`:''));}
   renderAll();}
 let busy=false;
 async function cookIn(slotIdx,u){ // pan appears over the shelf slot, the pile jumps in, sizzles, flips out evolved
@@ -478,9 +513,13 @@ async function cookIn(slotIdx,u){ // pan appears over the shelf slot, the pile j
   ftxt(el,STARS[u.t-1],'#FFC93C',46,44);
   center(`${KINDS[u.k].n[u.t-1].toUpperCase()}!`,infoUnit(u.k,u.t));
   if(u.t===3&&!meta.dishes.includes(u.k)){meta.dishes.push(u.k);run.newDishes.push(u.k);saveMeta();}}
-async function buy(){const s=run.sel;if(busy||!s||s.type!=='shop')return;const c=run.shop[s.i];if(run.coins<COST)return;
-  const o=owner(c.k);const cardEl=document.querySelector(`[data-act="card"][data-i="${s.i}"]`);
-  let target=o;if(o<0){target=run.team.findIndex(u=>!u);if(target<0)return;}
+async function buy(si,slot){if(busy||si==null)return;const c=run.shop[si];if(!c||c.sold)return;
+  if(run.coins<COST){say('Za mało monet','Sprzedaj coś albo zamknij lodówkę.');return;}
+  const o=owner(c.k);const cardEl=document.querySelector(`[data-act="card"][data-i="${si}"]`);
+  let target=o;
+  if(o<0){if(slot!=null&&!run.team[slot])target=slot;else target=run.team.findIndex(u=>!u);
+    if(target<0){say('Półka pełna','Sprzedaj coś, żeby zrobić miejsce.');return;}}
+  else if(o>=0&&run.team[o].t>=3)return;
   busy=true;const old=run.coins;run.coins-=COST;countTo($('#coinN'),old,run.coins);c.sold=true;run.sel=null;SFX.buy();
   if(cardEl)cardEl.style.visibility='hidden';renderActions();
   await flyTo(cardEl,document.getElementById('t-'+target),IMG[c.k][0],56);SFX.plop();
@@ -490,9 +529,11 @@ async function buy(){const s=run.sel;if(busy||!s||s.type!=='shop')return;const c
     else{renderAll();const el=document.getElementById('t-'+o);anim(el.querySelector('.sp'),'pop');ftxt(el,`${u.c}/3`,'#FFC93C',26,30);defaultCenter();}}
   busy=false;renderActions();}
 function onSlot(i){if(run.phase!=='shop'||busy)return;const s=run.sel;
-  if(s&&s.type==='shop'){select(null);return;}
-  if(s&&s.type==='shelf'){if(s.i===i){select(null);return;}const a=run.team[s.i];run.team[s.i]=run.team[i];run.team[i]=a;run.sel=null;SFX.whoosh();renderAll();defaultCenter();anim(document.getElementById('t-'+i),'pop');return;}
-  if(run.team[i])select({type:'shelf',i});}
+  if(!run.team[i]){select(null);return;}
+  if(s&&s.type==='shelf'&&s.i===i){select(null);return;}
+  select({type:'shelf',i});}
+function swapSlots(a,b){if(a===b)return;const t=run.team[a];run.team[a]=run.team[b];run.team[b]=t;run.sel=null;SFX.whoosh();renderAll();defaultCenter();
+  [a,b].forEach(j=>{const el=document.getElementById('t-'+j);if(el&&run.team[j])anim(el,'pop');});}
 function sell(){const s=run.sel;if(!s||s.type!=='shelf')return;const u=run.team[s.i];const el=document.getElementById('t-'+s.i);burst(el,['#F0405A','#fff'],10);
   const old=run.coins;run.coins+=u.t;run.team[s.i]=null;run.sel=null;SFX.coin();renderAll();countTo($('#coinN'),old,run.coins);defaultCenter();}
 
@@ -501,10 +542,16 @@ const wait=ms=>new Promise(res=>{let left=ms;const tick=()=>{if(!paused)left-=40
 function mkAlly(u){const s=stat(u);return{k:u.k,t:u.t,a:s.a,h:s.h,max:s.h,shell:u.k==='jajko'?u.t:0,soft:u.k==='twarog'?u.t:0,tok:false};}
 function mkTok(k,t){return k==='kielek'?{k,t:1,a:t,h:t,max:t,shell:0,soft:0,tok:true}:{k,t:1,a:t,h:2*t,max:2*t,shell:0,soft:0,tok:true};}
 const frontI=()=>B.allies.findIndex(a=>a&&a.h>0);
-const tEl=i=>document.getElementById('t-'+i);
-const eEl=e=>document.getElementById('e-'+e.uid);
-function updA(i){const a=B.allies[i],el=tEl(i);if(!el||!a)return;const b=el.querySelectorAll('.bdg');if(b[0])b[0].textContent=a.a;if(b[1])b[1].textContent=Math.max(0,a.h);}
-function updE(e){const el=eEl(e);if(!el)return;const b=el.querySelectorAll('.bdg');if(b[0])b[0].textContent=e.a;if(b[1])b[1].textContent=Math.max(0,e.h);}
+const tEl=i=>(B&&B.arena&&B.arena.ai===i&&document.getElementById('arA'))||document.getElementById('t-'+i);
+const eEl=e=>(B&&B.arena&&B.arena.eu===e.uid&&document.getElementById('arE'))||document.getElementById('e-'+e.uid);
+function setB(el,a,h){if(!el)return;const b=el.querySelectorAll('.bdg');if(b[0])b[0].textContent=a;if(b[1]){const v=Math.max(0,h);if(b[1].textContent!==String(v))anim(b[1],'pop');b[1].textContent=v;}}
+function updA(i){const a=B.allies[i];if(!a)return;setB(document.getElementById('t-'+i),a.a,a.h);if(B.arena&&B.arena.ai===i)setB(document.getElementById('arA'),a.a,a.h);}
+function updE(e){setB(document.getElementById('e-'+e.uid),e.a,e.h);if(B.arena&&B.arena.eu===e.uid)setB(document.getElementById('arE'),e.a,e.h);}
+function say(title,text){const cap=document.getElementById('arCap');if(cap&&run.phase==='fight'){cap.innerHTML=`${title?`<b style="font-weight:400;color:var(--gold)">${title}</b> `:''}${text||''}`;anim(cap,'pop');}else center(title,text);}
+function renderArena(n,cap){const a=B.allies[B.arena.ai],e=B.enemies.find(x=>x.uid===B.arena.eu);if(!a||!e)return;
+  $('#center').innerHTML=`<div class="arena"><div class="duel"><div class="fighter" id="arA"><img class="px sp" src="${unitImg(a)}" alt="${aName(a)}">${badges(a.a,a.h)}</div>
+    <div class="mid"><div class="sn">STARCIE ${n}</div><div class="vsx">VS</div></div>
+    <div class="fighter" id="arE"><img class="px sp" src="${MON[e.k]}" alt="${e.n}">${badges(e.a,e.h)}</div></div><div class="cap" id="arCap">${cap||''}</div></div>`;}
 function hitE(e,d,big){e.h-=d;const el=eEl(e);anim(el,'hurt');anim(el&&el.querySelector('.sp'),'flashk');ftxt(el,'-'+d,'#FF8A1F',big?44:34);burst(el,e.c,big?16:8);updE(e);}
 function hitA(i,d){const a=B.allies[i],el=tEl(i);
   if(a.shell>0){a.shell--;ftxt(el,'BLOK!','#9FD3FF',24);SFX.block();return false;}
@@ -547,33 +594,41 @@ async function startNight(){if(busy)return;busy=true;run.phase='closing';run.sel
   let n=0;while(frontI()>=0&&B.enemies.length&&n<80){n++;await clash(n);}
   endNight(B.enemies.length===0);}
 async function clash(n){const i=frontI(),a=B.allies[i],e=B.enemies[0];
-  renderTeam();renderEnemies();setClock(Math.min(23*60+n*20,29*60+40));
-  $('#center').innerHTML=`<div class="clash"><span class="n a">${a.a}</span><span class="vs">STARCIE ${n}</span><span class="n e">${e.a}</span></div><div class="cd">${aName(a)} kontra ${e.n}</div>`;
-  await wait(380);
-  anim(tEl(i),'lungeU');anim(eEl(e),'lungeD');SFX.whoosh();
+  const fresh=!B.arena||B.arena.ai!==i||B.arena.eu!==e.uid;
+  B.arena={ai:i,eu:e.uid};
+  renderTeam();renderEnemies();setClock(Math.min(23*60+n*20,29*60+40));renderArena(n,`${aName(a)} kontra ${e.n}`);
+  if(fresh&&!RM){SFX.whoosh();
+    const fa=document.getElementById('arA'),fe=document.getElementById('arE');
+    if(fa)fa.animate([{transform:'translate(-20px,90px) scale(.5)',opacity:0},{transform:'translate(0,-10px) scale(1.1)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:420,easing:'ease-out'});
+    if(fe)fe.animate([{transform:'translate(20px,-90px) scale(.5)',opacity:0},{transform:'translate(0,10px) scale(1.1)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:420,easing:'ease-out'});
+    await wait(520);}
+  else await wait(300);
+  anim(document.getElementById('arA'),'lungeR');anim(document.getElementById('arE'),'lungeL');SFX.whoosh();
   await wait(140);
   const big=a.a>=8;hitE(e,a.a,big);SFX.hit();shake(big?9:4);
   let extra='';
   if(a.k==='chili'&&!a.tok&&B.enemies[1]){hitE(B.enemies[1],a.a);extra='Ostre! Obrywa też następny.';}
   const landed=hitA(i,e.a);if(landed)SFX.hurt();
   if(landed&&e.sour&&a.h>0&&a.a>1){a.a--;updA(i);ftxt(tEl(i),'-1 ATK','#C7A3F0',22,40);extra+=' Skwaszony: −1 ataku.';}
-  if(extra)$('#center .cd').innerHTML=`${aName(a)} kontra ${e.n}<br><em>${extra.trim()}</em>`;
+  if(extra)say('',extra.trim());
   await wait(650);
   const sp=await clearDead();const am=await allyDeaths();
-  if(sp||am){center('',[sp?'Biała pleśń pęka na dwa Zarodniki!':'',am].filter(Boolean).join(' '));await wait(700);}
+  if(sp||am){say('',[sp?'Biała pleśń pęka na dwa Zarodniki!':'',am].filter(Boolean).join(' '));await wait(700);}
+  if(am||!B.enemies.some(x=>x.uid===B.arena.eu))B.arena.stale=true;
   const f=frontI(),bi=B.allies.findIndex(x=>x&&x.h>0&&x.k==='burak'&&!x.tok);
   if(bi>=0&&f>=0){const fa=B.allies[f];if(fa.h<fa.max){const h=Math.min(2*B.allies[bi].t,fa.max-fa.h);fa.h+=h;updA(f);anim(tEl(bi),'act');ftxt(tEl(f),'+'+h,'#7CF29A',30);SFX.heal();
-    center('BARSZCZ LECZY',`<span class="tag">PO STARCIU</span>${aName(fa)} +${h} życia.`);await wait(700);}}
+    say('BARSZCZ',`leczy ${aName(fa)} +${h}.`);await wait(700);}}
   const boss=B.enemies.find(x=>x.boss);
   if(boss){boss.clash++;
-    if(boss.k==='krol'&&boss.clash%3===0){B.enemies.push(mkEnemy('zarodnik'));renderEnemies();anim(eEl(boss),'act');center('KRÓL PLEŚNI','Na koniec kolejki dochodzi Zarodnik.');await wait(800);}
-    if(boss.k==='sloik'&&boss.clash%2===0&&frontI()>=0){anim(eEl(boss),'act');center('SMRÓD!','Słoik się otwiera: 1 obrażenie dla wszystkich.');shake(5);
-      B.allies.forEach((x,j)=>{if(x&&x.h>0)hitA(j,1);});await wait(700);const m=await allyDeaths();if(m){center('',m);await wait(600);}}}}
+    if(boss.k==='krol'&&boss.clash%3===0){B.enemies.push(mkEnemy('zarodnik'));renderEnemies();anim(eEl(boss),'act');say('KRÓL','woła Zarodnika.');await wait(800);}
+    if(boss.k==='sloik'&&boss.clash%2===0&&frontI()>=0){anim(eEl(boss),'act');say('SMRÓD!','1 obrażenie dla wszystkich.');shake(5);
+      B.allies.forEach((x,j)=>{if(x&&x.h>0)hitA(j,1);});await wait(700);const m=await allyDeaths();if(m){say('',m);await wait(600);}}}
+  if(B.arena&&B.arena.stale)B.arena=null;}
 async function endNight(win){const n=run.night;let lost=0;
   if(!win){lost=WAVES[n-1].some(k=>ENEMIES[k].boss)?2:1;run.hp=Math.max(0,run.hp-lost);}
   let ferm=0;run.team.forEach(u=>{if(u&&u.k==='ogorek'){u.ba+=u.t;u.bh+=u.t;ferm=Math.max(ferm,u.t);}});
   if(win)run.won++;meta.best=Math.max(meta.best,win?n:n-1);saveMeta();
-  (win?SFX.win:SFX.lose)();if(!win)shake(12);renderHUD();
+  if(B)B.arena=null;(win?SFX.win:SFX.lose)();if(!win)shake(12);renderHUD();renderTeam();renderEnemies();
   center(win?'CISZA.':'PLEŚŃ WYGRAŁA',win?'Ostatni potwór znika w szczelinie zamrażalnika.':`Zakwas traci ${lost} ♥.`);
   await sleep(1100);
   // dawn: clock runs to 06:00, the door shuts, then swings open on the morning light
@@ -590,10 +645,10 @@ function receipt(win,lost,ferm){const rows=[['Dniówka',7]];if(win)rows.push(['P
   overlay(`<div class="receipt">
     <div class="rh">SKLEP „U BABCI”<small>PARAGON · NOC ${nn} · 06:00</small></div><div class="dash"></div>
     ${rows.map(r=>`<div class="rr"><span>${r[0]}</span><b>+${r[1]}</b></div>`).join('')}
-    ${!win?`<div class="rr bad"><span>Zakwas oberwał</span><b>−${lost} ♥</b></div>`:''}
+    ${!win?`<div class="rr bad"><span>Zakwas oberwał</span><b>−${lost} ♥︎</b></div>`:''}
     ${ferm?`<div class="rr"><span>Ogórki ukiszone</span><b>+${ferm}/+${ferm}</b></div>`:''}
     <div class="dash"></div><div class="tot"><span>RAZEM</span><span>+${total}</span></div><div class="bar"></div><div class="note">${tip}</div>
-    <button class="btn b-orange" data-act="next">ZGARNIJ +${total} ▶</button></div>`,'bottom');
+    <button class="btn b-orange" data-act="next">ZGARNIJ +${total} ▶︎</button></div>`,'bottom');
   const sheet=$('#overlay .receipt');if(!RM)sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:500,easing:'cubic-bezier(.2,.9,.3,1)'});
   const tr=[...document.querySelectorAll('.receipt .rr')];tr.forEach((r,i)=>setTimeout(()=>{r.classList.add('in');SFX.tick();SFX.coin(i);},450+i*280));}
 async function collect(){const sheet=$('#overlay .receipt');if(sheet&&!RM)await sheet.animate([{transform:'none'},{transform:'translateY(110%)'}],{duration:280,easing:'ease-in'}).finished;
@@ -621,8 +676,29 @@ function showColl(){overlay(`<div class="sheet"><h2>KSIĄŻKA KUCHARSKA</h2><p>D
   <div class="coll">${Object.keys(KINDS).map(k=>{const on=meta.dishes.includes(k);return `<div class="${on?'':'lock'}"><img class="px" src="${IMG[k][2]}" alt="">${on?KINDS[k].n[2]:'???'}</div>`;}).join('')}</div>
   <button class="btn b-orange" data-act="close">ZAMKNIJ</button></div>`,'mid');}
 
+/* ================= DRAG & DROP (reorder the shelf, drop groceries onto it) ================= */
+let drag=null,suppress=false;
+document.addEventListener('dragstart',ev=>ev.preventDefault());
+document.addEventListener('pointerdown',ev=>{if(!run||run.phase!=='shop'||busy)return;
+  const el=ev.target.closest('.card[data-act="card"],#tRow .unit:not(.empty)');if(!el)return;
+  drag={el,x:ev.clientX,y:ev.clientY,started:false,type:el.classList.contains('card')?'card':'unit',i:+el.dataset.i,ghost:null,over:null};});
+function startDrag(){drag.started=true;const src=drag.type==='card'?IMG[run.shop[drag.i].k][0]:unitImg(run.team[drag.i]);
+  const g=document.createElement('img');g.src=src;g.className='px ghost';fx.appendChild(g);drag.ghost=g;drag.el.classList.add('dragging');SFX.tap();
+  if(drag.type==='card'){const o=owner(run.shop[drag.i].k);document.querySelectorAll('#tRow .unit').forEach((u,j)=>{if(o<0&&u.classList.contains('empty'))u.classList.add('hintslot');if(o===j)u.classList.add('mergeglow');});}}
+document.addEventListener('pointermove',ev=>{if(!drag)return;const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;
+  if(!drag.started){if(dx*dx+dy*dy<100)return;startDrag();}
+  const g=app.getBoundingClientRect();drag.ghost.style.left=(ev.clientX-g.left-36)+'px';drag.ghost.style.top=(ev.clientY-g.top-60)+'px';
+  const t=document.elementFromPoint(ev.clientX,ev.clientY);let slot=t&&t.closest('#tRow .unit');if(slot===drag.el)slot=null;
+  if(drag.over&&drag.over!==slot)drag.over.classList.remove('droptarget');if(slot)slot.classList.add('droptarget');drag.over=slot;});
+function endDrag(drop){const d=drag;drag=null;if(!d||!d.started)return;suppress=true;setTimeout(()=>{suppress=false;},60);
+  if(d.ghost)d.ghost.remove();d.el.classList.remove('dragging');document.querySelectorAll('.droptarget,.hintslot,.mergeglow').forEach(x=>x.classList.remove('droptarget','hintslot','mergeglow'));
+  if(!drop||!d.over)return;const j=+d.over.dataset.i;
+  if(d.type==='unit')swapSlots(d.i,j);else{run.sel=null;buy(d.i,j);}}
+document.addEventListener('pointerup',()=>endDrag(true));
+document.addEventListener('pointercancel',()=>endDrag(false));
+
 /* ================= INPUT ================= */
-document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-act]');if(!t)return;ac();const act=t.dataset.act,i=+t.dataset.i;
+document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;}const t=ev.target.closest('[data-act]');if(!t)return;ac();const act=t.dataset.act,i=+t.dataset.i;
   switch(act){
     case 'play':{if(busy)break;busy=true;SFX.buy();newRun();game.hidden=false;setClock(8*60);renderAll();defaultCenter();humOn(false);await doorOpen();busy=false;break;}
     case 'help':SFX.tap();showHelp();break;
@@ -630,11 +706,11 @@ document.addEventListener('click',async ev=>{const t=ev.target.closest('[data-ac
     case 'close':SFX.tap();closeOverlay();break;
     case 'mute':muted=!muted;if(muted)humOff();else humOn(game.classList.contains('night'));renderHUD();break;
     case 'card':if(!run||run.phase!=='shop'||busy||run.shop[i].sold)break;if(run.sel&&run.sel.type==='shop'&&run.sel.i===i)select(null);else select({type:'shop',i});break;
-    case 'buy':buy();break;
+    case 'buy':if(run.sel&&run.sel.type==='shop')buy(run.sel.i);break;
     case 'cancel':select(null);break;
     case 'slot':onSlot(i);break;
     case 'sell':sell();break;
-    case 'enemy':{if(!run)break;const e=(run.phase==='fight'?B.enemies:run.preview)[i];if(e){SFX.tap();center(e.n,`Atak ${e.a} · Życie ${Math.max(0,e.h)}. ${e.ab}`);}break;}
+    case 'enemy':{if(!run)break;const e=(run.phase==='fight'?B.enemies:run.preview)[i];if(e){SFX.tap();say(e.n+(e.boss?' · BOSS':''),e.ab.replace('BOSS. ',''));}break;}
     case 'reroll':if(run&&run.coins>=1&&!busy){const old=run.coins;run.coins--;rollShop();run.sel=null;SFX.whoosh();renderAll();countTo($('#coinN'),old,run.coins);
       document.querySelectorAll('.card').forEach((c,j)=>{if(!RM)c.animate([{transform:'translateX(-120%) rotate(-20deg)',opacity:0},{transform:'none',opacity:1}],{duration:300,delay:j*70,easing:'cubic-bezier(.3,1.4,.5,1)',fill:'backwards'});});defaultCenter();}break;
     case 'night':if(run&&run.team.some(Boolean))startNight();break;
