@@ -32,7 +32,6 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Łączenie jak w TFT: 3 kupione kopie trafiają na patelnię (skwierczenie, para) i wyskakują jako ★★, kolejne 3 jako danie ★★★
   (np. Ziemniak → Frytki → Placki, Burak → Ćwikła → Barszcz). Dania ★★★ wiszą potem na drzwiach jako magnesy.
 - Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy. Zepsuty składnik zielenieje i spada z półki.
-- Rzadkość składników to kolor ramki karty: szary od nocy 1, niebieski od 3, fioletowy od 5.
 - Dźwięki generowane w przeglądarce (Web Audio), wyciszanie przyciskiem ♪.
 
 ## Ekonomia i poziomy (v5)
