@@ -75,3 +75,13 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
   Zablokowane składniki nie pojawiają się w dostawach. Nowości ogłasza karteczka od Babci.
 - Danie dnia zawsze gra na Biegunie z pełną pulą składników, żeby wynik był porównywalny dla wszystkich.
 - Ekran ODBLOKOWANIA (przycisk KSIĄŻKA) pokazuje, co jest odblokowane i jak zdobyć resztę.
+
+## Ranking Dania dnia (v8)
+
+- Przycisk RANKING na drzwiach i miejsce w rankingu na karteczce po zakończeniu Dania dnia.
+- W artifactcie: wspólna baza artifactu, kolekcja `lb`, dokument `lb/<id gracza>` z najlepszym wynikiem dnia.
+  Reguły: wszyscy czytają, każdy pisze tylko swój dokument (Contributor i wyżej), właściciel może poprawiać.
+  Nazwy i awatary pochodzą z kont Claude. Żeby inni grali w rankingu, trzeba im udostępnić artifact jako Contributor.
+- W aplikacji: Cloudflare Worker + D1 w `server/` (instrukcja w `server/README.md`), adres podawany przez `MP_API` przy budowaniu.
+  Gracz ma losowe id urządzenia i nick do zmiany w oknie rankingu.
+- Bez żadnego z nich wynik zapisuje się tylko lokalnie.

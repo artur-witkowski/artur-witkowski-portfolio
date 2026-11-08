@@ -17,6 +17,8 @@ if (split < 0) throw new Error('Could not find <div id="wall"> in ../index.html;
 const head = html.slice(0, split).trim();
 const body = html.slice(split).trim();
 
+// MP_API=https://midnight-pantry-api.<account>.workers.dev npm run sync  -> online daily leaderboard in the app
+const api = process.env.MP_API ? `<script>window.MP_API=${JSON.stringify(process.env.MP_API.replace(/\/$/, ''))};</script>\n` : '';
 const page = `<!doctype html>
 <html lang="pl">
 <head>
@@ -29,7 +31,7 @@ html,body{margin:0;height:100%;overscroll-behavior:none}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-${head}
+${api}${head}
 </head>
 <body>
 ${body}

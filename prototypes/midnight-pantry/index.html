@@ -60,7 +60,7 @@ img.px{display:block}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
 .titlebtns{display:flex;flex-direction:column;gap:12px;width:min(100%,280px);margin-top:auto}
 .titlebtns .btn{font-size:28px;padding:14px}
-.tb2{display:flex;gap:10px}.tb2 .btn{flex:1;font-size:22px;padding:12px 6px}
+.tb2{display:flex;gap:8px}.tb2 .btn{flex:1;font-size:20px;padding:12px 4px}
 .sticky{background:#FFE98A;color:#3A2E10;padding:10px 12px 8px;transform:rotate(-2deg);box-shadow:3px 5px 0 rgba(0,0,0,.2);font-size:20px;line-height:1.1;width:min(100%,260px);text-align:left;position:relative}
 .sticky::before{content:"";position:absolute;top:-8px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--hp);box-shadow:0 2px 0 rgba(0,0,0,.3)}
 .sticky b{color:#B3261E;font-weight:400}
@@ -197,6 +197,19 @@ img{-webkit-user-drag:none;user-select:none}
 .ulist img{width:32px;height:32px}
 .ulist .no{opacity:.55}
 .ulist .no img{filter:brightness(0) opacity(.5)}
+/* ranking */
+.rlist{display:flex;flex-direction:column;gap:4px;max-height:46vh;overflow:auto}
+.rk{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.05);font-size:20px}
+.rk.me{background:rgba(255,201,60,.18);box-shadow:inset 0 0 0 2px var(--gold)}
+.rk .rp{width:26px;text-align:right;color:var(--gold)}
+.rk img,.rk i{width:26px;height:26px;border-radius:50%;flex:none;background:#3D3456}
+.rk .rn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk .rnight{font-size:16px;color:var(--muted)}
+.rk b{font-weight:400;color:var(--gold);min-width:48px;text-align:right}
+.nickrow{display:flex;align-items:center;gap:8px;font-size:18px}
+.nickrow input{flex:1;font:inherit;font-size:20px;padding:6px 8px;border-radius:8px;border:2px solid #3D3456;background:#120D1A;color:var(--text)}
+.bignote .mini{font-size:18px;display:flex;flex-direction:column;gap:1px;margin-top:4px}
+.bignote .mini .me{color:#B3261E}
 /* tiers */
 .card{background:var(--rb,var(--paper))}
 .card.t3,.card.t4{border-width:4px}
@@ -330,7 +343,7 @@ img{-webkit-user-drag:none;user-select:none}
       <div class="titlebtns">
         <button class="btn b-orange wiggle" data-act="play">OTWÓRZ LODÓWKĘ</button>
         <button class="btn b-green" data-act="daily" id="dailyBtn">DANIE DNIA</button>
-        <div class="tb2"><button class="btn b-blue" data-act="help">JAK GRAĆ</button><button class="btn b-gray" data-act="coll">KSIĄŻKA</button></div>
+        <div class="tb2"><button class="btn b-blue" data-act="help">JAK GRAĆ</button><button class="btn b-gray" data-act="rank">RANKING</button><button class="btn b-gray" data-act="coll">KSIĄŻKA</button></div>
       </div>
     </div>
     <div class="dishmags" id="dishmags"></div>
@@ -860,12 +873,59 @@ async function gameOver(win){meta.runs++;if(win)meta.won++;checkUnlocks(run);con
     <div class="nl"><span>${win?'Kuchnia lśni. Kto tu sprzątał po nocach?':'Rano wszystko wraca na półki.'}</span><b></b></div>
     <div class="nl"><span>Przetrwane noce</span><b>${run.won}/10</b></div>
     <div class="nl big"><span style="flex:1">${sc} pkt</span></div>
-    ${run.daily?`<div class="nl"><span>Danie dnia ${today()}</span><b>${rec}</b></div>`:''}
+    ${run.daily?`<div class="nl"><span>Danie dnia ${today()}</span><b>${rec}</b></div><div class="nl" id="rankLine"><span>Ranking…</span><b></b></div><div class="mini" id="rankMini"></div>`:''}
     ${nd?`<div class="nl"><span>Nowe magnesy:</span><b></b></div><div class="dishes">${nd}</div>`:''}${unlockLines()}
     <span class="sig">— Babcia · seed ${run.seed.toString(36)}</span></div>
-    <div class="btns"><button class="btn b-gray" data-act="home">MENU</button><button class="btn b-orange" data-act="again">JESZCZE RAZ</button></div>`);}
+    <div class="btns"><button class="btn b-gray" data-act="home">MENU</button><button class="btn b-orange" data-act="again">JESZCZE RAZ</button></div>`);
+  if(run.daily)postDaily(sc);}
+async function postDaily(sc){const d=today();const entry={score:sc,night:run.won,hp:run.hp,seed:run.seed,v:1,at:Date.now(),log:run.log.map(a=>a.join('.')).join(',')};
+  const st=await withTimeout(LB.submit(d,entry),10000);const line=$('#rankLine');if(!line)return;
+  if(st==='local'){line.querySelector('span').textContent='Ranking online: w Claude albo w aplikacji';return;}
+  if(st==='timeout'||st==='error'){line.querySelector('span').textContent='Nie udało się wysłać wyniku';return;}
+  const rows=await withTimeout(LB.top(d,50),10000);if(!Array.isArray(rows)){line.querySelector('span').textContent='Wynik zapisany';return;}
+  const i=rows.findIndex(r=>r.isMe);line.innerHTML=`<span>Miejsce w rankingu</span><b>${i>=0?'#'+(i+1)+' z '+rows.length:'—'}</b>`;line.classList.add('in');
+  const mini=$('#rankMini');if(mini){mini.innerHTML=rows.slice(0,3).map((r,j)=>`<div class="${r.isMe?'me':''}"><span></span></div>`).join('');
+    [...mini.children].forEach((el,j)=>{el.firstChild.textContent=`${j+1}. ${rows[j].name||'Ktoś'} · ${rows[j].score}`;});}
+  if(i===0&&rows.length>1){SFX.win();}}
 async function goHome(){if(busy)return;busy=true;await noteOut();const daily=run&&run.daily;run=null;B=null;game.hidden=true;renderDoor();doorTitle(true);
   const t=$('#doorTitle');if(!RM)[...t.children].forEach((c,i)=>c.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:300,delay:i*60,fill:'backwards'}));busy=false;return daily;}
+
+/* ================= DAILY LEADERBOARD =================
+   Two backends behind one small interface:
+   - inside the claude.ai artifact: the artifact's shared db (one doc per player: lb/<userId>), names from the viewer's account;
+   - in the app (or any page that sets window.MP_API): the Cloudflare Worker in ../server, with a per-device id and a nickname.
+   Without either, results stay local. */
+const LB={mode:null,db:null,user:null,me:null,_ready:null,
+  init(){if(this._ready)return this._ready;this._ready=(async()=>{
+    if(window.claude&&window.claude.use){try{const [db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
+      if(db&&user){const id=await user.id();if(id){this.db=db;this.user=user;this.me=id;this.mode='artifact';return true;}}}catch(e){}}
+    if(window.MP_API){this.mode='http';this.me=devId();return true;}
+    this.mode='local';return false;})();return this._ready;},
+  async submit(date,entry){if(!await this.init())return 'local';
+    try{if(this.mode==='artifact'){const ref=this.db.doc('lb/'+this.me);const cur=await ref.get();const d=cur.exists?cur.data():null;
+        if(d&&d.date===date&&d.score>=entry.score)return 'kept';await ref.set(Object.assign({date},entry));return 'saved';}
+      const r=await fetch(`${window.MP_API}/daily/${date}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign({player:this.me,name:nick()},entry))});
+      return r.ok?(await r.json()).status:'error';}catch(e){return 'error';}},
+  async top(date,n){if(!await this.init())return null;
+    try{if(this.mode==='artifact'){const q=await this.db.collection('lb').where('date','==',date).orderBy('score','desc').limit(n||25).get();
+        const rows=q.docs.map(d=>Object.assign({id:d.id},d.data()));const ps=await this.user.profiles(rows.map(r=>r.id));
+        return rows.map(r=>Object.assign(r,{name:(ps[r.id]&&ps[r.id].name)||'Ktoś',avatar:ps[r.id]&&ps[r.id].avatarUrl,isMe:r.id===this.me}));}
+      const r=await fetch(`${window.MP_API}/daily/${date}?limit=${n||25}`);if(!r.ok)return null;const j=await r.json();
+      return j.rows.map(x=>Object.assign(x,{isMe:x.player===this.me}));}catch(e){return null;}}};
+function devId(){try{let v=localStorage.getItem('mp-device');if(!v){v='d'+Math.random().toString(36).slice(2,12);localStorage.setItem('mp-device',v);}return v;}catch(e){return 'anon';}}
+function nick(){try{return localStorage.getItem('mp-nick')||('Kucharz '+devId().slice(1,5).toUpperCase());}catch(e){return 'Kucharz';}}
+function withTimeout(p,ms){return Promise.race([p,new Promise(r=>setTimeout(()=>r('timeout'),ms))]);}
+function rankRows(rows){return rows.map((r,i)=>`<div class="rk ${r.isMe?'me':''}"><span class="rp">${i+1}</span>${r.avatar?`<img src="${r.avatar}" alt="">`:'<i></i>'}<span class="rn"></span><span class="rnight">noc ${r.night}</span><b>${r.score}</b></div>`).join('');}
+function fillNames(box,rows){box.querySelectorAll('.rk .rn').forEach((el,i)=>{el.textContent=rows[i].name||'Ktoś';});}
+async function showRank(){const d=today();
+  overlay(`<div class="sheet"><h2>RANKING</h2><p>Danie dnia · ${d}<br><span style="color:var(--muted)">Wszyscy mają dziś te same dostawy.</span></p><div class="rlist" id="rlist"><p style="color:var(--muted)">Ładuję…</p></div>
+    ${LB.mode==='http'?`<label class="nickrow">Twój nick <input id="nickIn" maxlength="16" value="${nick().replace(/"/g,'')}"></label>`:''}
+    <button class="btn b-green" data-act="daily-from-rank">ZAGRAJ DANIE DNIA</button><button class="btn b-gray" data-act="close">ZAMKNIJ</button></div>`,'mid');
+  const rows=await withTimeout(LB.top(d,25),10000);const box=$('#rlist');if(!box)return;
+  if(rows==='timeout'){box.innerHTML='<p>Nie udało się połączyć z rankingiem. Spróbuj za chwilę.</p>';return;}
+  if(rows===null){box.innerHTML=`<p>${LB.mode==='local'?'Ranking online działa w Claude (ten artifact) i w aplikacji. Tutaj wynik zapisuje się tylko na tym urządzeniu.':'Ranking jest chwilowo niedostępny.'}</p>`;return;}
+  if(!rows.length){box.innerHTML='<p>Nikt jeszcze dziś nie grał. Bądź pierwszy!</p>';return;}
+  box.innerHTML=rankRows(rows);fillNames(box,rows);}
 
 /* ================= OVERLAYS ================= */
 function overlay(html,mode){const o=$('#overlay');o.className=mode==='mid'?'mid':'';o.innerHTML=html;o.hidden=false;paused=true;}
@@ -887,6 +947,8 @@ function showColl(){overlay(`<div class="sheet"><h2>ODBLOKOWANIA</h2>
 /* ================= DRAG & DROP (reorder the shelf, drop groceries onto it) ================= */
 let drag=null,suppress=false;
 document.addEventListener('dragstart',ev=>ev.preventDefault());
+document.addEventListener('change',ev=>{if(ev.target&&ev.target.id==='nickIn'){try{localStorage.setItem('mp-nick',ev.target.value.trim().slice(0,16));}catch(e){}}});
+LB.init();
 document.addEventListener('pointerdown',ev=>{if(!run||run.phase!=='shop'||busy)return;
   const el=ev.target.closest('.card[data-act="card"],#tRow .unit:not(.empty)');if(!el)return;
   drag={el,x:ev.clientX,y:ev.clientY,started:false,type:el.classList.contains('card')?'card':'unit',i:+el.dataset.i,ghost:null,over:null};});
@@ -914,6 +976,8 @@ document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;
     case 'play':case 'daily':{if(busy)break;busy=true;SFX.tap();newRun(act==='daily');game.hidden=false;setClock(8*60);renderAll();defaultCenter();await doorOpen();busy=false;break;}
     case 'help':SFX.tap();showHelp();break;
     case 'coll':SFX.tap();showColl();break;
+    case 'rank':SFX.tap();showRank();break;
+    case 'daily-from-rank':{closeOverlay();const b=document.querySelector('[data-act="daily"]');if(b)b.click();break;}
     case 'close':SFX.tap();closeOverlay();break;
     case 'mute':muted=!muted;if(muted)humOff();else humOn(game.classList.contains('night'));renderHUD();break;
     case 'card':if(!run||run.phase!=='shop'||busy||run.shop[i].sold)break;if(run.sel&&run.sel.type==='shop'&&run.sel.i===i)select(null);else select({type:'shop',i});break;

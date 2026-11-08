@@ -1,0 +1,12 @@
+{
+  "name": "midnight-pantry-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/worker.test.mjs",
+    "db:local": "wrangler d1 execute midnight-pantry --local --file=schema.sql",
+    "db:remote": "wrangler d1 execute midnight-pantry --remote --file=schema.sql",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  }
+}
