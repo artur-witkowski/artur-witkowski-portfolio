@@ -1,18 +1,21 @@
-# Midnight Pantry (prototyp v2)
+# Midnight Pantry (prototyp v3)
 
-Pionowy auto battler / roguelike na jedną rękę. Lodówka babci broni się nocą przed Pleśnią.
+Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią kuchni przed Pleśnią przez 10 nocy.
 
 - `index.html` to cały prototyp w jednym pliku (bez frameworka, bez builda). Otwórz go w przeglądarce telefonu.
 - Plik nie ma własnego `<!doctype>`/`<head>`, bo jest też publikowany jako Claude Artifact, który dokłada szkielet strony.
-- Postęp (magnesy, przepisy, najlepsza noc) zapisuje się w `localStorage`.
+- Postęp (najlepsza noc, ugotowane dania ★★★) zapisuje się w `localStorage`.
 - Katalog leży poza `src/` i `public/`, więc nie trafia do builda portfolio.
 
-## Zasady v2 (uproszczone po pierwszym teście)
+## Kierunek v3 (po drugim teście)
 
-1. Rano targ: 3 karty, każdy składnik kosztuje 3 okruszki. Ustawiasz je na 5 półkach.
-2. Nocą walka jest sekwencją starć: najwyższy składnik kontra pierwszy potwór, oba biją naraz.
-   Każda zdolność odpala się w jednym nazwanym momencie (Start nocy, W starciu, Po starciu, Po zepsuciu, Rano).
-3. Systemy odblokowują się po kolei: noc 1 tylko kupowanie, noc 2 przepisy, noc 3 łączenie i nowe składniki, noc 5 najmocniejsze składniki.
-4. 10 nocy, 5 serc Zakwasu, bossowie w nocy 5 i 10. Magnesy i przepisy zostają na lodówce między runami.
+- Wygląd: pixel-art z efektem CRT i mocnymi reakcjami (inspiracja Balatro) + rysunkowe postacie z grubym konturem (inspiracja Isaac / Wildfrost).
+  Sprite'y są rysowane kodem w 32×32, dostają kontur i cieniowanie, potem są skalowane bez wygładzania.
+- Bohaterami są same składniki z buźkami.
+- Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy.
+- Łączenie jak w TFT: 3 kupione kopie automatycznie łączą się w formę ★★, kolejne 3 w danie ★★★
+  (np. Ziemniak → Pieczony ziemniak → Placki).
+- Rzadkość składników to kolor ramki karty: szary od nocy 1, niebieski od 3, fioletowy od 5.
+- Dźwięki generowane w przeglądarce (Web Audio), wyciszanie przyciskiem ♪.
 
-Wycięte z v1 (do ewentualnego powrotu później): przyprawy, gałka ognia, kiszenie okruszków, myszy i mole, walka w czasie rzeczywistym.
+Wycięte względem v2: przepisy z sąsiednich półek (zastąpione ewolucją przez łączenie).
