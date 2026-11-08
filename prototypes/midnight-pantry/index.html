@@ -47,7 +47,7 @@ img.px{display:block}
 #door .bin img{width:56px;height:56px;margin-bottom:-6px}
 #door .edge{position:absolute;top:10px;bottom:10px;left:100%;width:24px;transform-origin:left center;transform:rotateY(90deg);background:linear-gradient(90deg,#E4EAEF,#A3AFBB);border-radius:0 6px 6px 0}
 #door .dshade{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,rgba(10,15,30,.1),rgba(10,15,30,.65));opacity:0;pointer-events:none;z-index:5}
-.mist{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(235,248,255,.5),rgba(235,248,255,0) 70%);pointer-events:none;z-index:89}
+.mist{will-change:transform,opacity;position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(235,248,255,.5),rgba(235,248,255,0) 70%);pointer-events:none;z-index:89}
 #door .seam{position:absolute;left:0;right:0;top:27%;height:6px;background:var(--enamel-d);box-shadow:0 2px 0 rgba(255,255,255,.6)}
 #door .handle{position:absolute;right:14px;width:12px;border-radius:6px;background:linear-gradient(90deg,#F4F4F4,#9BA3AD);box-shadow:3px 3px 0 rgba(0,0,0,.25)}
 #door .h1{top:8%;height:13%}#door .h2{top:34%;height:22%}
@@ -160,6 +160,25 @@ img{-webkit-user-drag:none;user-select:none}
 .arena .cap{font-size:19px;line-height:1.05;text-align:center;min-height:22px;max-width:330px;position:relative;z-index:3}
 .lungeR{animation:lr .3s ease-out}@keyframes lr{45%{transform:translateX(28px) scale(1.15) rotate(6deg)}}
 .lungeL{animation:ll .3s ease-out}@keyframes ll{45%{transform:translateX(-28px) scale(1.15) rotate(-6deg)}}
+/* door note (post-it summary) */
+#dim{position:absolute;inset:0;z-index:84;background:#04060C;opacity:0;pointer-events:none}
+#doorNote{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;margin:auto 0}
+.bignote{position:relative;width:min(100%,292px);background:#FFE98A;color:#3A2E10;padding:22px 18px 16px;box-sizing:border-box;transform:rotate(-2.5deg);
+  box-shadow:0 1px 0 #E9CF62,4px 8px 0 rgba(0,0,0,.18),0 18px 30px rgba(0,0,0,.18);font-size:22px;line-height:1.1;
+  background-image:linear-gradient(transparent 0 calc(100% - 26px),rgba(0,0,0,.05) calc(100% - 26px)),repeating-linear-gradient(transparent 0 27px,rgba(150,120,40,.18) 27px 28px)}
+.bignote::before{content:"";position:absolute;top:-10px;left:50%;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a85,var(--hp) 60%,#8f2232);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.bignote::after{content:"";position:absolute;right:0;bottom:0;width:26px;height:26px;background:linear-gradient(135deg,#F6D55C 50%,rgba(0,0,0,.12) 50%)}
+.bignote h3{margin:0 0 8px;font-weight:400;font-size:34px;line-height:.95;color:#B3261E;text-align:center}
+.bignote .nl{display:flex;justify-content:space-between;gap:10px;padding:2px 0;opacity:0;transform:translateX(-6px)}
+.bignote .nl.in{opacity:1;transform:none;transition:opacity .18s,transform .18s}
+.bignote .nl b{font-weight:400;white-space:nowrap}
+.bignote .bad{color:#B3261E}.bignote .good{color:#1E7A3C}
+.bignote .sig{display:block;text-align:right;margin-top:8px;color:#8A6A1A;font-size:18px}
+.bignote .big{font-size:46px;text-align:center;color:#3A2E10;margin:4px 0}
+.bignote .dishes{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.bignote .dishes img{width:40px;height:40px}
+#doorNote .btns{display:flex;gap:10px;width:min(100%,292px)}
+#doorNote .btns .btn{flex:1;font-size:24px;padding:14px 8px}
 /* tiers */
 .card{background:var(--rb,var(--paper))}
 .card.t3,.card.t4{border-width:4px}
@@ -284,6 +303,7 @@ img{-webkit-user-drag:none;user-select:none}
 
   <div id="door"><div class="front">
     <span class="seam"></span><span class="handle h1"></span><span class="handle h2"></span><span class="badge">BIEGUN</span>
+    <div id="doorNote" hidden></div>
     <div id="doorTitle" style="display:contents">
       <div class="mlogo" id="mlogo"></div>
       <div class="parade" id="parade"></div>
@@ -299,6 +319,7 @@ img{-webkit-user-drag:none;user-select:none}
   </div>
   <div class="back" id="doorBack"></div><div class="edge"></div></div>
 
+  <div id="dim"></div>
   <div id="fx"></div>
   <div id="flash"></div>
   <div id="overlay" hidden></div>
@@ -363,6 +384,12 @@ const SFX={
   lose:()=>[392,330,262,196].forEach((f,i)=>tone(f,.24,'triangle',.06,0,i*.14)),
   whoosh:()=>tone(800,.18,'sawtooth',.018,.3)
 };
+
+/* ================= NATIVE (Capacitor) — no-ops inside the artifact / a browser ================= */
+const CAP=window.Capacitor,NATIVE=!!(CAP&&CAP.isNativePlatform&&CAP.isNativePlatform());
+function haptic(style){if(!NATIVE||muted)return;try{CAP.Plugins.Haptics.impact({style});}catch(e){}}
+[['thud','HEAVY'],['merge','MEDIUM'],['hit','LIGHT'],['seal','LIGHT'],['plop','LIGHT'],['boss','HEAVY']].forEach(([k,st])=>{const f=SFX[k];SFX[k]=(...x)=>{haptic(st);return f(...x);};});
+if(NATIVE){try{CAP.Plugins.StatusBar.setStyle({style:'DARK'});}catch(e){}}
 
 /* ================= PIXEL TEXTURES (drawn small, scaled up crisp) ================= */
 function tex(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');fn(x,w,h);return c.toDataURL();}
@@ -460,32 +487,55 @@ function renderDoor(){
   $('#doorBack').innerHTML=[['egg_whole_white','egg_whole_brown','egg_whole_white'],['canned_food_1','canned_food_2','canned_food_3'],['butter','honey_pot','cheese']].map(r=>`<div class="bin">${r.map(a=>`<img class="px" src="${ART[a]}" alt="">`).join('')}</div>`).join('');
   const dd=meta.daily&&meta.daily[today()];$('#dailyBtn').textContent=dd?`DANIE DNIA · ${dd.score} PKT`:'DANIE DNIA';
   $('#dishmags').innerHTML=meta.dishes.map(k=>`<img class="px" src="${IMG[k][2]}" alt="">`).join('');}
-function doorTitle(show){$('#doorTitle').style.display=show?'contents':'none';}
+function doorTitle(show){$('#doorTitle').style.display=show?'contents':'none';if(show){$('#doorNote').hidden=true;}}
 function mist(n){if(RM)return;const g=app.getBoundingClientRect();for(let i=0;i<n;i++){const m=document.createElement('div');m.className='mist';const sz=R(70,160);
   m.style.cssText=`width:${sz}px;height:${sz}px;left:${R(-20,g.width*.6)}px;top:${R(g.height*.15,g.height*.6)}px`;fx.appendChild(m);
   m.animate([{transform:'translate(0,0) scale(.5)',opacity:0},{opacity:.9,offset:.25},{transform:`translate(${R(-80,-10)}px,${R(60,160)}px) scale(1.4)`,opacity:0}],{duration:R(1400,2200),delay:i*60,easing:'ease-out'});
   setTimeout(()=>m.remove(),2400+i*60);}}
-async function doorOpen(){door.hidden=false;const shade=door.querySelector('.dshade');
+// One continuous choreography per transition: the camera, the door, the light and the darkness share one clock,
+// only transform/opacity are animated (GPU friendly), and sounds are scheduled on that clock instead of awaited in steps.
+const dim=$('#dim');
+function layers(on){[door,app,dim].forEach(el=>{el.style.willChange=on?'transform,opacity':'';});}
+function finishAll(...els){els.forEach(el=>el&&el.getAnimations().forEach(x=>x.cancel()));}
+async function doorOpen(){const shade=door.querySelector('.dshade');door.hidden=false;
   if(RM){door.hidden=true;return;}
-  SFX.seal();
-  // step back so the whole door swing stays in view, then lean into the fridge
-  app.animate([{transform:'scale(1)'},{transform:'scale(.72)',offset:.22},{transform:'scale(.72)',offset:.55},{transform:'scale(1)'}],{duration:1500,easing:'cubic-bezier(.4,0,.2,1)'});
-  await sleep(330);
-  await door.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(-7deg)'}],{duration:170,easing:'ease-out',fill:'forwards'}).finished;
-  SFX.creak();mist(10);
-  const led=$('.led');if(led)led.animate([{opacity:0},{opacity:1,offset:.2},{opacity:.25,offset:.32},{opacity:1}],{duration:700,delay:180});
-  game.animate([{transform:'scale(.94)',filter:'brightness(.45)'},{transform:'none',filter:'none'}],{duration:1050,easing:'ease-out'});
-  shade.animate([{opacity:0},{opacity:.7}],{duration:900,fill:'forwards'});
-  await door.animate([{transform:'rotateY(-7deg)'},{transform:'rotateY(-150deg)'}],{duration:1000,easing:'cubic-bezier(.3,.1,.25,1)',fill:'forwards'}).finished;
-  door.hidden=true;door.getAnimations().forEach(x=>x.cancel());shade.getAnimations().forEach(x=>x.cancel());}
-async function doorClose(){door.hidden=false;const shade=door.querySelector('.dshade');
+  layers(true);const D=1700;
+  SFX.seal();setTimeout(()=>SFX.creak(),D*.22);setTimeout(()=>mist(7),D*.3);setTimeout(()=>humOn(false),D*.35);
+  const led=$('.led');if(led)led.animate([{opacity:0},{opacity:0,offset:.32},{opacity:1,offset:.38},{opacity:.25,offset:.42},{opacity:1,offset:.48},{opacity:1}],{duration:D});
+  dim.animate([{opacity:0},{opacity:.65,offset:.2},{opacity:.65,offset:.3},{opacity:0,offset:.75},{opacity:0}],{duration:D});
+  app.animate([
+    {transform:'scale(1)',easing:'cubic-bezier(.45,0,.25,1)'},
+    {transform:'scale(.74) translateY(1.5%)',offset:.24,easing:'linear'},
+    {transform:'scale(.74) translateY(1.5%)',offset:.44,easing:'cubic-bezier(.55,0,.15,1)'},
+    {transform:'scale(1)'}],{duration:D});
+  shade.animate([{opacity:0},{opacity:0,offset:.24},{opacity:.75,offset:.72},{opacity:.75}],{duration:D,fill:'forwards'});
+  const sw=door.animate([
+    {transform:'rotateY(0deg)',opacity:1,easing:'linear'},
+    {transform:'rotateY(0deg)',opacity:1,offset:.18,easing:'cubic-bezier(.3,1.8,.6,1)'},
+    {transform:'rotateY(-5deg)',opacity:1,offset:.25,easing:'cubic-bezier(.4,0,.15,1)'},
+    {transform:'rotateY(-138deg)',opacity:1,offset:.86,easing:'ease-in'},
+    {transform:'rotateY(-150deg)',opacity:0}],{duration:D,fill:'forwards'});
+  await sw.finished;door.hidden=true;finishAll(door,shade);layers(false);}
+async function doorClose(){const shade=door.querySelector('.dshade');door.hidden=false;
   if(RM){SFX.thud();return;}
-  shade.animate([{opacity:.7},{opacity:0}],{duration:820,fill:'forwards'});SFX.whoosh();
-  app.animate([{transform:'scale(1)'},{transform:'scale(.78)',offset:.3},{transform:'scale(.78)',offset:.8},{transform:'scale(1)'}],{duration:1100,easing:'ease-in-out'});
-  await sleep(250);
-  await door.animate([{transform:'rotateY(-150deg)'},{transform:'rotateY(-10deg)',offset:.85},{transform:'rotateY(0deg)'}],{duration:800,easing:'cubic-bezier(.55,0,.85,.45)',fill:'forwards'}).finished;
-  SFX.thud();shake(8);mist(5);door.getAnimations().forEach(x=>x.cancel());shade.getAnimations().forEach(x=>x.cancel());}
-async function doorFade(){if(!RM)await door.animate([{opacity:1},{opacity:0}],{duration:450,easing:'ease-in'}).finished;door.hidden=true;}
+  layers(true);const D=1300,HIT=.64;
+  SFX.whoosh();setTimeout(()=>{SFX.thud();mist(4);},D*HIT);setTimeout(()=>humOff(),D*HIT);
+  app.animate([
+    {transform:'scale(1)',easing:'cubic-bezier(.45,0,.25,1)'},
+    {transform:'scale(.8)',offset:.32,easing:'linear'},
+    {transform:'scale(.8)',offset:HIT,easing:'cubic-bezier(.2,.9,.3,1)'},
+    {transform:'scale(.775)',offset:HIT+.06,easing:'cubic-bezier(.4,0,.2,1)'},
+    {transform:'scale(1)'}],{duration:D});
+  shade.animate([{opacity:.75},{opacity:.75,offset:.25},{opacity:0,offset:HIT}],{duration:D,fill:'forwards'});
+  const sw=door.animate([
+    {transform:'rotateY(-150deg)',opacity:0,easing:'linear'},
+    {transform:'rotateY(-140deg)',opacity:1,offset:.12,easing:'cubic-bezier(.55,0,.8,.3)'},
+    {transform:'rotateY(0deg)',offset:HIT,easing:'cubic-bezier(.25,.9,.4,1)'},
+    {transform:'rotateY(-2.2deg)',offset:HIT+.08,easing:'cubic-bezier(.5,0,.5,1)'},
+    {transform:'rotateY(0deg)',offset:HIT+.18},
+    {transform:'rotateY(0deg)'}],{duration:D,fill:'forwards'});
+  await sw.finished;finishAll(door,shade);layers(false);}
+async function doorFade(){if(!RM)await door.animate([{transform:'none',opacity:1},{transform:'translateZ(60px)',opacity:0}],{duration:520,easing:'cubic-bezier(.5,0,.75,0)'}).finished;door.hidden=true;finishAll(door);}
 
 /* ================= RUN ================= */
 let run=null,B=null,uid=0,paused=false;
@@ -716,11 +766,28 @@ async function endNight(win){const n=run.night;let lost=0;
   // dawn: clock runs to 06:00, the door shuts, then swings open on the morning light
   const t0=run.clock;for(let k=1;k<=8;k++){setClock(Math.round(t0+(30*60-t0)*k/8));SFX.tick();await sleep(60);}
   run.phase='morning';renderActions();
+  doorTitle(false);renderDoor();await doorClose();
   if(run.hp<=0||(win&&n===10)){gameOver(win);return;}
-  doorTitle(false);renderDoor();await doorClose();await sleep(250);
-  setNight(false);run.phase='shop';B=null;setClock(8*60);run.night++;run.preview=null;rollShop(true);run.sel=null;renderAll();center('DZIEŃ DOBRY!','Lodówka znowu świeci.');
-  await doorOpen();
-  receipt(win,lost,ferm);}
+  setNight(false);humOff();run.phase='shop';B=null;setClock(8*60);run.night++;run.preview=null;rollShop(true);run.sel=null;run.coins=0;renderAll();defaultCenter();
+  morningNote(win,lost,ferm);}
+function noteIn(html){const box=$('#doorNote');box.innerHTML=html;box.hidden=false;const note=box.querySelector('.bignote');
+  SFX.plop();if(!RM){note.animate([{transform:'translateY(-60px) rotate(10deg) scale(1.25)',opacity:0},{transform:'translateY(4px) rotate(-3.5deg) scale(.98)',opacity:1,offset:.7},{transform:'rotate(-2.5deg)'}],{duration:460,easing:'cubic-bezier(.3,1.3,.5,1)'});
+    box.querySelector('.btns').animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:300,delay:500+box.querySelectorAll('.nl').length*200,fill:'backwards'});}
+  [...box.querySelectorAll('.nl')].forEach((r,i)=>setTimeout(()=>{r.classList.add('in');SFX.tick();},RM?0:420+i*200));}
+async function noteOut(){const box=$('#doorNote'),note=box.querySelector('.bignote');
+  if(note&&!RM){SFX.whoosh();box.querySelector('.btns').animate([{opacity:1},{opacity:0}],{duration:150,fill:'forwards'});
+    await note.animate([{transform:'rotate(-2.5deg)'},{transform:'translate(-10px,-14px) rotate(-8deg) scale(1.04)',offset:.3},{transform:'translate(260px,120px) rotate(40deg) scale(.9)',opacity:0}],{duration:420,easing:'cubic-bezier(.5,0,.8,.4)'}).finished;}
+  box.hidden=true;box.innerHTML='';}
+function morningNote(win,lost,ferm){const nn=run.night-1,left=run.leftover||0;
+  const tip=run.night===5?'Dziś w nocy przyjdzie <span class="bad">Król Pleśni</span>!':run.night===3?'W dostawie zielone produkty II.':run.night===7?'W dostawie legendarne IV!':run.night===10?'Ostatnia noc. Wracam jutro!':'Wydajcie wszystko, reszta przepada.';
+  noteIn(`<div class="bignote"><h3>${win?'Noc '+nn+' przetrwana!':'Pleśń wygrała…'}</h3>
+    ${!win?`<div class="nl bad"><span>Zakwas oberwał</span><b>−${lost} ♥︎</b></div>`:`<div class="nl good"><span>Zakwas cały</span><b>${run.hp}/${MAXHP} ♥︎</b></div>`}
+    ${ferm?`<div class="nl good"><span>Ogórki się ukisiły</span><b>+${ferm}/+${ferm}</b></div>`:''}
+    ${left?`<div class="nl bad"><span>Przepadło wczoraj</span><b>−${left}</b></div>`:''}
+    <div class="nl"><span>Na zakupy dziś</span><b>${BUDGET} monet</b></div>
+    <div class="nl"><span>${tip}</span><b></b></div>
+    <span class="sig">— Babcia</span></div>
+    <div class="btns"><button class="btn b-orange wiggle" data-act="next">OTWÓRZ LODÓWKĘ</button></div>`);}
 function receipt(win,lost,ferm){const total=BUDGET;run.pending=total;const nn=run.night-1;const left=run.leftover||0;
   const tip=run.night===5?'Dziś w nocy: KRÓL PLEŚNI':run.night===3?'W dostawie zielone produkty II':run.night===7?'W dostawie legendarne IV!':run.night===10?'Ostatnia noc. Babcia wraca jutro!':'Wydaj wszystko, reszta przepada';
   overlay(`<div class="receipt">
@@ -734,20 +801,24 @@ function receipt(win,lost,ferm){const total=BUDGET;run.pending=total;const nn=ru
     <button class="btn b-orange" data-act="next">ODBIERZ ${total} ▶︎</button></div>`,'bottom');
   const sheet=$('#overlay .receipt');if(!RM)sheet.animate([{transform:'translateY(105%)'},{transform:'translateY(0)'}],{duration:500,easing:'cubic-bezier(.2,.9,.3,1)'});
   const tr=[...document.querySelectorAll('.receipt .rr')];tr.forEach((r,i)=>setTimeout(()=>{r.classList.add('in');SFX.tick();SFX.coin(i);},450+i*280));}
-async function collect(){const sheet=$('#overlay .receipt');if(sheet&&!RM)await sheet.animate([{transform:'none'},{transform:'translateY(110%)'}],{duration:280,easing:'ease-in'}).finished;
-  closeOverlay();const old=0;run.coins=run.pending;run.pending=0;renderHUD();countTo($('#coinN'),old,run.coins);SFX.coin(3);
-  burst($('#coins'),['#FFC93C','#FFF3B0'],12,true);defaultCenter();
-  if(run.night===2&&!RM){}}
+async function collect(){if(busy)return;busy=true;await noteOut();
+  await doorOpen();run.coins=BUDGET;run.pending=0;renderHUD();countTo($('#coinN'),0,run.coins);SFX.coin(3);burst($('#coins'),['#FFC93C','#FFF3B0'],12,true);renderAll();defaultCenter();busy=false;}
 function score(win){return run.won*100+run.hp*25+(win?300:0)+run.newDishes.length*50;}
 async function gameOver(win){meta.runs++;if(win)meta.won++;const sc=score(win);let rec='';
-  if(run.daily){meta.daily=meta.daily||{};const d=today(),prev=meta.daily[d];if(!prev||sc>prev.score){meta.daily[d]={score:sc,night:run.won};rec=prev?'Nowy rekord dnia!':'Pierwszy wynik dnia!';}else rec=`Rekord dnia: ${prev.score} pkt`;}
+  if(run.daily){meta.daily=meta.daily||{};const d=today(),prev=meta.daily[d];if(!prev||sc>prev.score){meta.daily[d]={score:sc,night:run.won};rec=prev?'nowy rekord!':'pierwszy wynik';}else rec=`rekord ${prev.score}`;}
   saveMeta();humOff();
-  const nd=run.newDishes.map(k=>`<div><img class="px" src="${IMG[k][2]}" alt="">${KINDS[k].n[2]}</div>`).join('');
-  overlay(`<div class="sheet"><h2>${win?'BABCIA WRÓCIŁA!':'ZAKWAS OPADŁ'}</h2><p>${win?'Kuchnia przetrwała 10 nocy. Pleśń nie miała szans.':'Rano wszystko wraca na półki. Przetrwane noce: '+run.won+'.'}</p>
-    <p style="font-size:34px;color:var(--gold)">${sc} PKT</p>${run.daily?`<p>DANIE DNIA ${today()}<br><span style="color:var(--muted)">${rec}</span></p>`:''}
-    ${nd?`<p>Nowe magnesy na lodówkę:</p><div class="coll">${nd}</div>`:''}<p style="color:var(--muted)">Najdalej: noc ${meta.best} · seed ${run.seed.toString(36)}</p>
-    <button class="btn b-orange" data-act="home">ZAMKNIJ LODÓWKĘ</button></div>`,'mid');}
-async function goHome(){closeOverlay();renderDoor();doorTitle(true);await doorClose();setNight(false);humOff();run=null;B=null;game.hidden=true;}
+  const nd=run.newDishes.map(k=>`<img class="px" src="${IMG[k][2]}" alt="${KINDS[k].n[2]}">`).join('');
+  setNight(false);humOff();
+  noteIn(`<div class="bignote"><h3>${win?'Wróciłam!':'Zakwas opadł…'}</h3>
+    <div class="nl"><span>${win?'Kuchnia lśni. Kto tu sprzątał po nocach?':'Rano wszystko wraca na półki.'}</span><b></b></div>
+    <div class="nl"><span>Przetrwane noce</span><b>${run.won}/10</b></div>
+    <div class="nl big"><span style="flex:1">${sc} pkt</span></div>
+    ${run.daily?`<div class="nl"><span>Danie dnia ${today()}</span><b>${rec}</b></div>`:''}
+    ${nd?`<div class="nl"><span>Nowe magnesy:</span><b></b></div><div class="dishes">${nd}</div>`:''}
+    <span class="sig">— Babcia · seed ${run.seed.toString(36)}</span></div>
+    <div class="btns"><button class="btn b-gray" data-act="home">MENU</button><button class="btn b-orange" data-act="again">JESZCZE RAZ</button></div>`);}
+async function goHome(){if(busy)return;busy=true;await noteOut();const daily=run&&run.daily;run=null;B=null;game.hidden=true;renderDoor();doorTitle(true);
+  const t=$('#doorTitle');if(!RM)[...t.children].forEach((c,i)=>c.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:300,delay:i*60,fill:'backwards'}));busy=false;return daily;}
 
 /* ================= OVERLAYS ================= */
 function overlay(html,mode){const o=$('#overlay');o.className=mode==='mid'?'mid':'';o.innerHTML=html;o.hidden=false;paused=true;}
@@ -791,7 +862,7 @@ document.addEventListener('pointercancel',()=>endDrag(false));
 /* ================= INPUT ================= */
 document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;}const t=ev.target.closest('[data-act]');if(!t)return;ac();const act=t.dataset.act,i=+t.dataset.i;
   switch(act){
-    case 'play':case 'daily':{if(busy)break;busy=true;SFX.buy();newRun(act==='daily');game.hidden=false;setClock(8*60);renderAll();defaultCenter();humOn(false);await doorOpen();busy=false;break;}
+    case 'play':case 'daily':{if(busy)break;busy=true;SFX.tap();newRun(act==='daily');game.hidden=false;setClock(8*60);renderAll();defaultCenter();await doorOpen();busy=false;break;}
     case 'help':SFX.tap();showHelp();break;
     case 'coll':SFX.tap();showColl();break;
     case 'close':SFX.tap();closeOverlay();break;
@@ -809,6 +880,7 @@ document.addEventListener('click',async ev=>{if(suppress){suppress=false;return;
     case 'speed':run.speed=run.speed===1?2:run.speed===2?3:1;renderActions();break;
     case 'next':collect();break;
     case 'home':goHome();break;
+    case 'again':{const d=run&&run.daily;await goHome();if(busy)break;busy=true;newRun(d);game.hidden=false;setClock(8*60);renderAll();defaultCenter();doorTitle(false);await doorOpen();busy=false;break;}
   }});
 renderDoor();
 })();

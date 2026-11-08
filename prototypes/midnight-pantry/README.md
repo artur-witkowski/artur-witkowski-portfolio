@@ -28,7 +28,7 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
   - „Zamknij” zatrzaskuje drzwi i w środku robi się noc (gaśnie żarówka, świeci zamrażalnik, inny dźwięk buczenia),
   - potwory „rozmrażają się” jeden po drugim, a boss ma swój baner,
   - o świcie zegar dobiega 06:00, drzwi się zamykają i otwierają na dzień,
-  - wypłata wychodzi jako paragon „Sklep u Babci”.
+  - podsumowanie nocy przylepia się jako karteczka od Babci na zamkniętych drzwiach; „Otwórz lodówkę” zaczyna nowy dzień.
 - Łączenie jak w TFT: 3 kupione kopie trafiają na patelnię (skwierczenie, para) i wyskakują jako ★★, kolejne 3 jako danie ★★★
   (np. Ziemniak → Frytki → Placki, Burak → Ćwikła → Barszcz). Dania ★★★ wiszą potem na drzwiach jako magnesy.
 - Rząd 5 miejsc jak w Super Auto Pets, pierwszy z lewej walczy pierwszy. Zepsuty składnik zielenieje i spada z półki.
@@ -58,3 +58,9 @@ Pionowy auto battler / roguelike na jedną rękę. Składniki z lodówki bronią
 - Drzwi lodówki są w 3D: front, grubość krawędzi i wewnętrzna strona z półkami na jajka, słoiki i masło.
   Przy otwieraniu kamera się oddala, drzwi skręcają w perspektywie, wypływa zimna mgła, mruga lampa i kamera wchodzi do środka.
 - Wnętrze lodówki ma ściany boczne i sufit w perspektywie, lampę LED, żeberka na tylnej ścianie, uszczelkę i szklaną półkę z grubością.
+
+## Animacja drzwi i aplikacja (v6.1)
+
+- Otwieranie i zamykanie to po jednej ciągłej choreografii: kamera, drzwi, światło i przyciemnienie mają wspólny zegar,
+  animowane są tylko `transform` i `opacity`, dźwięki są zsynchronizowane z tym zegarem. Zamknięcie ma odbicie przy uszczelce.
+- Aplikacja na iOS i Androida (Capacitor 8): folder `app/`, instrukcja w `app/README.md`. Gra dalej rozwija się w `index.html`.
