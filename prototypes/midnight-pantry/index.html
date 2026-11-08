@@ -446,9 +446,9 @@ function autoTarget(id){if(run.night>=3){const same=run.shelves.findIndex(u=>u&&
 function unitInfo(u){const d=UNITS[u.id],s=stat(u);const grown=u.bonusAtk||u.bonusHp?` Ukiszony: +${u.bonusAtk}/+${u.bonusHp}.`:'';
   return `${d.e} <b>${d.n}</b> ⚔ ${s.atk} ♥ ${s.hp}. ${abilityText(d)}${grown} <em>Stuknij inną półkę, żeby przestawić.</em>`;}
 function onShop(i){const it=run.shop[i];if(!it||it.sold)return;
-  if(run.sel&&run.sel.type==='shop'&&run.sel.i===i){const t=autoTarget(it.id);if(t>=0)buyTo(i,t);else info('Brak wolnej półki. Sprzedaj coś.');return;}
+  if(run.sel&&run.sel.type==='shop'&&run.sel.i===i){run.sel=null;run.info='';renderAll();return;}
   run.sel={type:'shop',i};const d=UNITS[it.id];
-  run.info=`${d.e} <b>${d.n}</b> ⚔ ${d.atk} ♥ ${d.hp}. ${abilityText(d)} <em>Stuknij półkę albo kartę jeszcze raz.</em>`;
+  run.info=`${d.e} <b>${d.n}</b> ⚔ ${d.atk} ♥ ${d.hp}. ${abilityText(d)} <em>Stuknij półkę, żeby kupić. Stuknij kartę jeszcze raz, żeby odznaczyć.</em>`;
   renderAll();}
 function onShelf(i){if(run.phase!=='shop')return;const s=run.sel;
   if(s&&s.type==='shop'){buyTo(s.i,i);return;}
