@@ -17,12 +17,83 @@ const languages = [
   { flag: '🇪🇸', name: 'Spanish (Spain)' },
   { flag: '🇫🇷', name: 'French (France)' },
 ];
+
+// The same sentence opens the App Store listing and every directory entry, so answer engines
+// that quote any of them describe the app the same way.
+const definition =
+  'Lockabulary is a vocabulary app for iPhone and Mac. It blocks your apps on iPhone and locks your screen on Mac until you answer a few words in European Portuguese, Spanish or French.';
+
+const questions = [
+  { q: 'What is Lockabulary?', a: definition + ' It is made by Artur Witkowski, an independent developer.' },
+  {
+    q: 'Which languages does Lockabulary teach?',
+    a: 'European Portuguese, Spanish as spoken in Spain and French as spoken in France, each taught from English. Every language has 2,500 to 3,300 of its most used words, in order of how often you meet them.',
+  },
+  {
+    q: 'Does Lockabulary lock the whole Mac screen?',
+    a: 'Yes. Lockabulary is a Mac menu bar app. A countdown in the menu bar gives you two minutes, then every display blurs and a short quiz opens, usually for under a minute. It waits during calls and in apps you mark. Force Quit, logging out and restarting keep working, and "Emergency exit…" closes a quiz with Touch ID or your Mac password.',
+  },
+  {
+    q: 'How does Lockabulary block apps on iPhone?',
+    a: "Through Apple's Screen Time. You pick the apps, and after the minutes you choose in them a shield covers them until you answer a short quiz. You can pause the lock or turn it off in Settings.",
+  },
+  {
+    q: 'How much does Lockabulary cost?',
+    a: 'The download is free and everything works for 14 days. After that it is $12.99 a year or $19.99 once. Either one covers your iPhone and your Mac, with no account and no ads.',
+  },
+  {
+    q: 'How is Lockabulary different from Duolingo, Anki, one sec or Opal?',
+    a: "Duolingo and Anki wait for you to open them. Lockabulary interrupts you and asks. one sec and Opal also block apps, but nothing is taught while you wait. Lockabulary does less than any of them. It teaches vocabulary in three languages, with no speaking practice and no full grammar course, so it works best next to a course.",
+  },
+  {
+    q: 'How does the spaced repetition work?',
+    a: 'Reviews follow FSRS, the spaced repetition algorithm Anki also uses. A new word comes back once after 25 minutes, then FSRS spaces the reviews across days so that you remember about 90% of them.',
+  },
+  {
+    q: 'Is there an Android or Windows version of Lockabulary?',
+    a: 'No. Lockabulary runs on iPhone with iOS 26 and on Mac with macOS 26, or later. An older Android project with the same name is unrelated.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Lockabulary',
+    description: definition,
+    url: 'https://arturwitkowski.com/lockabulary/',
+    image: 'https://arturwitkowski.com/lockabulary/icon.png',
+    screenshot: 'https://arturwitkowski.com/lockabulary/og.jpg',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'iOS 26, macOS 26',
+    inLanguage: 'en',
+    datePublished: '2026-11-07',
+    downloadUrl: appStoreUrl,
+    installUrl: appStoreUrl,
+    sameAs: [appStoreUrl],
+    author: { '@type': 'Person', name: 'Artur Witkowski', url: 'https://arturwitkowski.com/en/' },
+    offers: [
+      { '@type': 'Offer', name: 'Yearly, after 14 days free', price: '12.99', priceCurrency: 'USD' },
+      { '@type': 'Offer', name: 'Lifetime', price: '19.99', priceCurrency: 'USD' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
 ---
 
 <LockabularyPage
-  title="Lockabulary: learn vocabulary, scroll less"
-  description="Lockabulary locks the apps you lose time in until you answer a few words. A vocabulary trainer for iPhone and Mac: European Portuguese, Spanish and French."
+  title="Lockabulary: vocabulary app that locks your iPhone apps and your Mac"
+  description={definition}
   path="lockabulary"
+  jsonLd={jsonLd}
   wide
 >
   <main>
@@ -30,11 +101,8 @@ const languages = [
     <section class="hero wrap">
       <div class="hero-copy">
         <span class="pill">For iPhone and Mac</span>
-        <h1>Learn a language, <em>scroll less.</em></h1>
-        <p class="lead">
-          Lockabulary locks the apps you lose time in until you answer a few words. On the Mac, a short
-          quiz comes up between your work. European Portuguese, Spanish and French.
-        </p>
+        <h1>Lockabulary locks your screen <em>until you answer a few words.</em></h1>
+        <p class="lead">{definition}</p>
         <div class="cta-row">
           <a class="store-btn" href={appStoreUrl}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.38-.92-2.4-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z" /></svg>
@@ -81,7 +149,7 @@ const languages = [
             <img class="mac-menu" src="/lockabulary/mac-menu.webp" alt="The Lockabulary menu: 1:41 to solve, Solve now, +10 min" width="400" height="940" loading="lazy" />
           </div>
           <div class="panel-copy">
-            <h3>On Mac, a quiz from the menu bar</h3>
+            <h3>On Mac, a menu bar app that locks the screen for a quiz</h3>
             <ol class="steps">
               <li>A countdown in the menu bar gives you two minutes to wrap up.</li>
               <li>Then the screen blurs and a short quiz opens, usually under a minute.</li>
@@ -108,7 +176,7 @@ const languages = [
         <ul class="facts">
           <li><strong>2,500 to 3,300 words</strong> per language, in order of how often you'll run into them.</li>
           <li><strong>Every word in a real sentence</strong>, with phonetic spelling and a voice.</li>
-          <li><strong>Reviews spaced with FSRS</strong>, so a word comes back right before you'd forget it.</li>
+          <li><strong>Spaced repetition with FSRS</strong>, so a word comes back right before you'd forget it.</li>
           <li><strong>Questions grow with you.</strong> New words are multiple choice, later you fill gaps, listen and type them.</li>
           <li><strong>A placement check</strong> skips the words you already know.</li>
         </ul>
@@ -163,8 +231,23 @@ const languages = [
           <li>No analytics</li>
           <li>No server</li>
         </ul>
-        <p>Your progress stays on your devices and in your own iCloud. <a href="/lockabulary/privacy">Read the privacy policy</a>.</p>
+        <p>Your progress stays on your devices and in your own iCloud. <a href="/lockabulary/privacy/">Read the privacy policy</a>.</p>
       </div>
+    </section>
+
+    {/* ===== QUESTIONS ===== */}
+    <section id="questions" class="wrap section help">
+      <span class="pill">Questions</span>
+      <h2>What people ask first</h2>
+      <div class="faq">
+        {questions.map(({ q, a }) => (
+          <details>
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+      <p class="soft note">Lockabulary 1.0 came out on 7 November 2026. This page was updated on 16 November 2026.</p>
     </section>
 
     {/* ===== HELP ===== */}
@@ -207,7 +290,7 @@ const languages = [
     font-weight: 800; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
   }
   h1, h2 { font-weight: 800; line-height: 1.02; margin: 16px 0 18px; text-wrap: balance; }
-  h1 { font-size: clamp(44px, 7vw, 82px); }
+  h1 { font-size: clamp(38px, 5.4vw, 64px); }
   h2 { font-size: clamp(34px, 4.6vw, 54px); }
   h1 em, h2 em {
     font-style: normal; padding: 0 6px; margin: 0 -6px;

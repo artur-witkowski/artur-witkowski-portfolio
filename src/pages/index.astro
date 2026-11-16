@@ -1,15 +1,29 @@
 ---
-// Root page — instant client-side redirect to /pl/ or /en/ based on browser language
+// Root page. A browser goes straight to /pl/ or /en/ by its language.
+// A crawler that doesn't run scripts gets real links instead of an empty body.
 ---
 
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Artur Witkowski</title>
+    <meta name="description" content="Artur Witkowski, software developer. Portfolio in English and Polish, and Lockabulary, a vocabulary app for iPhone and Mac." />
+    <link rel="alternate" hreflang="en" href="https://arturwitkowski.com/en/" />
+    <link rel="alternate" hreflang="pl" href="https://arturwitkowski.com/pl/" />
     <script is:inline>
       var s = localStorage.getItem('lang');
       var l = s || (navigator.language.startsWith('pl') ? 'pl' : 'en');
       window.location.replace('/' + l + '/');
     </script>
   </head>
-  <body style="display:none"></body>
+  <body>
+    <h1>Artur Witkowski</h1>
+    <ul>
+      <li><a href="/en/">Portfolio in English</a></li>
+      <li><a href="/pl/">Portfolio po polsku</a></li>
+      <li><a href="/lockabulary/">Lockabulary, a vocabulary app for iPhone and Mac</a></li>
+    </ul>
+  </body>
 </html>

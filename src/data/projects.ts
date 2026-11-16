@@ -22,7 +22,7 @@ export const projects: Project[] = [
       en: 'iPhone and Mac app for learning vocabulary. On the phone it locks the apps you lose time in until you answer a few words. On the Mac it blurs the screen for a short quiz every 15 to 70 minutes of work.',
     },
     stack: ['Swift', 'SwiftUI', 'AppKit', 'Screen Time API', 'CloudKit', 'StoreKit', 'WidgetKit', 'Python', 'Claude Code'],
-    url: '/lockabulary',
+    url: '/lockabulary/',
     type: 'solo',
     highlights: ['Screen Time shield on iPhone', 'CloudKit sync with no server', 'FSRS spaced repetition'],
     image: '/projects/lockabulary.webp',
