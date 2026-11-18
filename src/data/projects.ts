@@ -6,9 +6,17 @@ export interface Project {
   url: string;
   type: 'solo' | 'team';
   highlights: string[];
+  // colour of the glow behind the project and of its tile on hover
+  accent: string;
+  // square icon for the project menu; without one the tile shows the first letter of the name
+  icon?: string;
   image?: string;
+  // which part of the image stays in view when it is cropped
+  imagePos?: string;
   // an app, not a website: the picture is its screens on this colour, so it gets no browser bar
   backdrop?: string;
+  // a website: what sits behind its browser window
+  field?: string;
   // store pages, shown as buttons next to "Visit"
   stores?: { label: string; url: string; icon: 'apple' | 'play' }[];
 }
@@ -18,14 +26,17 @@ export const projects: Project[] = [
     slug: 'lockabulary',
     name: 'Lockabulary',
     description: {
-      pl: 'Aplikacja na iPhone\'a i Maca do nauki słówek. Na telefonie blokuje aplikacje, w których tracisz czas, dopóki nie odpowiesz na kilka pytań. Na Macu co 15 do 70 minut pracy rozmywa ekran na krótki quiz.',
-      en: 'iPhone and Mac app for learning vocabulary. On the phone it locks the apps you lose time in until you answer a few words. On the Mac it blurs the screen for a short quiz every 15 to 70 minutes of work.',
+      pl: 'Aplikacja na iPhone\'a i Maca do nauki portugalskich, hiszpańskich i francuskich słówek. Na telefonie blokuje aplikacje, w których tracisz czas, dopóki nie odpowiesz na kilka pytań. Na Macu co 15 do 70 minut pracy rozmywa ekran na krótki quiz.',
+      en: 'iPhone and Mac app for learning Portuguese, Spanish and French vocabulary. On the phone it locks the apps you lose time in until you answer a few words. On the Mac it blurs the screen for a short quiz every 15 to 70 minutes of work.',
     },
     stack: ['Swift', 'SwiftUI', 'AppKit', 'Screen Time API', 'CloudKit', 'StoreKit', 'WidgetKit', 'Python', 'Claude Code'],
     url: '/lockabulary/',
     type: 'solo',
     highlights: ['Screen Time shield on iPhone', 'CloudKit sync with no server', 'FSRS spaced repetition'],
+    accent: '#F7B9A0',
+    icon: '/projects/icons/lockabulary.webp',
     image: '/projects/lockabulary.webp',
+    imagePos: 'center 40%',
     backdrop: '#F6CDB8',
     // one app record for both, so one Apple ID
     stores: [
@@ -44,7 +55,10 @@ export const projects: Project[] = [
     url: 'https://krokiet.app',
     type: 'solo',
     highlights: ['Offline outbox with ids from the phone', 'Overture Maps import', 'Subscriptions through RevenueCat'],
+    accent: '#FFD66E',
+    icon: '/projects/icons/krokiet.webp',
     image: '/projects/krokiet.webp',
+    imagePos: 'center 12%',
     backdrop: '#FFD66E',
     stores: [
       { label: 'iPhone', url: 'https://apps.apple.com/app/id6813079137', icon: 'apple' },
@@ -62,7 +76,10 @@ export const projects: Project[] = [
     url: 'https://faunarium.net',
     type: 'solo',
     highlights: ['Monorepo (Turborepo)', 'CI/CD (GitHub Actions)', 'PWA + mobile (Capacitor)'],
+    accent: '#D9A066',
+    icon: '/projects/icons/faunarium.webp',
     image: '/projects/faunarium.webp',
+    field: 'linear-gradient(135deg, #2b1a0f 0%, #74492a 100%)',
   },
   {
     slug: 'get-diet',
@@ -75,6 +92,9 @@ export const projects: Project[] = [
     url: 'https://get-diet.com',
     type: 'team',
     highlights: ['Stripe subscriptions', 'PDF generation', 'Health survey system'],
+    accent: '#4ADE80',
+    icon: '/projects/icons/getdiet.webp',
     image: '/projects/getdiet.webp',
+    field: 'linear-gradient(135deg, #128a52 0%, #6fdca6 100%)',
   },
 ];

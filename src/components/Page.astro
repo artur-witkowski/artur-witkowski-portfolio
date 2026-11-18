@@ -4,6 +4,7 @@ import Nav from '@/components/Nav.astro';
 import type { Lang } from '@/i18n/index';
 import { t } from '@/i18n/index';
 import { projects } from '@/data/projects';
+import ProjectLinks from '@/components/ProjectLinks.astro';
 
 interface Props {
   lang: Lang;
@@ -288,170 +289,108 @@ const contactLinks = [
 
     </div>{/* close top row grid */}
 
-    {/* ===== PROJECTS CAROUSEL ===== */}
+    {/* ===== PROJECTS: MENU ===== */}
     <section
-      class="card-animate flex flex-col mb-3 lg:mb-0 min-h-0"
+      id="projects"
+      class="card-animate mb-3 lg:mb-0"
       style="animation-delay: 300ms"
     >
-      <div class="flex items-center justify-between mb-2.5 px-1">
-        <h2 class="relative inline-block section-label text-accent font-body font-medium text-xs uppercase tracking-[1.5px]">
-          {projectsLabelChars.map((char, i) => (
-            <span
-              class="split-char"
-              style={`--i: ${i}; --base-delay: 700ms`}
-            >
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          ))}
-        </h2>
-        <div class="flex items-center gap-2 md:hidden">
-          <div class="flex items-center gap-0" id="carousel-dots">
-            {projects.map((_, i) => (
-              <button
-                class={`carousel-dot ${i === 0 ? 'active' : ''}`}
-                data-index={i}
-                aria-label={`Project ${i + 1}`}
-              />
-            ))}
-          </div>
-          <button id="carousel-prev" class="p-2.5 rounded-lg border border-border text-text-muted hover:text-accent hover:border-accent/30 transition-all duration-200 cursor-pointer" aria-label="Previous">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
-          <button id="carousel-next" class="p-2.5 rounded-lg border border-border text-text-muted hover:text-accent hover:border-accent/30 transition-all duration-200 cursor-pointer" aria-label="Next">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
-        </div>
-      </div>
+      <h2 class="relative inline-block section-label text-accent font-body font-medium text-xs uppercase tracking-[1.5px] mb-2.5 ml-1">
+        {projectsLabelChars.map((char, i) => (
+          <span
+            class="split-char"
+            style={`--i: ${i}; --base-delay: 700ms`}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        ))}
+      </h2>
 
-      {/* One row on wide screens, up to four across; more wrap into the next row */}
-      <div class="carousel-track flex-1" id="carousel-track" style={`--cols: ${Math.min(projects.length, 4)}`}>
-        {projects.map((project) => {
-          const desc = project.description[lang];
-          const typeLabel = project.type === 'solo' ? t('projects.solo', lang) : t('projects.team', lang);
-          return (
-            <div class="carousel-card glass rounded-2xl p-5 lg:p-5 flex flex-col">
-              {/* Browser frame screenshot */}
-              {project.image && (
-                <div
-                  class={`browser-frame mb-3 rounded-lg overflow-hidden ${project.backdrop ? 'pt-[30px]' : 'border border-border/50'}`}
-                  style={project.backdrop ? `background-color: ${project.backdrop}` : undefined}
-                >
-                  {!project.backdrop && <div class="browser-frame__bar flex items-center gap-1.5 px-3 py-1.5 bg-surface/60">
-                    <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
-                    <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
-                    <span class="w-2 h-2 rounded-full bg-text-muted/20"></span>
-                    <span class="flex-1 mx-2 h-4 rounded bg-surface-hover flex items-center px-2">
-                      <span class="text-[8px] font-mono text-text-muted truncate" aria-hidden="true">{project.url}</span>
-                    </span>
-                  </div>}
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    width="600"
-                    height="375"
-                    class="block w-full aspect-[16/9] object-cover object-top"
-                    loading="lazy"
-                    decoding="async"
-                  />
+      {/* One row up to six projects, two rows above that */}
+      <nav class="project-menu" aria-label={t('projects.label', lang)} style={`--cols: ${projects.length <= 6 ? projects.length : Math.ceil(projects.length / 2)}`}>
+        {projects.map((project) => (
+          <a href={`#${project.slug}`} class="project-tile glass rounded-xl cursor-pointer" style={`--pa: ${project.accent}`}>
+            {project.icon ? (
+              <img class="project-tile__icon" src={project.icon} alt="" width="40" height="40" decoding="async" />
+            ) : (
+              <span class="project-tile__icon project-tile__icon--letter" aria-hidden="true">{project.name.charAt(0)}</span>
+            )}
+            <span class="project-tile__name">{project.name}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    {/* ===== PROJECTS: ONE CHAPTER EACH ===== */}
+    <div class="lg:px-3">
+      {projects.map((project, i) => {
+        const typeLabel = project.type === 'solo' ? t('projects.solo', lang) : t('projects.team', lang);
+        return (
+          <section id={project.slug} class={`chapter ${i % 2 ? 'chapter--flip' : ''}`} style={`--pa: ${project.accent}`}>
+            {project.backdrop ? (
+              <div class="chapter__media" style={`background-color: ${project.backdrop}`}>
+                <img class="chapter__shot" src={project.image} alt={project.name} width="1200" height="675" style={`object-position: ${project.imagePos ?? 'center'}`} loading="lazy" decoding="async" />
+              </div>
+            ) : (
+              <div class="chapter__media chapter__media--web" style={project.field ? `background: ${project.field}` : undefined}>
+                <div class="chapter__window">
+                  <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>{project.url.replace(/^https?:\/\//, '')}</span></div>
+                  <img src={project.image} alt={project.name} width="1200" height="675" loading="lazy" decoding="async" />
                 </div>
-              )}
+              </div>
+            )}
 
-              <div class="flex items-start justify-between gap-2 mb-2">
-                <h3 class="font-heading font-semibold text-base lg:text-lg text-text leading-snug">
+            <div>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
+                <h3 class="font-heading font-bold text-4xl lg:text-[52px] leading-[1.05] tracking-tight text-text">
                   {project.name}
                 </h3>
-                <span class={`shrink-0 text-[9px] font-mono px-1.5 py-0.5 rounded-full whitespace-nowrap ${project.type === 'solo' ? 'text-emerald-400 bg-emerald-400/10 border border-emerald-400/20' : 'text-violet-400 bg-violet-400/10 border border-violet-400/20'}`}>
+                <span class={`role-badge ${project.type === 'solo' ? 'role-badge--solo' : 'role-badge--team'}`}>
                   {typeLabel}
                 </span>
               </div>
-
-              <p class="font-body text-text-muted text-xs leading-relaxed mb-3 flex-1">
-                {desc}
+              <p class="font-body text-text-muted text-base lg:text-[16.5px] leading-[1.65] mb-5">
+                {project.description[lang]}
               </p>
-
-              <div class="chroma-tags mb-3">
-                {project.stack.map((techName) => {
-                  const tech = techLookup[techName];
-                  const color = tech?.color || '#06b6d4';
-                  const src = tech ? techIconSrc(tech) : undefined;
-                  return (
-                    <span class="chroma-tags__item" style={`--card-color: ${color}`}>
-                      {src && <img src={src} alt="" class="chroma-tags__icon" width="14" height="14" loading="lazy" onerror="this.style.display='none'" />}
-                      {techName}
-                    </span>
-                  );
-                })}
+              <div class="flex flex-wrap gap-1.5 mb-[26px]">
+                {project.stack.map((tech) => <span class="stack-chip">{tech}</span>)}
               </div>
-
-              <div class="flex items-center gap-1.5 flex-wrap mt-auto">
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="cta cta-primary flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg border border-transparent whitespace-nowrap text-xs font-body font-semibold cursor-pointer group"
-                >
-                  {t('projects.visit', lang)}
-                  <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-                  </svg>
-                </a>
-                {project.stores?.map((store) => (
-                  <a
-                    href={store.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="cta cta-secondary flex-1 inline-flex items-center justify-center gap-1 px-2 py-2 rounded-lg whitespace-nowrap border border-border bg-surface/40 text-text text-xs font-body font-medium cursor-pointer"
-                    aria-label={`${project.name}: ${store.icon === 'apple' ? 'App Store' : 'Google Play'}, ${store.label}`}
-                  >
-                    {store.icon === 'apple' ? (
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.38-.92-2.4-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z" />
-                      </svg>
-                    ) : (
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M4.6 2.3c-.3.3-.5.8-.5 1.4v16.6c0 .6.2 1.1.5 1.4l.1.1 9.3-9.3v-.2L4.7 2.2l-.1.1zm12.5 12.5-3.1-3.1v-.2l3.1-3.1.1.1 3.7 2.1c1 .6 1 1.6 0 2.2l-3.7 2.1-.1-.1zm-.1.1L13.8 12l-9.2 9.7c.3.4.9.4 1.6 0l10.8-6.8m0-5.8L6.2 2.3c-.7-.4-1.3-.4-1.6 0l9.2 9.7 3.2-3.2z" />
-                      </svg>
-                    )}
-                    {store.label}
-                  </a>
-                ))}
-              </div>
+              <ProjectLinks project={project} lang={lang} />
             </div>
-          );
-        })}
-      </div>
-    </section>
+          </section>
+        );
+      })}
+    </div>
 
-    {/* ===== FOOTER BAR ===== */}
-    <section
-      class="card-animate glass rounded-2xl px-5 py-2.5
-        lg:mt-auto
-        flex flex-col sm:flex-row items-center justify-between gap-2"
-      style="animation-delay: 450ms"
-    >
-      <div class="flex flex-col sm:flex-row items-center gap-2 sm:flex-wrap justify-center sm:justify-start">
-        <p class="text-text-muted font-body text-xs">{t('contact.cta', lang)}</p>
-        <div class="flex items-center gap-2">
-        {contactLinks.map((link) => (
+    {/* ===== CONTACT ===== */}
+    <section id="contact" class="glass rounded-2xl px-6 py-12 lg:py-14 text-center mb-3 lg:mb-0">
+      <h2 class="relative inline-block section-label text-accent font-body font-medium text-xs uppercase tracking-[1.5px]">
+        {t('contact.label', lang)}
+      </h2>
+      <p class="font-heading font-bold text-3xl lg:text-[44px] leading-[1.1] tracking-tight text-text mt-3.5 mb-[26px]">
+        {t('contact.cta', lang)}
+      </p>
+      <div class="flex flex-wrap justify-center gap-2">
+        {contactLinks.map((link, i) => (
           <a
             href={link.href}
             target={link.href.startsWith('mailto:') ? undefined : '_blank'}
             rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-            class="social-icon flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-border bg-surface/30 text-text-muted hover:text-accent text-[11px] font-medium cursor-pointer"
+            class={`cta inline-flex items-center justify-center gap-2 h-12 px-[22px] rounded-[10px] whitespace-nowrap font-body text-[15px] cursor-pointer ${i === 0 ? 'cta-primary border border-transparent font-semibold' : 'cta-secondary border border-border bg-surface/40 text-text font-medium'}`}
           >
             {link.icon === 'mail' && (
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
               </svg>
             )}
             {link.icon === 'linkedin' && (
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                 <rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" />
               </svg>
             )}
             {link.icon === 'github' && (
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
                 <path d="M9 18c-4.51 2-5-2-7-2" />
               </svg>
@@ -459,64 +398,19 @@ const contactLinks = [
             {link.label}
           </a>
         ))}
-        </div>
       </div>
-      <span class="text-text-muted text-xs font-body">&copy; 2026 Artur Witkowski</span>
     </section>
+
+    <div class="flex items-center justify-between gap-3 px-1 pb-1 text-xs text-text-muted font-body">
+      <span>&copy; 2026 Artur Witkowski</span>
+      <span>{t('footer.built', lang)}</span>
+    </div>
 
   </main>
 </Layout>
 
 <script is:inline>
 (function () {
-  // ===== CAROUSEL =====
-  var track = document.getElementById('carousel-track');
-  var dots = document.querySelectorAll('.carousel-dot');
-  var prevBtn = document.getElementById('carousel-prev');
-  var nextBtn = document.getElementById('carousel-next');
-
-  if (track && dots.length) {
-    function getCardWidth() {
-      var card = track.querySelector('.carousel-card');
-      if (!card) return 300;
-      return card.offsetWidth + 12;
-    }
-
-    function getCurrentIndex() {
-      return Math.round(track.scrollLeft / getCardWidth());
-    }
-
-    function scrollToIndex(idx) {
-      track.scrollTo({ left: idx * getCardWidth(), behavior: 'smooth' });
-    }
-
-    function updateDots() {
-      var idx = getCurrentIndex();
-      dots.forEach(function (d, i) {
-        d.classList.toggle('active', i === idx);
-      });
-    }
-
-    track.addEventListener('scroll', updateDots);
-
-    dots.forEach(function (dot) {
-      dot.addEventListener('click', function () {
-        scrollToIndex(parseInt(dot.getAttribute('data-index')));
-      });
-    });
-
-    if (prevBtn) prevBtn.addEventListener('click', function () {
-      var idx = getCurrentIndex();
-      if (idx > 0) scrollToIndex(idx - 1);
-    });
-
-    if (nextBtn) nextBtn.addEventListener('click', function () {
-      var idx = getCurrentIndex();
-      var maxIdx = dots.length - 1;
-      if (idx < maxIdx) scrollToIndex(idx + 1);
-    });
-  }
-
   // ===== TICKER TOGGLE =====
   var tickerToggle = document.getElementById('ticker-toggle');
   var toggleDot = document.getElementById('toggle-dot');

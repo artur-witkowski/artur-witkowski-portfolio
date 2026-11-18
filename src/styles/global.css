@@ -364,75 +364,243 @@ body {
   background: linear-gradient(90deg, #38bdf8, transparent);
 }
 
-/* ===== CAROUSEL ===== */
-.carousel-track {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-}
-
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* On phones the next card shows past the edge, so it's clear there are more */
-.carousel-card {
-  scroll-snap-align: start;
-  flex: 0 0 85%;
-}
-
-/* From tablets up every project is on screen: two columns, then --cols across (set from the project count) */
-@media (min-width: 768px) {
-  .carousel-track {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-  .carousel-card {
-    flex: none;
-  }
-}
-
-@media (min-width: 1280px) {
-  .carousel-track {
-    grid-template-columns: repeat(var(--cols, 3), 1fr);
-  }
-}
-
-/* Carousel dots */
-.carousel-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+/* ===== BROWSER BAR ===== */
+.browser-bar {
+  position: relative;
+  z-index: 1;
+  height: 28px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  background: #101f36;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.carousel-dot::after {
-  content: '';
-  width: 6px;
-  height: 6px;
+.browser-bar i {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--color-text-muted);
-  opacity: 0.3;
-  transition: all 0.2s ease;
+  background: rgba(176, 208, 240, 0.25);
 }
 
-.carousel-dot.active::after {
-  opacity: 1;
-  background: var(--color-accent);
-  width: 20px;
-  border-radius: 3px;
+.browser-bar span {
+  flex: 1;
+  margin-left: 8px;
+  height: 16px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  font: 400 9px/16px var(--font-mono);
+  color: #b0d0f0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ===== PROJECT MENU ===== */
+/* --pa is the project's colour, set inline on the tile and on its chapter */
+/* --cols is the most tiles a row may hold. A narrower screen fits fewer, never under --tile-min wide. */
+.project-menu {
+  --gap: 0.5rem;
+  --tile-min: 160px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(max(var(--tile-min), (100% - (var(--cols, 4) - 1) * var(--gap)) / var(--cols, 4)), 1fr)
+  );
+}
+
+.project-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+}
+
+.project-tile__icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.project-tile__icon--letter {
+  display: grid;
+  place-items: center;
+  background: var(--pa);
+  color: #0a1628;
+  font: 700 17px var(--font-heading);
+}
+
+.project-tile__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 14px var(--font-heading);
+  color: var(--color-text);
+}
+
+@media (min-width: 640px) {
+  .project-menu {
+    --gap: 0.75rem;
+    --tile-min: 172px;
+  }
+  .project-tile__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .project-tile__name {
+    font-size: 15px;
+  }
+}
+
+@media (hover: hover) {
+  .project-tile.glass:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--pa) 60%, transparent);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 12px 32px -14px color-mix(in srgb, var(--pa) 55%, transparent);
+  }
+}
+
+/* ===== CHAPTERS ===== */
+.chapter {
+  position: relative;
+  display: grid;
+  align-items: center;
+  gap: 1.375rem;
+  padding: 2.5rem 0;
+  scroll-margin-top: 1rem;
+}
+
+/* Glow in the project's colour behind the picture. It stays inside the chapter, or it widens the page on phones. */
+.chapter::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 4%;
+  left: 0;
+  width: min(820px, 100%);
+  height: 560px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--pa) 22%, transparent), transparent);
+  pointer-events: none;
+}
+
+.chapter--flip::before {
+  left: auto;
+  right: 0;
+}
+
+/* The first one sits right under the menu */
+.chapter:first-child {
+  padding-top: 1.5rem;
+}
+
+.chapter__media {
+  position: relative;
+  aspect-ratio: 5 / 3;
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.light .chapter__media {
+  box-shadow:
+    0 30px 70px -40px rgba(12, 26, 46, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.chapter__shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A website sits in a window on the project's colour, so it weighs the same as the app shots */
+.chapter__media--web {
+  display: flex;
+  padding: 7% 7% 0;
+  background: #0d1b30;
+}
+
+.chapter__window {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+  background: #0d1b30;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+}
+
+.chapter__window img {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 28px);
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Founder / Co-Founder. The 400 shades vanish on the light theme, so it gets the 700s there. */
+.role-badge {
+  --rb: #34d399;
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--rb) 30%, transparent);
+  background: color-mix(in srgb, var(--rb) 12%, transparent);
+  color: var(--rb);
+  font: 500 11px var(--font-mono);
+  white-space: nowrap;
+}
+
+.role-badge--team {
+  --rb: #a78bfa;
+}
+
+.light .role-badge {
+  --rb: #047857;
+}
+
+.light .role-badge--team {
+  --rb: #6d28d9;
+}
+
+.stack-chip {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font: 400 11px var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 1024px) {
+  .chapter {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+    padding: 4.875rem 0;
+  }
+  .chapter--flip {
+    grid-template-columns: 1fr 1.5fr;
+  }
+  .chapter--flip .chapter__media {
+    order: 2;
+  }
+  .chapter__media {
+    border-radius: 1.5rem;
+  }
 }
 
 /* ===== TECH TICKER ===== */
