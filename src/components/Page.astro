@@ -15,13 +15,15 @@ const { lang } = Astro.props;
 const nameChars = t('hero.name', lang).split('');
 const aboutLabelChars = t('about.label', lang).split('');
 const projectsLabelChars = t('projects.label', lang).split('');
+// how wide a project picture is drawn: 763px once the page hits its 1400px cap, just over half the page on desktop, the full width below
+const shotSizes = '(min-width: 1400px) 763px, (min-width: 1024px) 54vw, 100vw';
 
-interface TechItem { name: string; icon?: string; iconUrl?: string; color?: string }
+interface TechItem { name: string; icon?: string; color?: string }
 
+// Icons are files in public/tech, already filled with the brand colour.
+// A new one comes from https://cdn.simpleicons.org/<icon>/<hex colour>, saved as <icon>.svg.
 function techIconSrc(tech: TechItem): string | undefined {
-  if (tech.iconUrl) return tech.iconUrl;
-  if (tech.icon) return `https://cdn.simpleicons.org/${tech.icon}/${(tech.color || '#a0c4e8').slice(1)}`;
-  return undefined;
+  return tech.icon ? `/tech/${tech.icon}.svg` : undefined;
 }
 
 const frontendTechs: TechItem[] = [
@@ -36,7 +38,7 @@ const frontendTechs: TechItem[] = [
   { name: 'SASS', icon: 'sass', color: '#CC6699' },
   { name: 'Material UI', icon: 'mui', color: '#007FFF' },
   { name: 'Redux', icon: 'redux', color: '#764ABC' },
-  { name: 'Zustand', iconUrl: 'https://api.iconify.design/devicon-plain/zustand.svg?color=%23F56565', color: '#F56565' },
+  { name: 'Zustand', icon: 'zustand', color: '#F56565' },
   { name: 'React Query', icon: 'reactquery', color: '#FF4154' },
   { name: 'React Hook Form', icon: 'reacthookform', color: '#EC5990' },
   { name: 'Framer Motion', icon: 'framer', color: '#0055FF' },
@@ -81,44 +83,12 @@ const toolsTechs: TechItem[] = [
   { name: 'Playwright', color: '#2EAD33' },
 ];
 
-const allTechs = [...frontendTechs, ...backendTechs, ...toolsTechs];
 
 const techCategories = [
   { label: t('about.frontend', lang), items: frontendTechs, id: 'ticker-1', delay: '1000ms' },
   { label: t('about.backend', lang), items: backendTechs, id: 'ticker-2', delay: '1100ms' },
   { label: t('about.tools', lang), items: toolsTechs, id: 'ticker-3', delay: '1200ms' },
 ];
-
-// Tech lookup for project cards — maps stack names to icon/color
-const techLookup: Record<string, TechItem> = {};
-for (const tech of allTechs) {
-  techLookup[tech.name] = tech;
-}
-// Project-specific techs not in the main lists
-Object.assign(techLookup, {
-  'React 19': { name: 'React 19', icon: 'react', color: '#61DAFB' },
-  'React 18': { name: 'React 18', icon: 'react', color: '#61DAFB' },
-  'PixiJS 8': { name: 'PixiJS 8', iconUrl: 'https://api.iconify.design/devicon-plain/pixijs.svg?color=%23E72264', color: '#E72264' },
-  'Bun': { name: 'Bun', icon: 'bun', color: '#FBF0DF' },
-  'Capacitor': { name: 'Capacitor', icon: 'capacitor', color: '#119EFF' },
-  'Hono': { name: 'Hono', icon: 'hono', color: '#E36002' },
-  'TanStack Router': { name: 'TanStack Router', icon: 'tanstack', color: '#FF4154' },
-  'TanStack Query': { name: 'TanStack Query', icon: 'reactquery', color: '#FF4154' },
-  'React Hook Form': { name: 'React Hook Form', icon: 'reacthookform', color: '#EC5990' },
-  'Framer Motion': { name: 'Framer Motion', icon: 'framer', color: '#0055FF' },
-  'Zustand': { name: 'Zustand', iconUrl: 'https://api.iconify.design/devicon-plain/zustand.svg?color=%23F56565', color: '#F56565' },
-  'Stripe': { name: 'Stripe', icon: 'stripe', color: '#635BFF' },
-  'MapLibre': { name: 'MapLibre', icon: 'maplibre', color: '#396CB2' },
-  'PostGIS': { name: 'PostGIS', color: '#5C8DB8' },
-  'Swift': { name: 'Swift', icon: 'swift', color: '#F05138' },
-  'SwiftUI': { name: 'SwiftUI', icon: 'swift', color: '#0D96F6' },
-  'AppKit': { name: 'AppKit', icon: 'apple', color: '#c0c0c0' },
-  'Screen Time API': { name: 'Screen Time API', icon: 'apple', color: '#c0c0c0' },
-  'CloudKit': { name: 'CloudKit', icon: 'icloud', color: '#3693F3' },
-  'StoreKit': { name: 'StoreKit', icon: 'appstore', color: '#0D96F6' },
-  'WidgetKit': { name: 'WidgetKit', icon: 'apple', color: '#c0c0c0' },
-  'Python': { name: 'Python', icon: 'python', color: '#3776AB' },
-} satisfies Record<string, TechItem>);
 
 const contactLinks = [
   { label: t('contact.email', lang), href: 'mailto:contact@arturwitkowski.com', icon: 'mail' },
@@ -243,7 +213,7 @@ const contactLinks = [
 
       <!-- Toggle -->
       <div class="flex items-center justify-end mb-2 hero-animate" style="animation-delay: 950ms">
-        <button id="ticker-toggle" class="flex items-center gap-2 text-[10px] font-mono text-text-muted/50 hover:text-text-muted transition-colors cursor-pointer">
+        <button id="ticker-toggle" class="flex items-center gap-2 text-[10px] font-mono text-text-muted hover:text-text transition-colors cursor-pointer">
           <span id="toggle-track" class="relative w-7 h-3.5 rounded-full bg-border transition-colors duration-200">
             <span id="toggle-dot" class="absolute top-[2px] left-[2px] w-2.5 h-2.5 rounded-full bg-text-muted/60 transition-all duration-200"></span>
           </span>
@@ -255,7 +225,7 @@ const contactLinks = [
       <div id="tech-container">
         {techCategories.map((cat, ci) => (
           <div class={`tech-category ${ci < 2 ? 'mb-2' : ''}`}>
-            <p class="text-[10px] font-mono text-text-muted/40 uppercase tracking-wider mb-1.5 hero-animate" style={`animation-delay: ${cat.delay}`}>{cat.label}</p>
+            <p class="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-1.5 hero-animate" style={`animation-delay: ${cat.delay}`}>{cat.label}</p>
 
             {/* Animated ticker */}
             <div class="tech-ticker ticker-view hero-animate" style={`animation-delay: ${cat.delay}`}>
@@ -325,17 +295,20 @@ const contactLinks = [
     <div class="lg:px-3">
       {projects.map((project, i) => {
         const typeLabel = project.type === 'solo' ? t('projects.solo', lang) : t('projects.team', lang);
+        // on a desktop the first picture is in view on load and is the largest thing painted, so it must not wait
+        const eager = i === 0;
+        const srcset = project.imageSmall ? `${project.imageSmall} 800w, ${project.image} 1200w` : undefined;
         return (
           <section id={project.slug} class={`chapter ${i % 2 ? 'chapter--flip' : ''}`} style={`--pa: ${project.accent}`}>
             {project.backdrop ? (
               <div class="chapter__media" style={`background-color: ${project.backdrop}`}>
-                <img class="chapter__shot" src={project.image} alt={project.name} width="1200" height="675" style={`object-position: ${project.imagePos ?? 'center'}`} loading="lazy" decoding="async" />
+                <img class="chapter__shot" src={project.image} srcset={srcset} sizes={srcset && shotSizes} alt={project.name} width="1200" height="675" style={`object-position: ${project.imagePos ?? 'center'}`} loading={eager ? 'eager' : 'lazy'} decoding="async" />
               </div>
             ) : (
               <div class="chapter__media chapter__media--web" style={project.field ? `background: ${project.field}` : undefined}>
                 <div class="chapter__window">
                   <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>{project.url.replace(/^https?:\/\//, '')}</span></div>
-                  <img src={project.image} alt={project.name} width="1200" height="675" loading="lazy" decoding="async" />
+                  <img src={project.image} srcset={srcset} sizes={srcset && shotSizes} alt={project.name} width="1200" height="675" loading={eager ? 'eager' : 'lazy'} decoding="async" />
                 </div>
               </div>
             )}

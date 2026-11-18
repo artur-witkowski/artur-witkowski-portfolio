@@ -11,6 +11,8 @@ export interface Project {
   // square icon for the project menu; without one the tile shows the first letter of the name
   icon?: string;
   image?: string;
+  // the same picture 800px wide, for phones
+  imageSmall?: string;
   // which part of the image stays in view when it is cropped
   imagePos?: string;
   // an app, not a website: the picture is its screens on this colour, so it gets no browser bar
@@ -36,6 +38,7 @@ export const projects: Project[] = [
     accent: '#F7B9A0',
     icon: '/projects/icons/lockabulary.webp',
     image: '/projects/lockabulary.webp',
+    imageSmall: '/projects/lockabulary-800.webp',
     imagePos: 'center 40%',
     backdrop: '#F6CDB8',
     // one app record for both, so one Apple ID
@@ -58,6 +61,7 @@ export const projects: Project[] = [
     accent: '#FFD66E',
     icon: '/projects/icons/krokiet.webp',
     image: '/projects/krokiet.webp',
+    imageSmall: '/projects/krokiet-800.webp',
     imagePos: 'center 12%',
     backdrop: '#FFD66E',
     stores: [
@@ -79,6 +83,7 @@ export const projects: Project[] = [
     accent: '#D9A066',
     icon: '/projects/icons/faunarium.webp',
     image: '/projects/faunarium.webp',
+    imageSmall: '/projects/faunarium-800.webp',
     field: 'linear-gradient(135deg, #2b1a0f 0%, #74492a 100%)',
   },
   {
