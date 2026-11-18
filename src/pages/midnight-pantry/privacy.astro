@@ -1,0 +1,188 @@
+---
+import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.astro';
+---
+
+<MidnightPantryPage
+  lang="en"
+  page="privacy"
+  title="Midnight Pantry privacy policy"
+  description="How the Midnight Pantry game for iPhone and Android handles personal data: no ads, no tracking, an optional account that stores no email address, and how to delete it."
+>
+  <h1>Privacy policy</h1>
+  <p class="soft">Effective 18 November 2026</p>
+
+  <p>This policy explains how we process personal data when you play Midnight Pantry, a game for iPhone and Android. It is the information we must give you under Articles 13 and 14 of the GDPR. The GDPR applies to every player, wherever you live, because we are based in Poland. The English and Polish versions have equal force.</p>
+
+  <ol class="toc">
+    <li><a href="#who">Who we are</a></li>
+    <li><a href="#data">Data we process</a></li>
+    <li><a href="#device">Data that stays on your phone</a></li>
+    <li><a href="#purposes">Purposes and legal bases</a></li>
+    <li><a href="#optional">Required and optional data</a></li>
+    <li><a href="#visible">Who can see your data</a></li>
+    <li><a href="#providers">Service providers</a></li>
+    <li><a href="#others">Apple and Google</a></li>
+    <li><a href="#transfers">Transfers outside the EEA</a></li>
+    <li><a href="#retention">How long we keep data</a></li>
+    <li><a href="#delete-account">Deleting your account</a></li>
+    <li><a href="#rights">Your rights</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#children">Children</a></li>
+    <li><a href="#outside-eu">Players outside the European Union</a></li>
+    <li><a href="#changes">Changes to this policy</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+
+  <h2 id="who">1. Who we are</h2>
+  <p>The controller of your personal data is Artur Witkowski, a sole trader, ul. Stefana Batorego 23/7, 81-365 Gdynia, Poland, NIP 5862405430, REGON 528542614 ("we", "us"). We make Midnight Pantry. "GDPR" in this policy means Regulation (EU) 2016/679, the General Data Protection Regulation.</p>
+  <p>You can contact us at <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>, in English or Polish. We have not appointed a data protection officer, as the law does not require one.</p>
+  <p>Midnight Pantry plays offline, without an account. It shows no ads and contains no analytics or tracking software, and it does not read your phone's advertising identifier. We do not sell personal data. If you never sign in, the only things the game sends us are the error reports described in section 2.</p>
+
+  <h2 id="data">2. Data we process</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Category</th><th>Data</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Account</td><td>Whether you signed in with Apple or Google, the id that Apple or Google gives you for our game, a random account number we create, and the date the account was opened. No email address and no name</td><td>Apple or Google, when you sign in</td></tr>
+        <tr><td>Sign in with Apple</td><td>A token from Apple that lets us cancel your Sign in with Apple when you delete the account</td><td>Apple, if you sign in with Apple</td></tr>
+        <tr><td>Sessions</td><td>For each phone you are signed in on, a fingerprint (SHA-256 hash) of its session key and when it was created. The key itself stays on the phone</td><td>Your phone</td></tr>
+        <tr><td>Nickname</td><td>The nickname you pick and when you last changed it. If a moderator replaced it, also the replaced nickname, until you pick a new one, so the game can tell you what happened</td><td>You</td></tr>
+        <tr><td>Cloud save</td><td>Your game progress: best night, number of runs and wins, unlocked fridges and ingredients, dishes cooked, bosses beaten, achievement records and your daily contest results</td><td>Your phone</td></tr>
+        <tr><td>Daily contest results</td><td>The date, your score, nights survived, hearts left, the day's game seed, the list of moves you made in that run, and when you sent it</td><td>Your phone</td></tr>
+        <tr><td>Error reports</td><td>The error message, the place in the game's code where it happened (stack trace) and the game's build number. No account number, nickname, device id or other identifier</td><td>Your phone</td></tr>
+        <tr><td>Connection data</td><td>Your IP address and the request your phone sends</td><td>Your phone</td></tr>
+        <tr><td>Purchase records at RevenueCat</td><td>A random purchase id that the game creates on your phone, the store's transaction ids and purchase history, the price and currency, the country of your store account, and the app and system versions</td><td>Your phone, and Apple or Google</td></tr>
+        <tr><td>Emails to us</td><td>Your email address, name if your email shows one, and your message</td><td>You</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>When you sign in with Apple, the game asks Apple for no name and no email address, so Apple sends neither. When you sign in with Google, Google's sign-in token may also contain your email address and name. Our server reads only the account id from it and does not store anything else.</p>
+  <p>Our server receives your IP address with every request. It uses the address to count requests per minute and refuses more than a set number, which stops one phone or script from flooding it. The count lives in Cloudflare's rate limiter for one minute. We never write IP addresses to our database and our server keeps no request log.</p>
+  <p>The purchase id at RevenueCat is not linked to your game account. We cannot tell which nickname bought the full version.</p>
+
+  <h2 id="device">3. Data that stays on your phone</h2>
+  <p>The game keeps these in its own storage on your phone and does not send them to us: your settings (music and effects volume, vibration, language, battle speed), your progress, a game in progress, the story you have seen, your local daily contest results and, while you are signed in, the session key. When you are signed in, your progress also goes to the cloud save in section 2.</p>
+  <p>This storage is strictly necessary to provide the game you asked for, so it does not need your consent under Article 5(3) of Directive 2002/58/EC or the national laws that implement it. Deleting the game from your phone deletes this data.</p>
+
+  <h2 id="purposes">4. Purposes and legal bases</h2>
+  <p>The articles below are articles of the GDPR.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Purpose</th><th>Data</th><th>Legal basis</th></tr></thead>
+      <tbody>
+        <tr><td>Open your account, sign you in and keep you signed in</td><td>Account, sessions</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
+        <tr><td>Keep your progress with the account and bring it to another phone</td><td>Cloud save</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
+        <tr><td>Run the daily contest: show your nickname and score on the leaderboard, and check each score by replaying your moves</td><td>Nickname, daily contest results</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
+        <tr><td>Cancel Sign in with Apple when you delete the account</td><td>Sign in with Apple token</td><td>Performance of the contract, Art. 6(1)(b). You ask for it by deleting the account</td></tr>
+        <tr><td>Refuse offensive nicknames and rename those that slip through</td><td>Nickname</td><td>Legitimate interests, Art. 6(1)(f), in a leaderboard free of insults that every player can read</td></tr>
+        <tr><td>Limit requests per IP address</td><td>Connection data</td><td>Legitimate interests, Art. 6(1)(f), in protecting the server from abuse</td></tr>
+        <tr><td>Find and fix errors in the game</td><td>Error reports</td><td>Legitimate interests, Art. 6(1)(f), in a game that works</td></tr>
+        <tr><td>Sell the full version and unlock it on your phone</td><td>Purchase records at RevenueCat</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
+        <tr><td>Recover the database after a failure</td><td>All data on our server</td><td>Legitimate interests, Art. 6(1)(f), in not losing players' accounts</td></tr>
+        <tr><td>Answer emails about the game</td><td>Emails to us</td><td>Performance of the contract, Art. 6(1)(b), or, if you have no account, legitimate interests, Art. 6(1)(f), in answering people who write to us</td></tr>
+        <tr><td>Handle data rights requests</td><td>Emails to us, account</td><td>Legal obligation, Art. 6(1)(c), under Articles 12 to 22 of the GDPR</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Where we rely on legitimate interests, you can object on grounds relating to your particular situation. Section 12 explains how.</p>
+  <p>We do not rely on your consent for any processing.</p>
+  <p>Midnight Pantry makes no decision about you based solely on automated processing that has legal or similarly significant effects on you, as described in Article 22 of the GDPR. Two checks run automatically. A word filter refuses some nicknames when you pick them, and you can pick another at once. The server refuses a contest score that does not match a replay of your moves. A person decides every rename of a nickname that passed the filter.</p>
+
+  <h2 id="optional">5. Required and optional data</h2>
+  <p>An account is optional. Without one you can play the whole game offline, except the daily contest and the cloud save.</p>
+  <p>To open an account you must sign in with Apple or Google. To enter the daily contest you must also pick a nickname. These are requirements of the contract. Without them we cannot provide those features. No law requires you to give us any data.</p>
+
+  <h2 id="visible">6. Who can see your data</h2>
+  <p>Your nickname, daily scores and nights survived appear on the daily leaderboard. They are public. Anyone can see them in the game, with or without an account, and our server gives the leaderboard to anyone who asks for it. The winner of the previous day is shown by nickname.</p>
+  <p>Nobody else sees your account number, your Apple or Google id, your cloud save or your list of moves. The leaderboard sends no id of any player to the game.</p>
+  <p>Besides other players, the recipients of your data are the service providers in section 7 and the companies in section 8. We disclose data to public authorities only when the law obliges us to.</p>
+
+  <h2 id="providers">7. Service providers</h2>
+  <p>These companies process personal data on our behalf and only on our instructions. Each is bound by a data processing agreement under Article 28 of the GDPR. DPF is the EU-US Data Privacy Framework and SCCs are the standard contractual clauses. Section 9 describes both.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Provider</th><th>Purpose</th><th>Data</th><th>Safeguard</th></tr></thead>
+      <tbody>
+        <tr><td>Cloudflare, Inc. (Workers and D1)</td><td>Our server and database</td><td>Everything in section 2 except purchase records and emails</td><td>DPF and SCCs</td></tr>
+        <tr><td>RevenueCat, Inc.</td><td>Checking purchases with Apple and Google</td><td>Purchase records</td><td>SCCs</td></tr>
+        <tr><td>Namecheap, Inc.</td><td>The mailbox contact@arturwitkowski.com</td><td>Emails to us</td><td>SCCs</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="others">8. Apple and Google</h2>
+  <p>Apple and Google are not our processors. Each acts as a separate controller for its own processing, and its own privacy policy applies.</p>
+  <p>Apple and Google handle sign-in if you choose them. They learn that you signed in to Midnight Pantry.</p>
+  <p>Apple sells the full version through the App Store and Google through Google Play. They take the payment, handle refunds and keep your payment details. We never see your card or bank details, your name or your store account's email address.</p>
+  <p>The store you downloaded the game from may give us crash statistics and sales reports. These do not identify you to us.</p>
+
+  <h2 id="transfers">9. Transfers outside the EEA</h2>
+  <p>Cloudflare, RevenueCat and Namecheap are US companies. Cloudflare runs our server in its data centres around the world, including in the United States. RevenueCat and Namecheap process data in the United States.</p>
+  <p>For these transfers we rely on one or both of two safeguards. The first is the EU-US Data Privacy Framework, for providers certified under it, on the basis of the European Commission's adequacy decision of 10 July 2023 (Implementing Decision (EU) 2023/1795). The second is the standard contractual clauses adopted by Commission Implementing Decision (EU) 2021/914. The table in section 7 shows the safeguard for each provider. You can ask us for a copy of the standard contractual clauses.</p>
+
+  <h2 id="retention">10. How long we keep data</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Data</th><th>Period</th></tr></thead>
+      <tbody>
+        <tr><td>Account, nickname, cloud save and daily contest results</td><td>Until you delete your account. A new nickname replaces the old one, and each upload of your progress replaces the previous save</td></tr>
+        <tr><td>Sessions</td><td>Until you sign out on that phone or delete your account. They do not expire on their own</td></tr>
+        <tr><td>Sign in with Apple token</td><td>Until you delete your account. We use it once, to cancel the sign-in, and it is deleted with the account</td></tr>
+        <tr><td>Request counts per IP address</td><td>One minute, in Cloudflare's rate limiter. Never stored in our database</td></tr>
+        <tr><td>Error reports</td><td>90 days, then deleted</td></tr>
+        <tr><td>Purchase records at RevenueCat</td><td>As long as we sell the game through RevenueCat. They are not linked to your account, so deleting your account does not remove them. See section 11 for how to have them deleted</td></tr>
+        <tr><td>Emails to us</td><td>As long as needed to deal with your message, and no longer than 24 months after the last message on the same matter, unless we need them to establish, exercise or defend legal claims</td></tr>
+        <tr><td>Database history at Cloudflare</td><td>Up to 7 days</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Cloudflare keeps a history of our database for up to 7 days, so we can restore it after a failure. We use it only for that. If we restore an earlier state, we apply again every account deletion made after that point.</p>
+
+  <h2 id="delete-account">11. Deleting your account</h2>
+  <h3>In the game</h3>
+  <p>Open Settings, then Account, and tap Delete account. Confirm, and the account is deleted at once. This cannot be undone.</p>
+  <h3>Without the game</h3>
+  <p>If you no longer have the game, email <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a> from any address and ask us to delete your account. We store no email address with your account, so we cannot find it by your address. Give us your nickname exactly as it appears on the leaderboard, and say whether you signed in with Apple or Google. Anyone can read a nickname on the leaderboard, so we may ask you one question that only the owner can answer, such as the date and score of a contest you played. We delete the account within one month of your request and reply when it is done.</p>
+  <p>If you never picked a nickname, your account holds no contest results and we have no way to find it from an email. Install the game, sign in with the same Apple or Google account and delete it in Settings, Account.</p>
+  <h3>What is deleted</h3>
+  <p>We delete your account, the link to your Apple or Google account, your nickname, your cloud save, all your daily contest results with their moves, and the sessions of every phone you were signed in on. Your nickname and scores disappear from every leaderboard. If you signed in with Apple, we also ask Apple to cancel your Sign in with Apple for the game.</p>
+  <p>Your progress stays on the phone you deleted the account from. To remove it too, delete the game from the phone.</p>
+  <p>If you signed in with Google, you can also remove Midnight Pantry from the apps connected to your Google account, at <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>. That ends the link on Google's side. It does not delete your data on our server, so delete the account first.</p>
+  <h3>Your purchase</h3>
+  <p>Deleting your account does not remove the full version. The purchase belongs to your App Store or Google Play account, not to your game account, and you can restore it on any phone signed in to the same store account. If you also want the purchase records at RevenueCat deleted, email us the order number from the store's receipt. We then delete the matching records at RevenueCat. Apple or Google keep their own record of the purchase.</p>
+
+  <h2 id="rights">12. Your rights</h2>
+  <p>Under the GDPR you have the right to</p>
+  <ul>
+    <li>access your data and get a copy of it (Article 15)</li>
+    <li>have inaccurate data corrected (Article 16). You can change your nickname in the game. The first change is free at any time, and later changes once every 30 days</li>
+    <li>have your data erased (Article 17). Section 11 explains how</li>
+    <li>restrict how we process your data (Article 18)</li>
+    <li>receive the data you gave us, which we process to perform the contract, as a JSON file, and have it sent to another controller (Article 20)</li>
+    <li>object, on grounds relating to your particular situation, to processing based on legitimate interests (Article 21). We then stop, unless we show compelling legitimate grounds that override your interests, rights and freedoms, or we need the data to establish, exercise or defend legal claims</li>
+  </ul>
+  <p>These rights apply as far as the GDPR provides. Using them is free of charge.</p>
+  <p>To use a right, email us with your nickname. We answer within one month of receiving your request. For complex or numerous requests we may extend this by two more months, and we will tell you within the first month (Article 12(3)). We may ask a question to confirm that the account is yours, as described in section 11.</p>
+  <p>You have the right to lodge a complaint with the Polish supervisory authority, the President of the Personal Data Protection Office (Prezes Urzędu Ochrony Danych Osobowych), ul. Stanisława Moniuszki 1A, 00-014 Warszawa, <a href="https://uodo.gov.pl">uodo.gov.pl</a>, or with the supervisory authority in the EU country where you live or work, or where you believe the infringement took place (Article 77).</p>
+
+  <h2 id="security">13. Security</h2>
+  <p>All connections between the game, our server and our providers use TLS encryption.</p>
+  <p>Midnight Pantry has no passwords. You sign in through Apple or Google, and our server checks the signature on the token they issue, that it was issued for our game and that it has not expired.</p>
+  <p>The database holds only a fingerprint of each session key, so a copy of the database cannot be used to sign in as anyone. Only we can reach the moderation functions, with a secret key.</p>
+
+  <h2 id="children">14. Children</h2>
+  <p>Midnight Pantry is meant for players aged 13 and over and is not directed at children under 13. If we learn that an account belongs to a child under 13, we delete it. A parent or guardian can ask us to delete a child's account by email, giving its nickname.</p>
+
+  <h2 id="outside-eu">15. Players outside the European Union</h2>
+  <p>We are based in Poland, so the GDPR and the rest of this policy apply to every player, wherever you live. This section adds what some other laws ask us to tell you. It takes away none of the rights in the other sections.</p>
+  <p>Residents of the United Kingdom have the same rights under the UK GDPR and can also complain to the Information Commissioner's Office, <a href="https://ico.org.uk">ico.org.uk</a>.</p>
+  <p>Residents of some US states, such as California, Virginia and Colorado, have rights under state privacy laws. In the categories of the California Consumer Privacy Act, we hold identifiers (your Apple or Google id and your nickname), commercial information (purchase records at RevenueCat) and game activity (your cloud save and contest results). You can ask what data we hold about you, get a copy, correct it and delete it. We do not sell or share personal data, we show no ads and we profile nobody. To use any right, email us. Using it does not change how we treat you.</p>
+  <p>If you live in any other country, send any question or complaint about your data to contact@arturwitkowski.com. Artur Witkowski handles it and answers within one month. You can also complain to the data protection authority in your country.</p>
+
+  <h2 id="changes">16. Changes to this policy</h2>
+  <p>The date at the top of this page shows when this policy last changed. We do not know your email address, so if we make a material change, we will describe it in the game's update notes in the App Store and on Google Play before it takes effect. Earlier versions are available on request.</p>
+
+  <h2 id="contact">17. Contact</h2>
+  <p class="addr">Artur Witkowski<br />ul. Stefana Batorego 23/7, 81-365 Gdynia, Poland<br />NIP 5862405430, REGON 528542614</p>
+  <p>Write to us in English or Polish at <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>. We answer data rights requests within one month.</p>
+</MidnightPantryPage>

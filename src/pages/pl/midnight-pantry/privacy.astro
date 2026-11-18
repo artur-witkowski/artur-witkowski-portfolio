@@ -1,0 +1,188 @@
+---
+import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.astro';
+---
+
+<MidnightPantryPage
+  lang="pl"
+  page="privacy"
+  title="Midnight Pantry: polityka prywatności"
+  description="Jak gra Midnight Pantry na iPhone'a i Androida przetwarza dane osobowe: bez reklam i śledzenia, opcjonalne konto bez adresu e-mail i sposób jego usunięcia."
+>
+  <h1>Polityka prywatności</h1>
+  <p class="soft">Obowiązuje od 18 listopada 2026</p>
+
+  <p>Ta polityka wyjaśnia, jak przetwarzamy dane osobowe, gdy grasz w Midnight Pantry, grę na iPhone'a i Androida. Zawiera informacje, które musimy ci przekazać na podstawie art. 13 i 14 RODO. RODO stosujemy do każdego gracza, niezależnie od miejsca zamieszkania, bo działamy w Polsce. Wersja polska i angielska są jednakowo wiążące.</p>
+
+  <ol class="toc">
+    <li><a href="#who">Administrator</a></li>
+    <li><a href="#data">Jakie dane przetwarzamy</a></li>
+    <li><a href="#device">Dane, które zostają w telefonie</a></li>
+    <li><a href="#purposes">Cele i podstawy prawne</a></li>
+    <li><a href="#optional">Dane wymagane i dobrowolne</a></li>
+    <li><a href="#visible">Kto widzi twoje dane</a></li>
+    <li><a href="#providers">Podmioty przetwarzające</a></li>
+    <li><a href="#others">Apple i Google</a></li>
+    <li><a href="#transfers">Przekazywanie danych poza EOG</a></li>
+    <li><a href="#retention">Jak długo przechowujemy dane</a></li>
+    <li><a href="#delete-account">Usunięcie konta</a></li>
+    <li><a href="#rights">Twoje prawa</a></li>
+    <li><a href="#security">Bezpieczeństwo</a></li>
+    <li><a href="#children">Dzieci</a></li>
+    <li><a href="#outside-eu">Gracze spoza Unii Europejskiej</a></li>
+    <li><a href="#changes">Zmiany polityki</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ol>
+
+  <h2 id="who">1. Administrator</h2>
+  <p>Administratorem twoich danych osobowych jest Artur Witkowski, przedsiębiorca, ul. Stefana Batorego 23/7, 81-365 Gdynia, NIP 5862405430, REGON 528542614 ("my", "nas"). Tworzymy grę Midnight Pantry. "RODO" oznacza w tej polityce rozporządzenie (UE) 2016/679, ogólne rozporządzenie o ochronie danych.</p>
+  <p>Możesz się z nami kontaktować pod adresem <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>, po polsku lub po angielsku. Nie wyznaczyliśmy inspektora ochrony danych, bo przepisy tego nie wymagają.</p>
+  <p>W Midnight Pantry grasz offline, bez konta. Gra nie wyświetla reklam, nie zawiera oprogramowania analitycznego ani śledzącego i nie odczytuje identyfikatora reklamowego telefonu. Nie sprzedajemy danych osobowych. Jeśli nigdy się nie zalogujesz, gra wysyła nam tylko raporty błędów opisane w punkcie 2.</p>
+
+  <h2 id="data">2. Jakie dane przetwarzamy</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kategoria</th><th>Dane</th><th>Źródło</th></tr></thead>
+      <tbody>
+        <tr><td>Konto</td><td>Czy logujesz się przez Apple, czy przez Google, identyfikator, który Apple lub Google nadaje ci dla naszej gry, losowy numer konta nadany przez nas i data założenia konta. Bez adresu e-mail i bez imienia</td><td>Apple lub Google, gdy się logujesz</td></tr>
+        <tr><td>Logowanie przez Apple</td><td>Token od Apple, który pozwala nam odwołać twoje logowanie przez Apple, gdy usuwasz konto</td><td>Apple, jeśli logujesz się przez Apple</td></tr>
+        <tr><td>Sesje</td><td>Dla każdego telefonu zalogowanego na twoje konto skrót (SHA-256) jego klucza sesji i czas jego utworzenia. Sam klucz zostaje w telefonie</td><td>Twój telefon</td></tr>
+        <tr><td>Nick</td><td>Wybrany przez ciebie nick i data jego ostatniej zmiany. Jeśli moderator go zastąpił, także zastąpiony nick, dopóki nie wybierzesz nowego, żeby gra mogła ci powiedzieć, co się stało</td><td>Ty</td></tr>
+        <tr><td>Zapis na koncie</td><td>Twój postęp w grze: najdalsza noc, liczba rozgrywek i wygranych, odblokowane lodówki i składniki, ugotowane dania, pokonani bossowie, rekordy do osiągnięć i twoje wyniki w turnieju dnia</td><td>Twój telefon</td></tr>
+        <tr><td>Wyniki w turnieju dnia</td><td>Data, wynik, przetrwane noce, pozostałe serca, ziarno gry z tego dnia, lista twoich ruchów w tej rozgrywce i czas wysłania</td><td>Twój telefon</td></tr>
+        <tr><td>Raporty błędów</td><td>Treść błędu, miejsce w kodzie gry, w którym wystąpił (stos wywołań), i numer kompilacji gry. Bez numeru konta, nicku, identyfikatora urządzenia ani innego identyfikatora</td><td>Twój telefon</td></tr>
+        <tr><td>Dane połączenia</td><td>Twój adres IP i zapytanie wysłane przez telefon</td><td>Twój telefon</td></tr>
+        <tr><td>Zapisy zakupów w RevenueCat</td><td>Losowy identyfikator zakupu tworzony przez grę w twoim telefonie, identyfikatory transakcji i historia zakupów ze sklepu, cena i waluta, kraj konta w sklepie oraz wersja aplikacji i systemu</td><td>Twój telefon oraz Apple lub Google</td></tr>
+        <tr><td>E-maile do nas</td><td>Twój adres e-mail, imię, jeśli twoja poczta je pokazuje, i treść wiadomości</td><td>Ty</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Przy logowaniu przez Apple gra nie prosi Apple o imię ani adres e-mail, więc Apple ich nie przekazuje. Przy logowaniu przez Google token Google może zawierać także twój adres e-mail i imię. Nasz serwer odczytuje z niego tylko identyfikator konta i niczego więcej nie zapisuje.</p>
+  <p>Nasz serwer dostaje twój adres IP z każdym zapytaniem. Liczy na jego podstawie zapytania na minutę i odrzuca te ponad ustalony limit, żeby jeden telefon albo skrypt nie zalał serwera. Licznik istnieje przez minutę w ograniczniku zapytań Cloudflare. Nigdy nie zapisujemy adresów IP w bazie danych, a serwer nie prowadzi dziennika zapytań.</p>
+  <p>Identyfikator zakupu w RevenueCat nie jest powiązany z kontem w grze. Nie wiemy, który nick kupił pełną wersję.</p>
+
+  <h2 id="device">3. Dane, które zostają w telefonie</h2>
+  <p>Gra trzyma we własnej pamięci w telefonie i nie wysyła nam: twoich ustawień (głośność muzyki i efektów, wibracje, język, prędkość walki), postępu, przerwanej rozgrywki, obejrzanych fragmentów historii, lokalnych wyników turnieju dnia oraz klucza sesji, jeśli korzystasz z konta. Gdy korzystasz z konta, postęp trafia też do zapisu na koncie z punktu 2.</p>
+  <p>Przechowywanie tych danych jest niezbędne do działania gry, o którą prosisz, więc nie wymaga twojej zgody na podstawie art. 5 ust. 3 dyrektywy 2002/58/WE ani przepisów, które ją wdrażają. Usunięcie gry z telefonu usuwa te dane.</p>
+
+  <h2 id="purposes">4. Cele i podstawy prawne</h2>
+  <p>Artykuły wymienione poniżej to artykuły RODO.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cel</th><th>Dane</th><th>Podstawa prawna</th></tr></thead>
+      <tbody>
+        <tr><td>Założenie konta, logowanie i utrzymanie zalogowania</td><td>Konto, sesje</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b</td></tr>
+        <tr><td>Przechowanie postępu na koncie i przeniesienie go na inny telefon</td><td>Zapis na koncie</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b</td></tr>
+        <tr><td>Prowadzenie turnieju dnia: pokazanie nicku i wyniku w rankingu oraz sprawdzenie każdego wyniku przez odtworzenie twoich ruchów</td><td>Nick, wyniki w turnieju dnia</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b</td></tr>
+        <tr><td>Odwołanie logowania przez Apple przy usunięciu konta</td><td>Token logowania przez Apple</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b. Prosisz o to, usuwając konto</td></tr>
+        <tr><td>Odrzucanie obraźliwych nicków i zmiana tych, które przejdą przez filtr</td><td>Nick</td><td>Prawnie uzasadniony interes, art. 6 ust. 1 lit. f, polegający na rankingu bez obelg, który może czytać każdy gracz</td></tr>
+        <tr><td>Limit zapytań z jednego adresu IP</td><td>Dane połączenia</td><td>Prawnie uzasadniony interes, art. 6 ust. 1 lit. f, polegający na ochronie serwera przed nadużyciami</td></tr>
+        <tr><td>Wykrywanie i naprawianie błędów w grze</td><td>Raporty błędów</td><td>Prawnie uzasadniony interes, art. 6 ust. 1 lit. f, polegający na tym, żeby gra działała</td></tr>
+        <tr><td>Sprzedaż pełnej wersji i odblokowanie jej w telefonie</td><td>Zapisy zakupów w RevenueCat</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b</td></tr>
+        <tr><td>Odtworzenie bazy danych po awarii</td><td>Wszystkie dane na naszym serwerze</td><td>Prawnie uzasadniony interes, art. 6 ust. 1 lit. f, polegający na tym, żeby nie stracić kont graczy</td></tr>
+        <tr><td>Odpowiadanie na e-maile o grze</td><td>E-maile do nas</td><td>Wykonanie umowy, art. 6 ust. 1 lit. b, a jeśli nie masz konta, prawnie uzasadniony interes, art. 6 ust. 1 lit. f, polegający na odpowiadaniu osobom, które do nas piszą</td></tr>
+        <tr><td>Obsługa żądań dotyczących danych</td><td>E-maile do nas, konto</td><td>Obowiązek prawny, art. 6 ust. 1 lit. c, wynikający z art. 12 do 22 RODO</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Jeśli przetwarzamy dane na podstawie prawnie uzasadnionego interesu, możesz wnieść sprzeciw z przyczyn związanych z twoją szczególną sytuacją. Sposób opisujemy w punkcie 12.</p>
+  <p>Żadnego przetwarzania nie opieramy na twojej zgodzie.</p>
+  <p>Midnight Pantry nie podejmuje wobec ciebie decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu, które wywołują skutki prawne lub w podobny sposób istotnie na ciebie wpływają, w rozumieniu art. 22 RODO. Automatycznie działają dwa mechanizmy. Filtr słów odrzuca niektóre nicki przy wyborze, a ty możesz od razu wybrać inny. Serwer odrzuca wynik turnieju, który nie zgadza się z odtworzeniem twoich ruchów. O każdej zmianie nicku, który przeszedł przez filtr, decyduje człowiek.</p>
+
+  <h2 id="optional">5. Dane wymagane i dobrowolne</h2>
+  <p>Konto jest dobrowolne. Bez niego możesz grać offline w całą grę, poza turniejem dnia i zapisem na koncie.</p>
+  <p>Żeby założyć konto, musisz zalogować się przez Apple lub Google. Żeby wziąć udział w turnieju dnia, musisz też wybrać nick. To wymogi umowy. Bez nich nie możemy udostępnić tych funkcji. Żaden przepis nie zobowiązuje cię do podania nam danych.</p>
+
+  <h2 id="visible">6. Kto widzi twoje dane</h2>
+  <p>Twój nick, wyniki i przetrwane noce w turnieju dnia widać w rankingu dnia. Są publiczne. Widzi je w grze każdy, także bez konta, a nasz serwer udostępnia ranking każdemu, kto o niego zapyta. Gra pokazuje też nick zwycięzcy poprzedniego dnia.</p>
+  <p>Nikt inny nie widzi twojego numeru konta, identyfikatora Apple lub Google, zapisu na koncie ani listy ruchów. Ranking nie wysyła do gry identyfikatora żadnego gracza.</p>
+  <p>Poza innymi graczami odbiorcami twoich danych są podmioty z punktu 7 i firmy z punktu 8. Organom publicznym ujawniamy dane tylko wtedy, gdy zobowiązuje nas do tego prawo.</p>
+
+  <h2 id="providers">7. Podmioty przetwarzające</h2>
+  <p>Te firmy przetwarzają dane osobowe w naszym imieniu i wyłącznie na nasze polecenie. Każdą wiąże umowa powierzenia przetwarzania zgodna z art. 28 RODO. DPF to ramy ochrony danych UE-USA (EU-US Data Privacy Framework), a SKU to standardowe klauzule umowne. Oba opisujemy w punkcie 9.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Podmiot</th><th>Cel</th><th>Dane</th><th>Zabezpieczenie</th></tr></thead>
+      <tbody>
+        <tr><td>Cloudflare, Inc. (Workers i D1)</td><td>Nasz serwer i baza danych</td><td>Wszystko z punktu 2 poza zapisami zakupów i e-mailami</td><td>DPF i SKU</td></tr>
+        <tr><td>RevenueCat, Inc.</td><td>Sprawdzanie zakupów w Apple i Google</td><td>Zapisy zakupów</td><td>SKU</td></tr>
+        <tr><td>Namecheap, Inc.</td><td>Skrzynka contact@arturwitkowski.com</td><td>E-maile do nas</td><td>SKU</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="others">8. Apple i Google</h2>
+  <p>Apple i Google nie są naszymi podmiotami przetwarzającymi. Każda z tych firm jest odrębnym administratorem w zakresie własnego przetwarzania i stosuje własną politykę prywatności.</p>
+  <p>Apple i Google obsługują logowanie, jeśli je wybierzesz. Dowiadują się o logowaniu do Midnight Pantry.</p>
+  <p>Apple sprzedaje pełną wersję przez App Store, a Google przez Google Play. Pobierają płatność, obsługują zwroty i przechowują dane płatnicze. Nigdy nie widzimy danych twojej karty ani konta bankowego, twojego imienia ani adresu e-mail konta w sklepie.</p>
+  <p>Sklep, z którego pochodzi gra, może udostępniać nam statystyki awarii i raporty sprzedaży. Nie pozwalają nam one cię zidentyfikować.</p>
+
+  <h2 id="transfers">9. Przekazywanie danych poza EOG</h2>
+  <p>Cloudflare, RevenueCat i Namecheap to firmy amerykańskie. Cloudflare uruchamia nasz serwer w swoich centrach danych na całym świecie, także w Stanach Zjednoczonych. RevenueCat i Namecheap przetwarzają dane w Stanach Zjednoczonych.</p>
+  <p>Przy tych przekazaniach stosujemy jedno lub oba z dwóch zabezpieczeń. Pierwsze to ramy ochrony danych UE-USA, dla firm, które uzyskały w nich certyfikat, na podstawie decyzji Komisji Europejskiej z 10 lipca 2023 r. stwierdzającej odpowiedni stopień ochrony (decyzja wykonawcza (UE) 2023/1795). Drugie to standardowe klauzule umowne przyjęte decyzją wykonawczą Komisji (UE) 2021/914. Tabela w punkcie 7 pokazuje zabezpieczenie dla każdego podmiotu. Możesz poprosić nas o kopię standardowych klauzul umownych.</p>
+
+  <h2 id="retention">10. Jak długo przechowujemy dane</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dane</th><th>Okres</th></tr></thead>
+      <tbody>
+        <tr><td>Konto, nick, zapis na koncie i wyniki w turnieju dnia</td><td>Do usunięcia konta. Nowy nick zastępuje poprzedni, a każde przesłanie postępu zastępuje poprzedni zapis</td></tr>
+        <tr><td>Sesje</td><td>Do wylogowania na danym telefonie albo usunięcia konta. Same nie wygasają</td></tr>
+        <tr><td>Token logowania przez Apple</td><td>Do usunięcia konta. Używamy go raz, do odwołania logowania, i znika razem z kontem</td></tr>
+        <tr><td>Liczniki zapytań z adresu IP</td><td>Minuta, w ograniczniku zapytań Cloudflare. Nigdy nie trafiają do naszej bazy</td></tr>
+        <tr><td>Raporty błędów</td><td>90 dni, potem je usuwamy</td></tr>
+        <tr><td>Zapisy zakupów w RevenueCat</td><td>Dopóki sprzedajemy grę przez RevenueCat. Nie są powiązane z kontem, więc usunięcie konta ich nie usuwa. Jak je usunąć, opisujemy w punkcie 11</td></tr>
+        <tr><td>E-maile do nas</td><td>Tak długo, jak to potrzebne do załatwienia sprawy, i nie dłużej niż 24 miesiące od ostatniej wiadomości w tej sprawie, chyba że są nam potrzebne do ustalenia, dochodzenia lub obrony roszczeń</td></tr>
+        <tr><td>Historia bazy danych w Cloudflare</td><td>Do 7 dni</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Cloudflare przechowuje historię naszej bazy danych do 7 dni, żebyśmy mogli ją odtworzyć po awarii. Używamy jej tylko w tym celu. Jeśli odtworzymy wcześniejszy stan, ponownie wykonujemy każde usunięcie konta z późniejszego okresu.</p>
+
+  <h2 id="delete-account">11. Usunięcie konta</h2>
+  <h3>W grze</h3>
+  <p>Otwórz Ustawienia, potem Konto, i stuknij Usuń konto. Potwierdź, a konto zostanie usunięte od razu. Tego nie da się cofnąć.</p>
+  <h3>Bez gry</h3>
+  <p>Jeśli nie masz już gry, napisz z dowolnego adresu na <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a> z prośbą o usunięcie konta. Nie przechowujemy adresu e-mail przy koncie, więc nie znajdziemy go po twoim adresie. Podaj nick dokładnie tak, jak widać go w rankingu, i napisz, czy konto korzysta z logowania przez Apple, czy przez Google. Nick w rankingu może przeczytać każdy, więc możemy zadać ci jedno pytanie, na które odpowie tylko właściciel konta, na przykład o datę i wynik jednego z twoich turniejów. Usuwamy konto w ciągu miesiąca od prośby i odpisujemy, gdy to zrobimy.</p>
+  <p>Jeśli konto nie ma nicku, to nie ma żadnych wyników w turnieju i nie mamy jak go znaleźć na podstawie e-maila. Zainstaluj grę, zaloguj się tym samym kontem Apple lub Google i usuń konto w Ustawieniach, w sekcji Konto.</p>
+  <h3>Co usuwamy</h3>
+  <p>Usuwamy twoje konto, powiązanie z kontem Apple lub Google, nick, zapis na koncie, wszystkie wyniki w turnieju dnia razem z ruchami oraz sesje wszystkich telefonów zalogowanych na to konto. Twój nick i wyniki znikają ze wszystkich rankingów. Jeśli konto korzysta z logowania przez Apple, prosimy też Apple o odwołanie logowania przez Apple do gry.</p>
+  <p>Postęp zostaje w telefonie, na którym usuwasz konto. Żeby usunąć i jego, usuń grę z telefonu.</p>
+  <p>Jeśli konto korzysta z logowania przez Google, możesz też usunąć Midnight Pantry z aplikacji połączonych z kontem Google, na stronie <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>. To zrywa powiązanie po stronie Google, ale nie usuwa twoich danych z naszego serwera, więc najpierw usuń konto.</p>
+  <h3>Twój zakup</h3>
+  <p>Usunięcie konta nie odbiera pełnej wersji. Zakup należy do twojego konta w App Store lub Google Play, a nie do konta w grze, i możesz go przywrócić na każdym telefonie zalogowanym do tego samego konta w sklepie. Jeśli chcesz usunąć także zapisy zakupu w RevenueCat, wyślij nam numer zamówienia z potwierdzenia zakupu ze sklepu. Wtedy usuniemy odpowiadające mu zapisy w RevenueCat. Apple lub Google zachowują własny zapis zakupu.</p>
+
+  <h2 id="rights">12. Twoje prawa</h2>
+  <p>Na podstawie RODO masz prawo do</p>
+  <ul>
+    <li>dostępu do swoich danych i otrzymania ich kopii (art. 15)</li>
+    <li>sprostowania nieprawidłowych danych (art. 16). Nick możesz zmienić w grze. Pierwsza zmiana jest wolna w każdej chwili, kolejne raz na 30 dni</li>
+    <li>usunięcia danych (art. 17). Sposób opisujemy w punkcie 11</li>
+    <li>ograniczenia przetwarzania (art. 18)</li>
+    <li>otrzymania w pliku JSON danych, które nam przekazujesz i które przetwarzamy w celu wykonania umowy, oraz przesłania ich innemu administratorowi (art. 20)</li>
+    <li>wniesienia sprzeciwu, z przyczyn związanych z twoją szczególną sytuacją, wobec przetwarzania opartego na prawnie uzasadnionym interesie (art. 21). Wtedy przestajemy przetwarzać te dane, chyba że wykażemy ważne prawnie uzasadnione podstawy, które są nadrzędne wobec twoich interesów, praw i wolności, albo dane są nam potrzebne do ustalenia, dochodzenia lub obrony roszczeń</li>
+  </ul>
+  <p>Te prawa przysługują w zakresie przewidzianym w RODO. Korzystanie z nich jest bezpłatne.</p>
+  <p>Żeby skorzystać z prawa, napisz do nas i podaj swój nick. Odpowiadamy w ciągu miesiąca od otrzymania żądania. Przy żądaniach złożonych lub licznych możemy przedłużyć ten termin o kolejne dwa miesiące i poinformujemy cię o tym w ciągu pierwszego miesiąca (art. 12 ust. 3). Możemy zadać pytanie, które potwierdzi, że konto należy do ciebie, tak jak opisujemy w punkcie 11.</p>
+  <p>Masz prawo wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych, ul. Stanisława Moniuszki 1A, 00-014 Warszawa, <a href="https://uodo.gov.pl">uodo.gov.pl</a>, albo do organu nadzorczego w państwie UE, w którym mieszkasz lub pracujesz albo w którym doszło do naruszenia (art. 77).</p>
+
+  <h2 id="security">13. Bezpieczeństwo</h2>
+  <p>Wszystkie połączenia między grą, naszym serwerem i naszymi dostawcami są szyfrowane protokołem TLS.</p>
+  <p>Midnight Pantry nie ma haseł. Logujesz się przez Apple lub Google, a nasz serwer sprawdza podpis wystawionego przez nich tokenu, to, czy wystawiono go dla naszej gry, i to, czy nie wygasł.</p>
+  <p>Baza danych przechowuje tylko skrót każdego klucza sesji, więc kopia bazy nie pozwala zalogować się jako ktokolwiek. Do funkcji moderacji mamy dostęp tylko my, za pomocą tajnego klucza.</p>
+
+  <h2 id="children">14. Dzieci</h2>
+  <p>Midnight Pantry jest przeznaczona dla graczy w wieku od 13 lat i nie jest skierowana do dzieci poniżej 13 roku życia. Jeśli dowiemy się, że konto należy do dziecka poniżej 13 lat, usuniemy je. Rodzic lub opiekun może poprosić nas e-mailem o usunięcie konta dziecka, podając jego nick.</p>
+
+  <h2 id="outside-eu">15. Gracze spoza Unii Europejskiej</h2>
+  <p>Działamy w Polsce, więc RODO i reszta tej polityki dotyczą każdego gracza, niezależnie od miejsca zamieszkania. Ten punkt dodaje to, co każą nam przekazać przepisy niektórych innych państw. Nie odbiera żadnego z praw opisanych w pozostałych punktach.</p>
+  <p>Mieszkańcy Wielkiej Brytanii mają te same prawa na podstawie UK GDPR i mogą też złożyć skargę do Information Commissioner's Office, <a href="https://ico.org.uk">ico.org.uk</a>.</p>
+  <p>Mieszkańcy niektórych stanów USA, na przykład Kalifornii, Wirginii i Kolorado, mają prawa na podstawie stanowych przepisów o prywatności. W kategoriach kalifornijskiej ustawy California Consumer Privacy Act przechowujemy identyfikatory (twój identyfikator Apple lub Google i nick), informacje handlowe (zapisy zakupów w RevenueCat) i aktywność w grze (zapis na koncie i wyniki w turnieju). Możesz zapytać, jakie dane o tobie mamy, otrzymać ich kopię, sprostować je i usunąć. Nie sprzedajemy ani nie udostępniamy danych osobowych, nie wyświetlamy reklam i nikogo nie profilujemy. Żeby skorzystać z prawa, napisz do nas. Nie zmienia to sposobu, w jaki cię traktujemy.</p>
+  <p>Jeśli mieszkasz w innym państwie, pytania i skargi dotyczące twoich danych wysyłaj na contact@arturwitkowski.com. Rozpatruje je Artur Witkowski i odpowiada w ciągu miesiąca. Możesz też złożyć skargę do organu ochrony danych w swoim państwie.</p>
+
+  <h2 id="changes">16. Zmiany polityki</h2>
+  <p>Data na górze tej strony pokazuje, kiedy polityka ostatnio się zmieniła. Nie znamy twojego adresu e-mail, więc istotną zmianę opiszemy w informacjach o aktualizacji gry w App Store i Google Play, zanim zacznie obowiązywać. Wcześniejsze wersje udostępniamy na prośbę.</p>
+
+  <h2 id="contact">17. Kontakt</h2>
+  <p class="addr">Artur Witkowski<br />ul. Stefana Batorego 23/7, 81-365 Gdynia<br />NIP 5862405430, REGON 528542614</p>
+  <p>Pisz do nas po polsku lub po angielsku na <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>. Na żądania dotyczące danych odpowiadamy w ciągu miesiąca.</p>
+</MidnightPantryPage>

@@ -1,0 +1,121 @@
+---
+// Legal pages for the Midnight Pantry game: privacy policy and terms of use, in English under
+// /midnight-pantry/ and in Polish under /pl/midnight-pantry/. Colours are the game's own.
+interface Props {
+  lang: 'en' | 'pl';
+  title: string;
+  description: string;
+  // the page without the language prefix, e.g. "privacy"
+  page: 'privacy' | 'terms';
+}
+const { lang, title, description, page } = Astro.props;
+const base = 'https://arturwitkowski.com';
+// Cloudflare Pages serves folders with a trailing slash and redirects the bare path there
+const pathFor = (l: 'en' | 'pl', p: string) => `${l === 'pl' ? '/pl' : ''}/midnight-pantry/${p}/`;
+const other = lang === 'en' ? 'pl' : 'en';
+const words = {
+  en: { privacy: 'Privacy', terms: 'Terms', switch: 'Polski', by: 'Made by' },
+  pl: { privacy: 'Prywatność', terms: 'Regulamin', switch: 'English', by: 'Autor:' },
+}[lang];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={base + pathFor(lang, page)} />
+    <link rel="alternate" hreflang="en" href={base + pathFor('en', page)} />
+    <link rel="alternate" hreflang="pl" href={base + pathFor('pl', page)} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={base + pathFor(lang, page)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Midnight Pantry" />
+    <meta name="theme-color" content="#151b2e" />
+    <link rel="icon" href="/midnight-pantry/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/midnight-pantry/icon.png" />
+    <style is:global>
+      :root {
+        --bg: #fff9e8; --card: #f3ecd8; --ink: #140e1c; --soft: #5e5672; --line: #d9cfb4;
+        --accent: #b34d00;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #151b2e; --card: #1e2540; --ink: #f4efe6; --soft: #a79fbf; --line: #2d2a3d;
+          --accent: #ffc93c;
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      body {
+        margin: 0; background: var(--bg); color: var(--ink);
+        font: 17px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--accent); }
+      .soft { color: var(--soft); }
+
+      .site-header {
+        max-width: 760px; margin: 0 auto; padding: 22px 20px;
+        display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      }
+      .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; }
+      .brand img { width: 40px; height: 40px; border-radius: 10px; }
+      .site-nav { display: flex; gap: 18px; font-weight: 600; font-size: 15px; }
+      .site-nav a { color: var(--ink); text-decoration: none; }
+      .site-nav a:hover, .site-nav a[aria-current='page'] { color: var(--accent); }
+
+      .narrow { max-width: 760px; margin: 0 auto; padding: 8px 20px 64px; }
+      .narrow h1 { font-size: 36px; line-height: 1.1; margin: 0 0 8px; }
+      .narrow h2 { font-size: 21px; line-height: 1.25; margin: 38px 0 8px; scroll-margin-top: 16px; }
+      .narrow h3 { font-size: 17px; margin: 22px 0 6px; }
+      .narrow p { margin: 0 0 12px; }
+      .narrow ul, .narrow ol.sub { margin: 0 0 12px; padding-left: 24px; }
+      .narrow li { margin: 4px 0; }
+      .toc { columns: 2; column-gap: 32px; padding-left: 22px; margin: 20px 0 8px; font-size: 15px; }
+      @media (max-width: 560px) { .toc { columns: 1; } .narrow h1 { font-size: 30px; } }
+      .addr { margin: 10px 0 14px 20px; }
+      .card { background: var(--card); border-radius: 14px; padding: 16px 18px; margin: 16px 0; }
+      .card p:last-child { margin-bottom: 0; }
+
+      .table-wrap { overflow-x: auto; margin: 10px 0 16px; }
+      table { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.45; }
+      th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+      th { font-weight: 700; }
+      @media (max-width: 560px) { table { font-size: 14px; } th, td { padding: 6px 6px; } }
+
+      .site-footer {
+        max-width: 760px; margin: 0 auto; padding: 24px 20px 48px; color: var(--soft); font-size: 15px;
+        display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: space-between;
+        border-top: 1px solid var(--line);
+      }
+      .site-footer nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <span class="brand">
+        <img src="/midnight-pantry/icon.png" alt="" width="40" height="40" />
+        Midnight Pantry
+      </span>
+      <nav class="site-nav" aria-label="Midnight Pantry">
+        <a href={pathFor(lang, 'privacy')} aria-current={page === 'privacy' ? 'page' : undefined}>{words.privacy}</a>
+        <a href={pathFor(lang, 'terms')} aria-current={page === 'terms' ? 'page' : undefined}>{words.terms}</a>
+        <a href={pathFor(other, page)} hreflang={other} lang={other}>{words.switch}</a>
+      </nav>
+    </header>
+    <main class="narrow"><slot /></main>
+    <footer class="site-footer">
+      <nav aria-label="Footer">
+        <a href={pathFor(lang, 'privacy')}>{words.privacy}</a>
+        <a href={pathFor(lang, 'terms')}>{words.terms}</a>
+        <a href="mailto:contact@arturwitkowski.com">contact@arturwitkowski.com</a>
+      </nav>
+      <span>{words.by} <a href={lang === 'pl' ? '/pl/' : '/en/'}>Artur Witkowski</a></span>
+    </footer>
+  </body>
+</html>
