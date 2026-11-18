@@ -40,6 +40,9 @@ const altLang = getAlternateLang(lang);
     <!-- Preload LCP image -->
     <link rel="preload" href="/profile.webp" as="image" type="image/webp" />
 
+    <!-- Preload the heading font, so the swap from the fallback happens before the name is read -->
+    <link rel="preload" href="/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
+
     <!-- Preconnect to icon CDNs -->
     <link rel="preconnect" href="https://cdn.simpleicons.org" />
     <link rel="preconnect" href="https://api.iconify.design" />
