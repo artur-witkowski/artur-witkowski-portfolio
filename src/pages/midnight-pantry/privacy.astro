@@ -9,7 +9,7 @@ import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.
   description="How the Midnight Pantry game for iPhone and Android handles personal data: no ads, no tracking, an optional account that stores no email address, and how to delete it."
 >
   <h1>Privacy policy</h1>
-  <p class="soft">Effective 18 November 2026</p>
+  <p class="soft">Effective 19 November 2026</p>
 
   <p>This policy explains how we process personal data when you play Midnight Pantry, a game for iPhone and Android. It is the information we must give you under Articles 13 and 14 of the GDPR. The GDPR applies to every player, wherever you live, because we are based in Poland. The English and Polish versions have equal force.</p>
 
@@ -49,6 +49,7 @@ import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.
         <tr><td>Nickname</td><td>The nickname you pick and when you last changed it. If a moderator replaced it, also the replaced nickname, until you pick a new one, so the game can tell you what happened</td><td>You</td></tr>
         <tr><td>Cloud save</td><td>Your game progress: best night, number of runs and wins, unlocked fridges and ingredients, dishes cooked, bosses beaten, achievement records and your daily contest results</td><td>Your phone</td></tr>
         <tr><td>Daily contest results</td><td>The date, your score, nights survived, hearts left, the day's game seed, the list of moves you made in that run, and when you sent it</td><td>Your phone</td></tr>
+        <tr><td>Nickname reports</td><td>Which nickname you reported, when, and your account number, so one player counts once</td><td>You</td></tr>
         <tr><td>Error reports</td><td>The error message, the place in the game's code where it happened (stack trace) and the game's build number. No account number, nickname, device id or other identifier</td><td>Your phone</td></tr>
         <tr><td>Connection data</td><td>Your IP address and the request your phone sends</td><td>Your phone</td></tr>
         <tr><td>Purchase records at RevenueCat</td><td>A random purchase id that the game creates on your phone, the store's transaction ids and purchase history, the price and currency, the country of your store account, and the app and system versions</td><td>Your phone, and Apple or Google</td></tr>
@@ -61,7 +62,7 @@ import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.
   <p>The purchase id at RevenueCat is not linked to your game account. We cannot tell which nickname bought the full version.</p>
 
   <h2 id="device">3. Data that stays on your phone</h2>
-  <p>The game keeps these in its own storage on your phone and does not send them to us: your settings (music and effects volume, vibration, language, battle speed), your progress, a game in progress, the story you have seen, your local daily contest results and, while you are signed in, the session key. When you are signed in, your progress also goes to the cloud save in section 2.</p>
+  <p>The game keeps these in its own storage on your phone and does not send them to us: your settings (music and effects volume, vibration, language, battle speed), your progress, a game in progress, the story you have seen, your local daily contest results, the nicknames you hid in the leaderboard and, while you are signed in, the session key. When you are signed in, your progress also goes to the cloud save in section 2.</p>
   <p>This storage is strictly necessary to provide the game you asked for, so it does not need your consent under Article 5(3) of Directive 2002/58/EC or the national laws that implement it. Deleting the game from your phone deletes this data.</p>
 
   <h2 id="purposes">4. Purposes and legal bases</h2>
@@ -75,6 +76,7 @@ import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.
         <tr><td>Run the daily contest: show your nickname and score on the leaderboard, and check each score by replaying your moves</td><td>Nickname, daily contest results</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
         <tr><td>Cancel Sign in with Apple when you delete the account</td><td>Sign in with Apple token</td><td>Performance of the contract, Art. 6(1)(b). You ask for it by deleting the account</td></tr>
         <tr><td>Refuse offensive nicknames and rename those that slip through</td><td>Nickname</td><td>Legitimate interests, Art. 6(1)(f), in a leaderboard free of insults that every player can read</td></tr>
+        <tr><td>Handle the reports players send about nicknames</td><td>Nickname reports, nickname</td><td>Legitimate interests, Art. 6(1)(f), in the same leaderboard</td></tr>
         <tr><td>Limit requests per IP address</td><td>Connection data</td><td>Legitimate interests, Art. 6(1)(f), in protecting the server from abuse</td></tr>
         <tr><td>Find and fix errors in the game</td><td>Error reports</td><td>Legitimate interests, Art. 6(1)(f), in a game that works</td></tr>
         <tr><td>Sell the full version and unlock it on your phone</td><td>Purchase records at RevenueCat</td><td>Performance of the contract, Art. 6(1)(b)</td></tr>
@@ -129,6 +131,7 @@ import MidnightPantryPage from '@/components/midnight-pantry/MidnightPantryPage.
         <tr><td>Sessions</td><td>Until you sign out on that phone or delete your account. They do not expire on their own</td></tr>
         <tr><td>Sign in with Apple token</td><td>Until you delete your account. We use it once, to cancel the sign-in, and it is deleted with the account</td></tr>
         <tr><td>Request counts per IP address</td><td>One minute, in Cloudflare's rate limiter. Never stored in our database</td></tr>
+        <tr><td>Nickname reports</td><td>Until a moderator replaces the reported nickname, or until either account is deleted</td></tr>
         <tr><td>Error reports</td><td>90 days, then deleted</td></tr>
         <tr><td>Purchase records at RevenueCat</td><td>As long as we sell the game through RevenueCat. They are not linked to your account, so deleting your account does not remove them. See section 11 for how to have them deleted</td></tr>
         <tr><td>Emails to us</td><td>As long as needed to deal with your message, and no longer than 24 months after the last message on the same matter, unless we need them to establish, exercise or defend legal claims</td></tr>
